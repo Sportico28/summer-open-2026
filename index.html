@@ -217,7 +217,7 @@
     .mc-vs{color:var(--gray);font-size:11px;text-align:center;}
 
     /* MODAL */
-    .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:200;display:flex;align-items:flex-end;backdrop-filter:blur(8px);}
+    .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:flex-end;backdrop-filter:blur(3px);}
     .modal{background:#111;border-radius:20px 20px 0 0;padding:24px 20px 36px;width:100%;max-height:90vh;overflow-y:auto;border-top:1px solid var(--border);}
     .modal-title{font-size:18px;font-weight:800;font-style:italic;color:var(--gold);text-transform:uppercase;margin-bottom:4px;}
     .modal-sub{font-size:12px;color:var(--gray);margin-bottom:20px;}
@@ -243,6 +243,34 @@
     .detail-meta-item{font-size:12px;color:var(--gray);}
     .detail-meta-item span{color:var(--white);font-weight:600;display:block;margin-top:2px;}
     .btn-gok-match{width:100%;padding:13px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--black);border:none;border-radius:10px;font-size:14px;font-weight:800;font-family:'Rubik',sans-serif;cursor:pointer;margin-top:16px;}
+    /* BETTING MODAL */
+    .bet-type-row{display:flex;gap:6px;margin-bottom:14px;}
+    .bet-type-btn{flex:1;padding:9px 4px;border-radius:9px;border:1px solid var(--border);background:var(--card2);color:var(--gray);font-size:10px;font-weight:700;font-family:'Rubik',sans-serif;cursor:pointer;text-align:center;line-height:1.4;}
+    .bet-type-btn.active{border-color:var(--gold);color:var(--gold);background:#E9B74511;}
+    .amount-row{display:flex;gap:6px;margin:10px 0;}
+    .amt-btn{flex:1;padding:9px 0;border-radius:8px;border:1px solid var(--border);background:var(--card2);color:var(--white);font-size:13px;font-weight:700;font-family:'Rubik',sans-serif;cursor:pointer;}
+    .amt-btn.active{background:var(--gold);color:var(--black);border-color:var(--gold);}
+    .deadline-badge{font-size:10px;color:var(--gray);margin-top:3px;}
+    .deadline-badge.closed{color:#f87171;}
+    .sp-row{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px 0;}
+    .sp-side{display:flex;flex-direction:column;align-items:center;gap:4px;}
+    .sp-name{font-size:10px;color:var(--gray);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;}
+    .sp-ctrl{display:flex;align-items:center;gap:6px;}
+    .sp-btn{width:30px;height:30px;border-radius:7px;border:1px solid var(--border);background:var(--card2);color:var(--white);font-size:18px;font-weight:700;cursor:pointer;font-family:'Rubik',sans-serif;display:flex;align-items:center;justify-content:center;}
+    .sp-num{font-size:26px;font-weight:800;color:var(--white);min-width:28px;text-align:center;}
+    .sp-vs-lbl{font-size:14px;color:var(--border);font-weight:700;}
+    .vote-bar{height:6px;border-radius:3px;background:var(--border);margin:8px 0;overflow:hidden;display:flex;}
+    .vote-bar-fill{height:100%;border-radius:3px;background:var(--gold);transition:width .3s;}
+    .vote-lbl{display:flex;justify-content:space-between;font-size:10px;color:var(--gray);margin-bottom:2px;}
+    .underdog-tag{font-size:10px;color:#4ade80;font-weight:700;margin-left:4px;}
+    /* ADMIN DEADLINE */
+    .dl-block{background:var(--card);border-radius:10px;padding:11px 13px;margin:3px 12px 0;}
+    .dl-head{font-size:12px;font-weight:700;color:var(--gold);margin-bottom:6px;}
+    .dl-info{font-size:11px;color:var(--gray);margin-bottom:8px;line-height:1.5;}
+    .dl-btns{display:flex;gap:8px;align-items:center;}
+    .dl-time{font-size:13px;font-weight:800;color:var(--white);flex:1;}
+    .dl-adj{padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--card2);color:var(--white);font-size:12px;font-weight:700;font-family:'Rubik',sans-serif;cursor:pointer;}
+    .dl-reset{padding:8px 10px;border-radius:8px;border:none;background:none;color:#555;font-size:11px;font-family:'Rubik',sans-serif;cursor:pointer;}
 
     /* TOAST */
     .toast{position:fixed;bottom:calc(var(--nav-h)+12px);left:50%;transform:translateX(-50%) translateY(10px);background:#222;border:1px solid #444;color:var(--white);padding:10px 20px;border-radius:20px;font-size:13px;opacity:0;transition:all .25s;z-index:500;white-space:nowrap;pointer-events:none;font-family:'Rubik',sans-serif;}
@@ -364,6 +392,7 @@
     <div class="admin-tabs">
       <button class="atab active" id="atab-wedstrijden" onclick="setAdminTab('wedstrijden')">Wedstrijden</button>
       <button class="atab" id="atab-deelnemers" onclick="setAdminTab('deelnemers')">Deelnemers</button>
+      <button class="atab" id="atab-deadlines" onclick="setAdminTab('deadlines')">Deadlines</button>
     </div>
     <div id="admin-tab-wedstrijden">
       <div class="admin-filter" id="admin-filter"></div>
@@ -372,6 +401,9 @@
     <div id="admin-tab-deelnemers" style="display:none">
       <div class="cat-selector" id="deeln-cat-sel"></div>
       <div id="deeln-content"></div>
+    </div>
+    <div id="admin-tab-deadlines" style="display:none">
+      <div id="admin-deadline-list"></div>
     </div>
   </div>
 </div>
@@ -515,6 +547,33 @@ const INIT_CREDITS=10;
 function addMins(t,m){const[h,mi]=t.split(':').map(Number),tot=h*60+mi+m;return`${String(Math.floor(tot/60)).padStart(2,'0')}:${String(tot%60).padStart(2,'0')}`;}
 function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function teamName(cat,poule,key){if(!key)return null;return(S.teams&&S.teams[cat]&&poule&&S.teams[cat][poule]&&S.teams[cat][poule][key])||key;}
+function isTiebreak(s1,s2){return Math.min(s1,s2)===8&&Math.max(s1,s2)===9;}
+function getPouleKey(cat,poule){return cat+'_'+poule;}
+function getEindrKey(cat,phase){return cat+'_'+phase;}
+function getDefaultDeadlineMs(cat,poule){
+  const ps=POULE_SCHED[cat]?.[poule];if(!ps)return null;
+  const dayObj=DAYS.find(d=>d.key===ps.day);if(!dayObj)return null;
+  return new Date(dayObj.date+'T'+ps.rounds[0]+':00').getTime()-15*60*1000;
+}
+function getMatchDeadlineMs(m){
+  if(m.phase==='poule'){
+    const key=getPouleKey(m.cat,m.poule);
+    if(deadlineOverrides[key]!==undefined)return deadlineOverrides[key];
+    return getDefaultDeadlineMs(m.cat,m.poule);
+  }else{
+    const key=getEindrKey(m.cat,m.phase);
+    if(deadlineOverrides[key]!==undefined)return deadlineOverrides[key];
+    const dayObj=DAYS.find(d=>d.key===m.day);if(!dayObj||!m.time)return null;
+    return new Date(dayObj.date+'T'+m.time+':00').getTime()-15*60*1000;
+  }
+}
+function canBetOnMatch(m){if(m.locked)return false;const dl=getMatchDeadlineMs(m);if(dl===null)return false;return Date.now()<dl;}
+function deadlineStr(m){
+  const dl=getMatchDeadlineMs(m);if(!dl)return'';
+  if(Date.now()>dl)return'Gesloten';
+  const d=new Date(dl);
+  return'Tot '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+}
 function phaseLabel(ph){return{poule:'Pouleduel',QF:'Kwartfinale',SF:'Halve Finale',F:'Finale'}[ph]||ph;}
 function courtLbl(c){if(!c)return'?';return`V${c}`;}
 
@@ -557,7 +616,8 @@ function makeSeed(){
 // STATE
 // ============================================================
 let S={teams:{},deelnemers:{},matches:[]};
-let fbRef=null,usersRef=null;
+let fbRef=null,usersRef=null,deadlineRef=null,matchPicksRef=null;
+let deadlineOverrides={};
 let adminActive=false,currentDay='ma',currentCat='h_p100',adminFilterCat='all',adminTab='wedstrijden',deelnCat='h_p100',editMatchId=null,detailMatchId=null,pinBuffer='';
 let GokState={deviceId:'',nickname:'',credits:INIT_CREDITS,bets:{}};
 
@@ -569,6 +629,9 @@ function initFirebase(){
     firebase.initializeApp(FIREBASE_CONFIG);
     fbRef=firebase.database().ref(FB_PATH);
     usersRef=firebase.database().ref(FB_PATH+'/users');
+    deadlineRef=firebase.database().ref(FB_PATH+'/deadlineOverrides');
+    matchPicksRef=firebase.database().ref(FB_PATH+'/picks');
+    deadlineRef.on('value',snap=>{deadlineOverrides=snap.val()||{};});
     fbRef.child('data').on('value',snap=>{
       const d=snap.val();
       if(d&&d.matches&&d.matches.length){S.matches=d.matches.map(m=>({...m,s1:m.s1??null,s2:m.s2??null,locked:!!m.locked,t1:m.t1??null,t2:m.t2??null}));S.teams=d.teams||{};S.deelnemers=d.deelnemers||{};}
@@ -804,10 +867,25 @@ function resolveGokBets(){
     if(bet.resolved)return;
     const m=S.matches.find(x=>x.id===mid);
     if(!m||!m.locked||m.s1===null)return;
-    const t1won=+m.s1>+m.s2,t2won=+m.s2>+m.s1;
-    const won=(bet.pick==='1'&&t1won)||(bet.pick==='2'&&t2won);
-    GokState.bets[mid]={...bet,resolved:true,won};
-    if(won)GokState.credits+=bet.amount;
+    const s1=+m.s1,s2=+m.s2;
+    const t1won=s1>s2,t2won=s2>s1;
+    let payout=0,won=false;
+    if(bet.type==='score'){
+      const exactRight=s1===bet.predictedS1&&s2===bet.predictedS2;
+      const winnerRight=(bet.pick==='1'&&t1won)||(bet.pick==='2'&&t2won);
+      if(exactRight){payout=bet.amount*4;won=true;}
+      else if(winnerRight){payout=2;won=false;}
+      else{payout=0;won=false;}
+    }else if(bet.type==='tiebreak'){
+      won=isTiebreak(s1,s2);payout=won?bet.amount*4:0;
+    }else{
+      won=(bet.pick==='1'&&t1won)||(bet.pick==='2'&&t2won);
+      payout=won?bet.amount*2:0;
+    }
+    // underdog bonus: +1 als je op de underdog gok en wint
+    if(won&&bet.underdog)payout+=1;
+    GokState.bets[mid]={...bet,resolved:true,won,payout};
+    GokState.credits+=payout;
     changed=true;
   });
   if(changed)saveGokLocal();
@@ -816,35 +894,44 @@ function renderGokken(){
   resolveGokBets();
   const el=document.getElementById('gokken-content');
   if(!GokState.nickname){
-    el.innerHTML=`<div class="gok-setup"><div style="font-size:48px;margin-bottom:16px"><svg viewBox="0 0 24 24" fill="#E9B745" width="56" height="56"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div><h2>Lucky Legend</h2><p>Gok op wedstrijden en verdien Lucky Credits. Geen account nodig, gewoon een naam kiezen.</p><p style="margin-bottom:24px">Je start met <strong style="color:var(--gold)">${INIT_CREDITS} credits</strong>. Per 50 credits maak je kans om Lucky Legend te worden.</p><input class="gok-input" id="gok-nick-inp" placeholder="Kies een bijnaam..." maxlength="20"><button class="btn-gok-start" onclick="startGokken()">Start met gokken</button></div>`;
+    el.innerHTML=`<div class="gok-setup"><div style="font-size:48px;margin-bottom:16px"><svg viewBox="0 0 24 24" fill="#E9B745" width="56" height="56"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div><h2>Lucky Legend</h2><p>Gok op wedstrijden en verdien Lucky Credits. Geen account nodig, gewoon een naam kiezen.</p><p style="margin-bottom:24px">Je start met <strong style="color:var(--gold)">${INIT_CREDITS} credits</strong>. Wie de meeste credits verzamelt wordt de Lucky Legend.</p><input class="gok-input" id="gok-nick-inp" placeholder="Kies een bijnaam..." maxlength="20"><button class="btn-gok-start" onclick="startGokken()">Start met gokken</button></div>`;
     return;
   }
   const initial=GokState.nickname.charAt(0).toUpperCase();
   let html=`<div class="gok-profile"><div class="gok-avatar">${initial}</div><div><div class="gok-name">${escHtml(GokState.nickname)}</div><div class="gok-credits"><svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12" style="vertical-align:middle;margin-right:3px"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>${GokState.credits} Lucky Credits</div></div></div>`;
-  // Open matches
-  const open=S.matches.filter(m=>!m.locked&&m.phase==='poule'&&!GokState.bets[m.id]);
+  const open=S.matches.filter(m=>canBetOnMatch(m)&&!GokState.bets[m.id]&&(m.t1||m.t1_desc)&&(m.t2||m.t2_desc));
   const mybets=Object.entries(GokState.bets).filter(([,b])=>b).map(([id,bet])=>({...bet,matchId:id,match:S.matches.find(x=>x.id===id)})).filter(x=>x.match);
   if(open.length){
     html+=`<div class="sec-title">Gok op een match</div>`;
-    open.slice(0,8).forEach(m=>{
+    open.slice(0,10).forEach(m=>{
       const cat=CATS[m.cat]||{};
-      const t1n=teamName(m.cat,m.poule,m.t1)||'?',t2n=teamName(m.cat,m.poule,m.t2)||'?';
-      html+=`<div class="gok-bet-card"><div class="gok-bet-top"><span class="gok-bet-cat" style="background:${cat.color}22;color:${cat.color}">${cat.short} Poule ${m.poule}</span><span class="gok-bet-time">${m.time||'?'} &middot; V${m.court||'?'}</span></div><div class="gok-teams"><div class="gok-team-name">${escHtml(t1n)}</div><div class="gok-vs-txt">vs</div><div class="gok-team-name right">${escHtml(t2n)}</div></div><div class="gok-actions"><button class="btn-pick" onclick="quickBet('${m.id}','1')">Gok ${escHtml(t1n)}</button><button class="btn-pick" onclick="quickBet('${m.id}','2')">Gok ${escHtml(t2n)}</button></div></div>`;
+      const t1n=m.phase==='poule'?(teamName(m.cat,m.poule,m.t1)||'?'):(m.t1_desc||m.t1||'TBD');
+      const t2n=m.phase==='poule'?(teamName(m.cat,m.poule,m.t2)||'?'):(m.t2_desc||m.t2||'TBD');
+      const dl=deadlineStr(m);
+      const phase=m.phase==='poule'?`Poule ${m.poule}`:(m.label||m.phase);
+      html+=`<div class="gok-bet-card" onclick="openGokModal('${m.id}')"><div class="gok-bet-top"><span class="gok-bet-cat" style="background:${cat.color}22;color:${cat.color}">${cat.short} ${phase}</span><span class="gok-bet-time">${m.time||'?'} &middot; V${m.court||'?'}</span></div><div class="gok-teams"><div class="gok-team-name">${escHtml(t1n)}</div><div class="gok-vs-txt">vs</div><div class="gok-team-name right">${escHtml(t2n)}</div></div><div class="deadline-badge ${Date.now()>getMatchDeadlineMs(m)?'closed':''}">⏱ ${dl}</div></div>`;
     });
   } else {html+=`<div class="empty" style="padding-top:20px">Geen open matches om op te gokken</div>`;}
   if(mybets.length){
     html+=`<div class="sec-title">Mijn gokken</div>`;
-    mybets.reverse().forEach(({matchId,match,pick,amount,resolved,won})=>{
+    mybets.slice().reverse().forEach(({matchId,match,type,pick,predictedS1,predictedS2,amount,resolved,won,payout,underdog})=>{
       if(!match)return;
       const cat=CATS[match.cat]||{};
-      const t1n=teamName(match.cat,match.poule,match.t1)||'?',t2n=teamName(match.cat,match.poule,match.t2)||'?';
-      const pickName=pick==='1'?t1n:t2n;
-      html+=`<div class="leaderboard-row" style="flex-direction:column;align-items:flex-start;gap:4px"><div style="display:flex;width:100%;justify-content:space-between;align-items:center"><span style="font-size:11px;color:${cat.color};font-weight:700">${cat.short} &middot; ${match.time||'?'}</span><span class="gok-bet-result ${resolved?(won?'win':'loss'):'pending'}">${resolved?(won?'+'+amount+' gewonnen':'-'+amount+' verloren'):'Wacht...'}</span></div><div style="font-size:13px">${escHtml(t1n)} vs ${escHtml(t2n)}</div><div style="font-size:11px;color:var(--gray)">Gok: <strong style="color:var(--white)">${escHtml(pickName)}</strong> &middot; ${amount} credit${amount!==1?'s':''}</div></div>`;
+      const t1n=match.phase==='poule'?(teamName(match.cat,match.poule,match.t1)||'?'):(match.t1_desc||match.t1||'TBD');
+      const t2n=match.phase==='poule'?(teamName(match.cat,match.poule,match.t2)||'?'):(match.t2_desc||match.t2||'TBD');
+      let gokLbl='';
+      if(type==='score')gokLbl=`Uitslag: ${pick==='1'?escHtml(t1n):escHtml(t2n)} wint ${predictedS1}-${predictedS2}`;
+      else if(type==='tiebreak')gokLbl='Gaat naar tiebreak';
+      else gokLbl=`Winnaar: ${pick==='1'?escHtml(t1n):escHtml(t2n)}`;
+      if(underdog)gokLbl+=' <span class="underdog-tag">underdog</span>';
+      let res='';
+      if(resolved){const p=payout||0;res=`<span class="gok-bet-result ${p>0?'win':'loss'}">${p>0?'+'+p+' credits':'Verloren'}</span>`;}
+      else res=`<span class="gok-bet-result pending">Wacht...</span>`;
+      html+=`<div class="leaderboard-row" style="flex-direction:column;align-items:flex-start;gap:4px"><div style="display:flex;width:100%;justify-content:space-between;align-items:center"><span style="font-size:11px;color:${cat.color};font-weight:700">${cat.short} &middot; ${match.time||'?'}</span>${res}</div><div style="font-size:13px">${escHtml(t1n)} vs ${escHtml(t2n)}</div><div style="font-size:11px;color:var(--gray)">${gokLbl} &middot; inzet ${amount}</div></div>`;
     });
   }
-  // Leaderboard
   html+=`<div class="sec-title">Lucky Legend Klassement</div><div id="leaderboard-list"><div class="empty">Laden...</div></div>`;
-  html+=`<div style="padding:16px;text-align:center;font-size:11px;color:var(--gray)">Per 50 credits maak je extra kans om Lucky Legend te worden.<br><a href="#" onclick="resetGok()" style="color:#444">Naam wijzigen</a></div>`;
+  html+=`<div style="padding:16px;text-align:center;font-size:11px;color:var(--gray)">Meeste credits = Lucky Legend.<br><a href="#" onclick="resetGok()" style="color:#444">Naam wijzigen</a></div>`;
   el.innerHTML=html;
   loadLeaderboard();
 }
@@ -861,40 +948,104 @@ function loadLeaderboard(){
 function startGokken(){
   const nick=document.getElementById('gok-nick-inp').value.trim();
   if(!nick){toast('Voer een bijnaam in');return;}
-  GokState.nickname=nick;
-  GokState.credits=INIT_CREDITS;
-  GokState.bets={};
-  localStorage.setItem('sum26_nick',nick);
-  saveGokLocal();
-  renderGokken();
+  GokState.nickname=nick;GokState.credits=INIT_CREDITS;GokState.bets={};
+  localStorage.setItem('sum26_nick',nick);saveGokLocal();renderGokken();
 }
 function resetGok(){if(confirm('Naam wijzigen? Je credits blijven bewaard.')){const n=prompt('Nieuwe bijnaam:','');if(n&&n.trim()){GokState.nickname=n.trim();localStorage.setItem('sum26_nick',GokState.nickname);saveGokLocal();renderGokken();}}}
-function quickBet(matchId,pick){
-  if(GokState.credits<1){toast('Niet genoeg credits');return;}
-  const amount=Math.min(2,GokState.credits);
-  GokState.bets[matchId]={pick,amount,resolved:false,won:null,ts:Date.now()};
-  GokState.credits-=amount;
-  saveGokLocal();
-  toast(`Gok geplaatst! -${amount} credit${amount!==1?'s':''}`);
-  renderGokken();
-}
-function openGokMatch(matchId){
+function openGokModal(matchId){
   closeDetail();
-  if(GokState.credits<1){toast('Niet genoeg credits');return;}
   const m=S.matches.find(x=>x.id===matchId);if(!m)return;
-  const t1n=teamName(m.cat,m.poule,m.t1)||'?',t2n=teamName(m.cat,m.poule,m.t2)||'?';
-  const cat=CATS[m.cat]||{};
-  document.getElementById('modal-title').textContent='Gok plaatsen';
-  document.getElementById('modal-sub').textContent=`${cat.short} - Poule ${m.poule} - ${m.time||'?'}`;
+  if(!GokState.nickname){toast('Kies eerst een naam in Lucky Legend');return;}
+  if(GokState.bets[matchId]){toast('Je hebt al een gok op deze match');return;}
+  if(!canBetOnMatch(m)){toast('Inzetten is gesloten voor deze match');return;}
+  if(GokState.credits<1){toast('Niet genoeg credits');return;}
+  const is2set=m.cat==='h_p700'||m.phase==='SF'||m.phase==='F';
+  const maxS=is2set?6:9;
+  const t1n=m.phase==='poule'?(teamName(m.cat,m.poule,m.t1)||'?'):(m.t1_desc||m.t1||'TBD');
+  const t2n=m.phase==='poule'?(teamName(m.cat,m.poule,m.t2)||'?'):(m.t2_desc||m.t2||'TBD');
+  window._gok={matchId,type:'winner',pick:null,s1:maxS,s2:Math.max(0,maxS-2),amount:2,maxS,t1n,t2n,cat:m.cat,phase:m.phase};
   document.getElementById('modal-bg').style.display='flex';
-  document.getElementById('modal-bg').querySelector('.modal').innerHTML=`<div class="modal-title">Gok plaatsen</div><div class="modal-sub">${escHtml(`${cat.short} - Poule ${m.poule}`)}</div><div style="padding:16px 0;border-bottom:1px solid var(--border);border-top:1px solid var(--border);margin-bottom:16px"><div style="text-align:center;font-size:13px;color:var(--gray);margin-bottom:12px">Kies de winnaar (2 credits inzet)</div><div class="gok-actions"><button class="btn-pick" id="gk-t1" onclick="selectGokPick('${matchId}','1')">${escHtml(t1n)}</button><button class="btn-pick" id="gk-t2" onclick="selectGokPick('${matchId}','2')">${escHtml(t2n)}</button></div></div><div class="modal-row"><button class="btn-cancel" onclick="closeModal()">Annuleren</button><button class="btn-save" onclick="confirmGokBet('${matchId}')">Gok plaatsen</button></div>`;
-  window._gokPick=null;
+  _renderGokModal();
+  // laad stemtelling voor underdog indicator
+  if(matchPicksRef)matchPicksRef.child(matchId).once('value',snap=>{window._gokPicks=snap.val()||{t1:0,t2:0};_renderGokModal();});
 }
-function selectGokPick(matchId,pick){window._gokPick=pick;document.getElementById('gk-t1').classList.toggle('selected',pick==='1');document.getElementById('gk-t2').classList.toggle('selected',pick==='2');}
-function confirmGokBet(matchId){
-  if(!window._gokPick){toast('Kies eerst een winnaar');return;}
-  quickBet(matchId,window._gokPick);
+function _renderGokModal(){
+  const g=window._gok;if(!g)return;
+  const m=S.matches.find(x=>x.id===g.matchId);if(!m)return;
+  const picks=window._gokPicks||{t1:0,t2:0};
+  const totalPicks=(picks.t1||0)+(picks.t2||0);
+  const pct1=totalPicks>0?Math.round(100*(picks.t1||0)/totalPicks):50;
+  const pct2=100-pct1;
+  const isFav1=pct1>=pct2;
+  // vote bar
+  const voteBarHtml=totalPicks>0?`<div class="vote-lbl"><span>${escHtml(g.t1n)} ${pct1}%</span><span>${pct2}% ${escHtml(g.t2n)}</span></div><div class="vote-bar"><div class="vote-bar-fill" style="width:${pct1}%"></div></div>`:'';
+  // pick row
+  const underdogTag1=totalPicks>0&&!isFav1?'<span class="underdog-tag">underdog</span>':'';
+  const underdogTag2=totalPicks>0&&isFav1?'<span class="underdog-tag">underdog</span>':'';
+  const pickRow=`<div class="gok-actions" style="margin:10px 0"><button class="btn-pick ${g.pick==='1'?'selected':''}" onclick="gokSetPick('1')">${escHtml(g.t1n)}${underdogTag1}</button><button class="btn-pick ${g.pick==='2'?'selected':''}" onclick="gokSetPick('2')">${escHtml(g.t2n)}${underdogTag2}</button></div>`;
+  // amount row (max min(10, credits))
+  const maxAmt=Math.min(10,GokState.credits);
+  const amtBtns=[1,2,5,10].filter(a=>a<=maxAmt).map(a=>`<button class="amt-btn ${g.amount===a?'active':''}" onclick="gokSetAmt(${a})">${a}</button>`).join('');
+  const amtRow=`<div style="font-size:11px;color:var(--gray);margin-top:10px;margin-bottom:4px">Inzet (max 10)</div><div class="amount-row">${amtBtns}</div>`;
+  // content per type
+  let body='';
+  if(g.type==='winner'){
+    body=pickRow+`<div style="text-align:center;font-size:11px;color:var(--gray);margin-top:4px">Vaste inzet: <strong style="color:var(--gold)">2 credits</strong> &nbsp;&middot;&nbsp; Win: <strong style="color:#4ade80">4 terug (netto +2)</strong></div>`;
+  }else if(g.type==='score'){
+    const scoreRow=`<div style="font-size:11px;color:var(--gray);text-align:center;margin-bottom:6px">Voorspel de exacte eindstand</div><div class="sp-row"><div class="sp-side"><div class="sp-name">${escHtml(g.t1n)}</div><div class="sp-ctrl"><button class="sp-btn" onclick="gokScoreAdj('s1',-1)">-</button><div class="sp-num">${g.s1}</div><button class="sp-btn" onclick="gokScoreAdj('s1',1)">+</button></div></div><div class="sp-vs-lbl">-</div><div class="sp-side"><div class="sp-name">${escHtml(g.t2n)}</div><div class="sp-ctrl"><button class="sp-btn" onclick="gokScoreAdj('s2',-1)">-</button><div class="sp-num">${g.s2}</div><button class="sp-btn" onclick="gokScoreAdj('s2',1)">+</button></div></div></div>`;
+    body=pickRow+scoreRow+amtRow+`<div style="font-size:10px;color:var(--gray);margin-top:6px;text-align:center">Exact juist: <strong style="color:#4ade80">4x terug</strong> &nbsp;&middot;&nbsp; Winnaar juist: <strong style="color:#facc15">2 credits terug</strong></div>`;
+  }else if(g.type==='tiebreak'){
+    body=`<div style="text-align:center;padding:10px 0"><div style="font-size:14px;font-weight:700;margin-bottom:6px">Gaat naar tiebreak?</div><div style="font-size:11px;color:var(--gray);line-height:1.5">Enkel bij 8-8 &rarr; eindstand 9-8 of 8-9</div></div>`+amtRow+`<div style="font-size:10px;color:var(--gray);margin-top:6px;text-align:center">Win: <strong style="color:#4ade80">4x terug</strong></div>`;
+  }
+  // underdog bonus info
+  const udInfo=totalPicks>0?`<div style="font-size:10px;color:#4ade80;text-align:center;margin-top:6px">+1 bonus credit als je op de underdog gokt en wint</div>`:'';
+  // submit label
+  let submitLbl='';
+  const inzet=g.type==='winner'?2:g.amount;
+  if(GokState.credits<inzet){submitLbl=`Niet genoeg credits`;}
+  else{submitLbl=`Gok plaatsen (${inzet} credit${inzet!==1?'s':''})`;}
+  // deadline
+  const dlBadge=`<div class="deadline-badge" style="text-align:center;margin-bottom:10px">⏱ ${deadlineStr(m)}</div>`;
+  const catObj=CATS[g.cat]||{};
+  const phase=m.phase==='poule'?`Poule ${m.poule}`:(m.label||m.phase);
+  const content=`<div class="modal-title" style="font-size:15px">${escHtml(catObj.short||g.cat)} ${phase} &middot; ${m.time||'?'}</div>${dlBadge}<div class="bet-type-row"><button class="bet-type-btn ${g.type==='winner'?'active':''}" onclick="gokSetType('winner')">Winnaar<br><span style="font-weight:400;opacity:.7">2 credits</span></button><button class="bet-type-btn ${g.type==='score'?'active':''}" onclick="gokSetType('score')">Uitslag<br><span style="font-weight:400;opacity:.7">4x</span></button><button class="bet-type-btn ${g.type==='tiebreak'?'active':''}" onclick="gokSetType('tiebreak')">Tiebreak<br><span style="font-weight:400;opacity:.7">4x</span></button></div>${voteBarHtml}${body}${udInfo}<div class="modal-row" style="margin-top:14px"><button class="btn-cancel" onclick="closeModal()">Annuleren</button><button class="btn-save" onclick="confirmGokBet()">${escHtml(submitLbl)}</button></div>`;
+  document.getElementById('modal-bg').querySelector('.modal').innerHTML=content;
+}
+function gokSetType(t){window._gok.type=t;if(t==='winner')window._gok.amount=2;_renderGokModal();}
+function gokSetPick(p){window._gok.pick=p;_renderGokModal();}
+function gokSetAmt(a){window._gok.amount=a;_renderGokModal();}
+function gokScoreAdj(field,dir){
+  const g=window._gok;const max=g.maxS;
+  g[field]=Math.max(0,Math.min(max,g[field]+dir));
+  _renderGokModal();
+}
+function confirmGokBet(){
+  const g=window._gok;if(!g)return;
+  if(g.type!=='tiebreak'&&!g.pick){toast('Kies eerst een winnaar');return;}
+  const inzet=g.type==='winner'?2:g.amount;
+  if(GokState.credits<inzet){toast('Niet genoeg credits');return;}
+  const m=S.matches.find(x=>x.id===g.matchId);if(!m||!canBetOnMatch(m)){toast('Inzetten gesloten');closeModal();return;}
+  // underdog check
+  const picks=window._gokPicks||{t1:0,t2:0};
+  const totalPicks=(picks.t1||0)+(picks.t2||0);
+  let underdog=false;
+  if(totalPicks>0&&g.pick){
+    const myCount=g.pick==='1'?(picks.t1||0):(picks.t2||0);
+    const otherCount=g.pick==='1'?(picks.t2||0):(picks.t1||0);
+    underdog=myCount<otherCount;
+  }
+  const bet={type:g.type,pick:g.pick||null,predictedS1:g.type==='score'?g.s1:null,predictedS2:g.type==='score'?g.s2:null,amount:inzet,underdog,resolved:false,won:null,payout:null,ts:Date.now()};
+  GokState.bets[g.matchId]=bet;
+  GokState.credits-=inzet;
+  saveGokLocal();
+  // schrijf pick naar Firebase voor stemtelling
+  if(matchPicksRef&&g.pick){
+    const field=g.pick==='1'?'t1':'t2';
+    matchPicksRef.child(g.matchId+'/'+field).transaction(v=>(v||0)+1);
+  }
   closeModal();
+  toast(`Gok geplaatst! -${inzet} credit${inzet!==1?'s':''}`);
+  renderGokken();
 }
 
 // ============================================================
@@ -910,10 +1061,74 @@ function setAdminTab(tab){
   adminTab=tab;
   document.getElementById('atab-wedstrijden').classList.toggle('active',tab==='wedstrijden');
   document.getElementById('atab-deelnemers').classList.toggle('active',tab==='deelnemers');
+  document.getElementById('atab-deadlines').classList.toggle('active',tab==='deadlines');
   document.getElementById('admin-tab-wedstrijden').style.display=tab==='wedstrijden'?'':'none';
   document.getElementById('admin-tab-deelnemers').style.display=tab==='deelnemers'?'':'none';
+  document.getElementById('admin-tab-deadlines').style.display=tab==='deadlines'?'':'none';
   if(tab==='wedstrijden')renderAdminWedstrijden();
   if(tab==='deelnemers')renderDeelnemers();
+  if(tab==='deadlines')renderAdminDeadlines();
+}
+function renderAdminDeadlines(){
+  const el=document.getElementById('admin-deadline-list');if(!el)return;
+  let html='';
+  // Poule deadlines per dag
+  DAYS.slice(0,5).forEach(dayObj=>{
+    const poulesForDay=[];
+    Object.entries(POULE_SCHED).forEach(([cat,poules])=>{
+      Object.entries(poules).forEach(([poule,ps])=>{
+        if(ps.day===dayObj.key)poulesForDay.push({cat,poule,ps});
+      });
+    });
+    // groepeer per unieke starttijd+courts combo (= per speelblok)
+    const blocks={};
+    poulesForDay.forEach(({cat,poule,ps})=>{
+      const key=ps.rounds[0];
+      if(!blocks[key])blocks[key]=[];
+      blocks[key].push({cat,poule,ps});
+    });
+    if(!Object.keys(blocks).length)return;
+    html+=`<div class="sec-title">${dayObj.full}</div>`;
+    Object.entries(blocks).sort(([a],[b])=>a<b?-1:1).forEach(([startTime,group])=>{
+      const defaultDl=getDefaultDeadlineMs(group[0].cat,group[0].poule);
+      const key=getPouleKey(group[0].cat,group[0].poule);
+      const effectiveDl=deadlineOverrides[key]!==undefined?deadlineOverrides[key]:defaultDl;
+      const dlDate=new Date(effectiveDl);
+      const dlStr=String(dlDate.getHours()).padStart(2,'0')+':'+String(dlDate.getMinutes()).padStart(2,'0');
+      const overridden=deadlineOverrides[key]!==undefined;
+      const groupLabels=group.map(({cat,poule})=>(CATS[cat]?.short||cat)+' '+poule).join(', ');
+      // alle groepen in dit blok hebben dezelfde deadline → gebruik eerste key
+      html+=`<div class="dl-block"><div class="dl-head">${groupLabels}</div><div class="dl-info">Start: ${startTime} &nbsp;&middot;&nbsp; Default deadline: ${addMins(startTime,-15)}${overridden?' &nbsp;&middot;&nbsp; <strong style="color:var(--gold)">Aangepast</strong>':''}</div><div class="dl-btns"><div class="dl-time">⏱ ${dlStr}</div><button class="dl-adj" onclick="adjustDeadline('${group.map(g=>getPouleKey(g.cat,g.poule)).join(',')}',${effectiveDl},-5)">-5 min</button><button class="dl-adj" onclick="adjustDeadline('${group.map(g=>getPouleKey(g.cat,g.poule)).join(',')}',${effectiveDl},+5)">+5 min</button>${overridden?`<button class="dl-reset" onclick="resetDeadline('${group.map(g=>getPouleKey(g.cat,g.poule)).join(',')}')">reset</button>`:''}</div></div>`;
+    });
+  });
+  // Eindronde deadlines
+  ['za','zo'].forEach(dayKey=>{
+    const dayObj=DAYS.find(d=>d.key===dayKey);
+    html+=`<div class="sec-title">${dayObj.full} - Eindronde</div>`;
+    S.matches.filter(m=>m.day===dayKey&&m.phase!=='poule').forEach(m=>{
+      const key=getEindrKey(m.cat,m.phase);
+      const defaultDl=new Date(dayObj.date+'T'+m.time+':00').getTime()-15*60*1000;
+      const effectiveDl=deadlineOverrides[key]!==undefined?deadlineOverrides[key]:defaultDl;
+      const dlDate=new Date(effectiveDl);
+      const dlStr=String(dlDate.getHours()).padStart(2,'0')+':'+String(dlDate.getMinutes()).padStart(2,'0');
+      const overridden=deadlineOverrides[key]!==undefined;
+      const cat=CATS[m.cat]||{};const phase=m.label||m.phase;
+      html+=`<div class="dl-block"><div class="dl-head">${cat.short} ${phase}</div><div class="dl-info">Start: ${m.time||'?'}${overridden?' &nbsp;&middot;&nbsp; <strong style="color:var(--gold)">Aangepast</strong>':''}</div><div class="dl-btns"><div class="dl-time">⏱ ${dlStr}</div><button class="dl-adj" onclick="adjustDeadline('${key}',${effectiveDl},-5)">-5 min</button><button class="dl-adj" onclick="adjustDeadline('${key}',${effectiveDl},+5)">+5 min</button>${overridden?`<button class="dl-reset" onclick="resetDeadline('${key}')">reset</button>`:''}</div></div>`;
+    });
+  });
+  if(!html)html='<div class="empty">Geen data</div>';
+  el.innerHTML=html;
+}
+function adjustDeadline(keysStr,currentMs,deltaMin){
+  if(!deadlineRef)return;
+  const newMs=currentMs+(deltaMin*60*1000);
+  keysStr.split(',').forEach(k=>{deadlineRef.child(k).set(newMs);});
+  setTimeout(renderAdminDeadlines,300);
+}
+function resetDeadline(keysStr){
+  if(!deadlineRef)return;
+  keysStr.split(',').forEach(k=>{deadlineRef.child(k).remove();});
+  setTimeout(renderAdminDeadlines,300);
 }
 function renderAdminWedstrijden(){
   const fEl=document.getElementById('admin-filter');
