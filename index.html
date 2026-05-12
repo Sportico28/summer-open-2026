@@ -50,7 +50,8 @@
     .activities-scroll{display:flex;overflow-x:auto;padding:0 12px 16px;gap:12px;scrollbar-width:none;}
     .activities-scroll::-webkit-scrollbar{display:none;}
     .act-card{flex-shrink:0;width:160px;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--border);cursor:pointer;}
-    .act-img{height:100px;display:flex;align-items:center;justify-content:center;}
+    .act-img{height:100px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+    .act-img img{width:100%;height:100%;object-fit:cover;display:block;}
     .act-body{padding:10px 12px 12px;}
     .act-title{font-size:13px;font-weight:700;margin-bottom:3px;}
     .act-desc{font-size:11px;color:var(--gray);line-height:1.4;}
@@ -289,34 +290,24 @@
   <div class="sec-title">Randactiviteiten</div>
   <div class="activities-scroll">
     <div class="act-card" onclick="goPage('gokken')">
-      <div class="act-img" style="background:linear-gradient(135deg,#E9B745,#c9972a)">
-        <svg viewBox="0 0 24 24" fill="#000" width="44" height="44"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-      </div>
+      <div class="act-img"><img src="assets/Lucky_legends_app_icon.png" alt="Lucky Legend"></div>
       <div class="act-body"><div class="act-title">Lucky Legend</div><div class="act-desc">Gok op matches, verdien credits</div></div>
     </div>
     <div class="act-card">
-      <div class="act-img" style="background:linear-gradient(135deg,#1a1a2e,#16213e)">
-        <svg viewBox="0 0 24 24" fill="#E9B745" width="44" height="44"><path d="M18.5 3H6c-1.1 0-2 .9-2 2v5.71c0 3.83 2.95 7.18 6.78 7.29 3.96.12 7.22-3.06 7.22-7V5c0-1.1-.9-2-2-2zm-5 8v2.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5V11H11c-.28 0-.5-.22-.5-.5s.22-.5.5-.5h1.5V8.5c0-.28.22-.5.5-.5s.5.22.5.5V10H15c.28 0 .5.22.5.5s-.22.5-.5.5h-1.5zM4 19h16v2H4z"/></svg>
-      </div>
-      <div class="act-body"><div class="act-title">Bar &amp; Tapas</div><div class="act-desc">Sfeer, hapjes en drankjes</div></div>
+      <div class="act-img"><img src="assets/Steak_app_icon.png" alt="WDP Steak"></div>
+      <div class="act-body"><div class="act-title">WDP Steak</div><div class="act-desc">Steak night voor de kampioenen</div></div>
     </div>
     <div class="act-card">
-      <div class="act-img" style="background:linear-gradient(135deg,#0f3460,#533483)">
-        <svg viewBox="0 0 24 24" fill="#fff" width="44" height="44"><path d="M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5zM19 19.09H5V4.91h14v14.18zM6 15h12v2H6zm0-4h12v2H6zm0-4h12v2H6z"/></svg>
-      </div>
-      <div class="act-body"><div class="act-title">Merchandise</div><div class="act-desc">Officiële Pachanga collectie</div></div>
+      <div class="act-img"><img src="assets/Beer_Hotdog_app_icon.png" alt="Afterwork"></div>
+      <div class="act-body"><div class="act-title">Afterwork</div><div class="act-desc">Tripels en hotdogs na de wedstrijden</div></div>
     </div>
     <div class="act-card">
-      <div class="act-img" style="background:linear-gradient(135deg,#2d1b69,#11998e)">
-        <svg viewBox="0 0 24 24" fill="#fff" width="44" height="44"><path d="M20 4h-3.17L15 2H9L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-      </div>
-      <div class="act-body"><div class="act-title">Foto &amp; Video</div><div class="act-desc">Deel je moment #SummerOpen26</div></div>
+      <div class="act-img"><img src="assets/Wine_app_icon.png" alt="Ladies Night"></div>
+      <div class="act-body"><div class="act-title">Ladies Night</div><div class="act-desc">by Unwined</div></div>
     </div>
     <div class="act-card">
-      <div class="act-img" style="background:linear-gradient(135deg,#134e5e,#71b280)">
-        <svg viewBox="0 0 24 24" fill="#fff" width="44" height="44"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-      </div>
-      <div class="act-body"><div class="act-title">Club Community</div><div class="act-desc">Ontmoet je medespelers</div></div>
+      <div class="act-img"><img src="assets/Barbecue_app_icon.png" alt="Barbecue"></div>
+      <div class="act-body"><div class="act-title">Barbecue</div><div class="act-desc">Afsluiten met een BBQ op het terras</div></div>
     </div>
   </div>
 
