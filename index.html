@@ -55,6 +55,7 @@
     .act-body{padding:10px 12px 12px;}
     .act-title{font-size:13px;font-weight:700;margin-bottom:3px;}
     .act-desc{font-size:11px;color:var(--gray);line-height:1.4;}
+    .act-days{font-size:10px;color:var(--gold);font-weight:700;letter-spacing:.3px;margin-top:5px;opacity:.8;}
 
     /* CAT CARDS (home) */
     .cat-card{background:var(--card);margin:4px 12px;border-radius:12px;padding:13px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;border:1px solid transparent;transition:border-color .15s;}
@@ -272,6 +273,16 @@
     .dl-adj{padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--card2);color:var(--white);font-size:12px;font-weight:700;font-family:'Rubik',sans-serif;cursor:pointer;}
     .dl-reset{padding:8px 10px;border-radius:8px;border:none;background:none;color:#555;font-size:11px;font-family:'Rubik',sans-serif;cursor:pointer;}
 
+    /* SPELREGELS */
+    .spelregels-card{background:var(--card);border-radius:12px;margin:4px 12px 12px;overflow:hidden;border:1px solid var(--border);}
+    .sr-row{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;}
+    .sr-icon{font-size:18px;width:26px;text-align:center;flex-shrink:0;margin-top:1px;}
+    .sr-body{flex:1;}
+    .sr-label{font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px;}
+    .sr-val{font-size:12px;color:var(--gray);line-height:1.5;}
+    .sr-val strong{color:var(--white);}
+    .sr-divider{height:1px;background:var(--border);margin:0 14px;}
+
     /* TOAST */
     .toast{position:fixed;bottom:calc(var(--nav-h)+12px);left:50%;transform:translateX(-50%) translateY(10px);background:#222;border:1px solid #444;color:var(--white);padding:10px 20px;border-radius:20px;font-size:13px;opacity:0;transition:all .25s;z-index:500;white-space:nowrap;pointer-events:none;font-family:'Rubik',sans-serif;}
     .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
@@ -319,23 +330,23 @@
   <div class="activities-scroll">
     <div class="act-card" onclick="goPage('gokken')">
       <div class="act-img"><img src="assets/Lucky_legends_app_icon.png" alt="Lucky Legend"></div>
-      <div class="act-body"><div class="act-title">Lucky Legend</div><div class="act-desc">Gok op matches en vergroot je kans om Lucky Legend te worden.</div></div>
+      <div class="act-body"><div class="act-title">Lucky Legend</div><div class="act-desc">Gok op matches en vergroot je kans om Lucky Legend te worden.</div><div class="act-days">MA · DI · WO · DO · VR · ZA · ZO</div></div>
     </div>
     <div class="act-card" onclick="window.open('#','_blank')">
       <div class="act-img"><img src="assets/Steak_app_icon.png" alt="WDP Steak"></div>
-      <div class="act-body"><div class="act-title">WDP Steak</div><div class="act-desc">WDP Steak op MA-DI-WO</div></div>
+      <div class="act-body"><div class="act-title">WDP Steak</div><div class="act-desc">Inschrijven voor een steak na je match</div><div class="act-days">MA · DI · WO</div></div>
     </div>
     <div class="act-card">
       <div class="act-img"><img src="assets/Beer_Hotdog_app_icon.png" alt="Afterwork"></div>
-      <div class="act-body"><div class="act-title">Afterwork</div><div class="act-desc">Tripels en hotdogs zolang de voorraad strekt</div></div>
+      <div class="act-body"><div class="act-title">Afterwork</div><div class="act-desc">Tripels en hotdogs zolang de voorraad strekt</div><div class="act-days">MA · DI · WO · DO · VR</div></div>
     </div>
     <div class="act-card">
       <div class="act-img"><img src="assets/Wine_app_icon.png" alt="Ladies Night"></div>
-      <div class="act-body"><div class="act-title">Ladies Night</div><div class="act-desc">by Unwined</div></div>
+      <div class="act-body"><div class="act-title">Ladies Night</div><div class="act-desc">by Unwined</div><div class="act-days">VR</div></div>
     </div>
     <div class="act-card">
       <div class="act-img"><img src="assets/Barbecue_app_icon.png" alt="Barbecue"></div>
-      <div class="act-body"><div class="act-title">Barbecue</div><div class="act-desc">Afsluiten met een BBQ op het terras</div></div>
+      <div class="act-body"><div class="act-title">Barbecue</div><div class="act-desc">Afsluiten met een BBQ op het terras</div><div class="act-days">ZO</div></div>
     </div>
   </div>
 
@@ -931,6 +942,20 @@ function renderGokken(){
     });
   }
   html+=`<div class="sec-title">Lucky Legend Klassement</div><div id="leaderboard-list"><div class="empty">Laden...</div></div>`;
+  html+=`<div class="sec-title">Spelregels</div>
+<div class="spelregels-card">
+  <div class="sr-row"><div class="sr-icon">⭐</div><div class="sr-body"><div class="sr-label">Start</div><div class="sr-val">Iedereen start met <strong>10 Lucky Credits</strong>.</div></div></div>
+  <div class="sr-divider"></div>
+  <div class="sr-row"><div class="sr-icon">🏆</div><div class="sr-body"><div class="sr-label">Winnaar kiezen</div><div class="sr-val">Inzet <strong>2 credits</strong>, altijd vast. Win = <strong>4 credits</strong> terug (netto +2).</div></div></div>
+  <div class="sr-divider"></div>
+  <div class="sr-row"><div class="sr-icon">🎯</div><div class="sr-body"><div class="sr-label">Exacte uitslag</div><div class="sr-val">Inzet <strong>1-10 credits</strong>. Score juist = <strong>4x</strong> terug. Winnaar juist maar score fout = <strong>2 credits</strong> terug. Alles fout = 0.</div></div></div>
+  <div class="sr-divider"></div>
+  <div class="sr-row"><div class="sr-icon">⚡</div><div class="sr-body"><div class="sr-label">Gaat naar tiebreak?</div><div class="sr-val">Inzet <strong>1-10 credits</strong>. Tiebreak = eindstand 8-9 of 9-8. Raad juist = <strong>4x</strong> terug.</div></div></div>
+  <div class="sr-divider"></div>
+  <div class="sr-row"><div class="sr-icon sr-green">🐶</div><div class="sr-body"><div class="sr-label">Underdog bonus</div><div class="sr-val">Gok je op de minderheid (minder dan 50% stemmen) en win je, dan krijg je <strong>+1 credit extra</strong>.</div></div></div>
+  <div class="sr-divider"></div>
+  <div class="sr-row"><div class="sr-icon">⏱</div><div class="sr-body"><div class="sr-label">Deadline</div><div class="sr-val">Gokken sluit <strong>15 min voor start</strong> van de poule. De wedstrijdleider kan de deadline aanpassen.</div></div></div>
+</div>`;
   html+=`<div style="padding:16px;text-align:center;font-size:11px;color:var(--gray)">Meeste credits = Lucky Legend.<br><a href="#" onclick="resetGok()" style="color:#444">Naam wijzigen</a></div>`;
   el.innerHTML=html;
   loadLeaderboard();
