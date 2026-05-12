@@ -649,7 +649,7 @@ function renderDag(){
   const ms=S.matches.filter(m=>m.day===currentDay);
   if(!ms.length){content.innerHTML=`<div class="empty">Geen wedstrijden op ${day.full}</div>`;return;}
   const times=[...new Set(ms.map(m=>m.time||'00:00'))].sort();
-  const courts=[...new Set(ms.map(m=>m.court).filter(Boolean))].sort((a,b)=>a-b);
+  const courts=[...new Set([...ms.map(m=>m.court).filter(Boolean),3,8])].sort((a,b)=>a-b);
   let html=`<div class="day-full-lbl">${day.full}</div><div class="court-grid-wrap"><div class="court-grid">`;
   // Header
   html+=`<div class="cg-header-row"><div class="cg-time-hdr"></div>${courts.map(c=>`<div class="cg-court-hdr">V${c}</div>`).join('')}</div>`;
