@@ -4,305 +4,251 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#000000">
-  <meta name="apple-mobile-web-app-capable" content="yes">
   <title>Pachanga Summer Open 2026</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;0,500;0,700;0,800;1,700;1,800&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --gold:   #E9B745;
-      --gold2:  #c9972a;
-      --black:  #000000;
-      --card:   #111111;
-      --card2:  #1a1a1a;
-      --border: #2a2a2a;
-      --gray:   #888888;
-      --white:  #ffffff;
-      --green:  #4ade80;
-      --red:    #f87171;
-      --nav-h:  62px;
-    }
-    * { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-    html { height:100%; }
-    body {
-      min-height:100%; background:var(--black); color:var(--white);
-      font-family:'Rubik', sans-serif; padding-bottom:calc(var(--nav-h) + 20px);
-      overflow-y:auto;
-    }
+    :root{--gold:#E9B745;--gold2:#c9972a;--black:#000;--card:#111;--card2:#1a1a1a;--border:#2a2a2a;--gray:#888;--white:#fff;--nav-h:62px;}
+    *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+    html{height:100%;}
+    body{min-height:100%;background:var(--black);color:var(--white);font-family:'Rubik',sans-serif;padding-bottom:calc(var(--nav-h)+20px);overflow-y:auto;}
 
-    /* BOTTOM NAV */
-    .bottom-nav {
-      position:fixed; bottom:0; left:0; right:0; height:var(--nav-h);
-      background:#0a0a0a; border-top:1px solid var(--border);
-      display:flex; z-index:100;
-    }
-    .nav-btn {
-      flex:1; display:flex; flex-direction:column; align-items:center;
-      justify-content:center; gap:3px; cursor:pointer; border:none;
-      background:none; color:var(--gray); font-size:10px; font-weight:500;
-      font-family:'Rubik',sans-serif; padding:6px 0; transition:color .15s;
-    }
-    .nav-btn.active { color:var(--gold); }
-    .nav-icon { font-size:20px; line-height:1; }
+    /* NAV */
+    .bottom-nav{position:fixed;bottom:0;left:0;right:0;height:var(--nav-h);background:#0a0a0a;border-top:1px solid var(--border);display:flex;z-index:100;}
+    .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;border:none;background:none;color:var(--gray);font-size:9px;font-weight:600;font-family:'Rubik',sans-serif;padding:6px 0;transition:color .15s;}
+    .nav-btn.active{color:var(--gold);}
+    .nav-btn svg{transition:fill .15s;}
 
     /* PAGES */
-    .page { display:none; min-height:calc(100vh - var(--nav-h)); }
-    .page.active { display:block; }
+    .page{display:none;min-height:calc(100vh - var(--nav-h));}
+    .page.active{display:block;}
 
     /* LOADING */
-    .fb-loading {
-      position:fixed; inset:0; background:var(--black); z-index:1000;
-      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px;
-    }
-    .fb-logo { font-size:32px; font-weight:800; font-style:italic; color:var(--gold); letter-spacing:-1px; text-transform:uppercase; }
-    .fb-sub { font-size:12px; color:var(--gray); text-transform:uppercase; letter-spacing:2px; }
-    .fb-spin {
-      width:36px; height:36px; border:3px solid var(--border);
-      border-top-color:var(--gold); border-radius:50%; animation:spin .8s linear infinite;
-    }
-    @keyframes spin { to { transform:rotate(360deg); } }
+    .fb-loading{position:fixed;inset:0;background:var(--black);z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
+    .fb-logo{font-size:32px;font-weight:800;font-style:italic;color:var(--gold);letter-spacing:-1px;text-transform:uppercase;}
+    .fb-sub{font-size:12px;color:var(--gray);text-transform:uppercase;letter-spacing:2px;}
+    .fb-spin{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg);}}
 
     /* HOME */
-    .home-hero {
-      background:var(--black); padding:28px 16px 20px; text-align:center;
-      border-bottom:1px solid var(--border);
-    }
-    .hero-eyebrow { font-size:10px; color:var(--gray); text-transform:uppercase; letter-spacing:2px; margin-bottom:6px; }
-    .hero-title { font-size:28px; font-weight:800; font-style:italic; text-transform:uppercase; color:var(--gold); letter-spacing:-0.5px; line-height:1.1; margin-bottom:4px; }
-    .hero-dates { font-size:13px; color:var(--gray); margin-bottom:18px; }
-    .hero-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
-    .hstat { background:var(--card); border-radius:10px; padding:12px 8px; text-align:center; }
-    .hstat-v { font-size:24px; font-weight:800; color:var(--gold); }
-    .hstat-l { font-size:10px; color:var(--gray); margin-top:2px; }
+    .home-hero{position:relative;background:linear-gradient(160deg,#1a1200 0%,#000 60%);padding:32px 16px 24px;border-bottom:1px solid var(--border);overflow:hidden;}
+    .home-hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23E9B745' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");pointer-events:none;}
+    .hero-eyebrow{font-size:10px;color:var(--gray);text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;}
+    .hero-title{font-size:30px;font-weight:800;font-style:italic;text-transform:uppercase;color:var(--gold);letter-spacing:-0.5px;line-height:1.1;margin-bottom:4px;}
+    .hero-dates{font-size:13px;color:var(--gray);margin-bottom:20px;}
+    .hero-countdown{display:flex;gap:10px;margin-bottom:20px;}
+    .hcd-unit{background:var(--card);border-radius:10px;padding:10px 12px;text-align:center;flex:1;}
+    .hcd-val{font-size:22px;font-weight:800;color:var(--gold);}
+    .hcd-lbl{font-size:9px;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-top:2px;}
+    .hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+    .hstat{background:rgba(255,255,255,.05);border-radius:10px;padding:12px 8px;text-align:center;border:1px solid var(--border);}
+    .hstat-v{font-size:22px;font-weight:800;color:var(--gold);}
+    .hstat-l{font-size:10px;color:var(--gray);margin-top:2px;}
 
-    .prog-wrap { padding:16px 16px 8px; }
-    .prog-row { display:flex; justify-content:space-between; font-size:12px; color:var(--gray); margin-bottom:6px; }
-    .prog-bar { height:4px; background:var(--border); border-radius:3px; overflow:hidden; }
-    .prog-fill { height:100%; background:var(--gold); border-radius:3px; transition:width .6s ease; }
+    .sec-title{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:1px;padding:16px 16px 8px;}
 
-    .sec-title { font-size:11px; font-weight:700; color:var(--gray); text-transform:uppercase; letter-spacing:1px; padding:16px 16px 8px; }
+    /* ACTIVITY CARDS */
+    .activities-scroll{display:flex;overflow-x:auto;padding:0 12px 16px;gap:12px;scrollbar-width:none;}
+    .activities-scroll::-webkit-scrollbar{display:none;}
+    .act-card{flex-shrink:0;width:160px;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--border);cursor:pointer;}
+    .act-img{height:100px;display:flex;align-items:center;justify-content:center;}
+    .act-body{padding:10px 12px 12px;}
+    .act-title{font-size:13px;font-weight:700;margin-bottom:3px;}
+    .act-desc{font-size:11px;color:var(--gray);line-height:1.4;}
 
-    .cat-card {
-      background:var(--card); margin:4px 12px; border-radius:12px;
-      padding:13px 14px; display:flex; align-items:center; gap:12px;
-      cursor:pointer; border:1px solid transparent; transition:border-color .15s;
-    }
-    .cat-card:active { border-color:var(--gold); }
-    .cat-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
-    .cat-info { flex:1; min-width:0; }
-    .cat-name { font-size:14px; font-weight:600; }
-    .cat-meta { font-size:11px; color:var(--gray); margin-top:2px; }
-    .cat-pct { font-size:13px; font-weight:700; color:var(--gold); flex-shrink:0; }
+    /* CAT CARDS (home) */
+    .cat-card{background:var(--card);margin:4px 12px;border-radius:12px;padding:13px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;border:1px solid transparent;transition:border-color .15s;}
+    .cat-card:active{border-color:var(--gold);}
+    .cat-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+    .cat-info{flex:1;min-width:0;}
+    .cat-name{font-size:14px;font-weight:600;}
+    .cat-meta{font-size:11px;color:var(--gray);margin-top:2px;}
+    .cat-pct{font-size:13px;font-weight:700;color:var(--gold);flex-shrink:0;}
 
-    /* DAG */
-    .day-tabs { display:flex; overflow-x:auto; padding:12px 12px 0; gap:6px; scrollbar-width:none; }
-    .day-tabs::-webkit-scrollbar { display:none; }
-    .day-tab {
-      flex-shrink:0; padding:8px 14px; border-radius:8px; border:1px solid var(--border);
-      background:none; color:var(--gray); font-size:12px; font-weight:600;
-      font-family:'Rubik',sans-serif; cursor:pointer; transition:all .15s; white-space:nowrap;
-    }
-    .day-tab.active { background:var(--gold); color:var(--black); border-color:var(--gold); }
+    /* DAG - GRID */
+    .day-tabs{display:flex;overflow-x:auto;padding:12px 12px 0;gap:6px;scrollbar-width:none;}
+    .day-tabs::-webkit-scrollbar{display:none;}
+    .day-tab{flex-shrink:0;padding:8px 14px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--gray);font-size:12px;font-weight:600;font-family:'Rubik',sans-serif;cursor:pointer;transition:all .15s;}
+    .day-tab.active{background:var(--gold);color:var(--black);border-color:var(--gold);}
 
-    .time-group-lbl {
-      padding:16px 16px 6px; font-size:12px; font-weight:700; color:var(--gold);
-      text-transform:uppercase; letter-spacing:1px;
-    }
-
-    /* MATCH CARD */
-    .match-card {
-      background:var(--card); margin:4px 12px; border-radius:12px;
-      padding:11px 14px; border-left:3px solid transparent;
-    }
-    .match-card.played { border-left-color:var(--gold); }
-    .match-card.eindronde { border-left-color:#555; }
-    .match-card.eindronde.played { border-left-color:var(--gold); }
-    .mc-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
-    .mc-meta { font-size:11px; color:var(--gray); }
-    .mc-badge {
-      font-size:10px; background:var(--card2); padding:2px 8px;
-      border-radius:10px; color:var(--gray);
-    }
-    .mc-badge.gold { background:#2a1f00; color:var(--gold); }
-    .mc-teams { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:6px; }
-    .mc-team { font-size:13px; font-weight:500; line-height:1.3; }
-    .mc-team.right { text-align:right; }
-    .mc-team.tbd { color:var(--gray); font-style:italic; font-weight:400; font-size:12px; }
-    .mc-team.won { color:var(--gold); font-weight:700; }
-    .mc-score { display:flex; align-items:center; gap:4px; font-size:20px; font-weight:800; white-space:nowrap; }
-    .mc-score .w { color:var(--gold); }
-    .mc-score .l { color:var(--gray); }
-    .mc-score .d { color:var(--border); font-size:16px; }
-    .mc-vs { color:var(--gray); font-size:11px; text-align:center; }
+    .court-grid-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:16px;}
+    .court-grid{display:inline-block;min-width:100%;}
+    .cg-header-row{display:flex;}
+    .cg-time-hdr{width:52px;flex-shrink:0;background:var(--black);position:sticky;left:0;z-index:2;border-right:1px solid var(--border);}
+    .cg-court-hdr{width:130px;flex-shrink:0;padding:10px 6px;text-align:center;font-size:12px;font-weight:800;color:var(--gold);background:var(--card2);border-bottom:2px solid var(--gold);border-right:1px solid var(--border);}
+    .cg-row{display:flex;border-bottom:1px solid var(--border);}
+    .cg-time{width:52px;flex-shrink:0;padding:8px 4px;font-size:11px;color:var(--gray);font-weight:700;display:flex;align-items:center;justify-content:center;border-right:1px solid var(--border);background:var(--black);position:sticky;left:0;z-index:1;}
+    .cg-cell{width:130px;flex-shrink:0;padding:7px 8px;border-right:1px solid var(--border);min-height:90px;background:var(--card);cursor:pointer;transition:background .1s;}
+    .cg-cell:active{background:var(--card2);}
+    .cg-cell.empty{background:#080808;display:flex;align-items:center;justify-content:center;cursor:default;}
+    .cg-empty-dot{width:6px;height:6px;border-radius:50%;background:var(--border);}
+    .gc-badge{font-size:9px;font-weight:700;padding:2px 5px;border-radius:4px;display:inline-block;margin-bottom:5px;}
+    .gc-team{font-size:11px;font-weight:500;line-height:1.35;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:114px;}
+    .gc-team.won{color:var(--gold);font-weight:700;}
+    .gc-vs{font-size:9px;color:var(--border);margin:2px 0;}
+    .gc-score{font-size:13px;font-weight:800;color:var(--gold);margin-top:4px;}
+    .gc-lock{font-size:9px;color:var(--gray);margin-top:2px;}
+    .day-full-lbl{padding:12px 16px 4px;font-size:13px;font-weight:700;color:var(--gray);}
 
     /* STANDEN */
-    .cat-selector { display:flex; flex-wrap:wrap; gap:6px; padding:12px; }
-    .cat-pill {
-      padding:7px 12px; border-radius:20px; border:1px solid var(--border);
-      background:none; color:var(--gray); font-size:12px; font-weight:600;
-      font-family:'Rubik',sans-serif; cursor:pointer; transition:all .15s;
-    }
-    .cat-pill.active { background:var(--gold); color:var(--black); border-color:var(--gold); }
+    .cat-selector{display:flex;flex-wrap:wrap;gap:6px;padding:12px;}
+    .cat-pill{padding:7px 12px;border-radius:20px;border:1px solid var(--border);background:none;color:var(--gray);font-size:12px;font-weight:600;font-family:'Rubik',sans-serif;cursor:pointer;transition:all .15s;}
+    .cat-pill.active{background:var(--gold);color:var(--black);border-color:var(--gold);}
+    .poule-block{margin:8px 12px;}
+    .poule-head{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;padding-left:2px;}
+    .standings-table{background:var(--card);border-radius:12px;overflow:hidden;}
+    .st-row{display:grid;grid-template-columns:20px 1fr 32px 32px 32px 32px 32px;align-items:center;padding:10px 12px;gap:6px;font-size:12px;border-bottom:1px solid var(--border);}
+    .st-row:last-child{border-bottom:none;}
+    .st-row.header{color:var(--gray);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;background:var(--card2);}
+    .st-pos{color:var(--gray);font-weight:700;}
+    .st-pos.top{color:var(--gold);}
+    .st-team{font-weight:500;}
+    .st-team.leader{color:var(--gold);font-weight:700;}
+    .st-num{text-align:center;color:var(--white);}
+    .st-pts{text-align:center;font-weight:700;color:var(--gold);}
+    .bracket-wrap{padding:8px 12px 20px;}
+    .bracket-title{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;padding-left:2px;}
+    .bracket-round{margin-bottom:16px;}
+    .bracket-lbl{font-size:10px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;padding-left:2px;}
+    .bracket-match{background:var(--card);border-radius:10px;padding:10px 12px;margin-bottom:4px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;}
+    .bm-left{display:flex;flex-direction:column;gap:4px;}
+    .bm-team{font-size:12px;font-weight:500;}
+    .bm-team.won{color:var(--gold);font-weight:700;}
+    .bm-team.tbd{color:var(--gray);font-style:italic;}
+    .bm-score{font-size:16px;font-weight:800;color:var(--gold);text-align:right;white-space:nowrap;}
+    .bm-vs{font-size:10px;color:var(--border);}
+    .bm-badge{font-size:9px;color:var(--gray);margin-left:6px;}
 
-    .poule-block { margin:8px 12px; }
-    .poule-head {
-      font-size:11px; font-weight:700; color:var(--gray);
-      text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; padding-left:2px;
-    }
-    .standings-table { background:var(--card); border-radius:12px; overflow:hidden; }
-    .st-row {
-      display:grid; grid-template-columns:20px 1fr 32px 32px 32px 32px 32px;
-      align-items:center; padding:10px 12px; gap:6px; font-size:12px;
-      border-bottom:1px solid var(--border);
-    }
-    .st-row:last-child { border-bottom:none; }
-    .st-row.header { color:var(--gray); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; background:var(--card2); }
-    .st-pos { color:var(--gray); font-weight:700; }
-    .st-pos.top { color:var(--gold); }
-    .st-team { font-weight:500; }
-    .st-team.leader { color:var(--gold); font-weight:700; }
-    .st-num { text-align:center; color:var(--white); }
-    .st-pts { text-align:center; font-weight:700; color:var(--gold); }
-
-    /* Bracket */
-    .bracket-wrap { padding:8px 12px 20px; }
-    .bracket-title { font-size:11px; font-weight:700; color:var(--gray); text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; padding-left:2px; }
-    .bracket-round { margin-bottom:16px; }
-    .bracket-lbl { font-size:10px; font-weight:700; color:var(--gold); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; padding-left:2px; }
-    .bracket-match {
-      background:var(--card); border-radius:10px; padding:10px 12px;
-      margin-bottom:4px; display:grid; grid-template-columns:1fr auto; align-items:center; gap:8px;
-    }
-    .bm-left { display:flex; flex-direction:column; gap:4px; }
-    .bm-team { font-size:12px; font-weight:500; }
-    .bm-team.won { color:var(--gold); font-weight:700; }
-    .bm-team.tbd { color:var(--gray); font-style:italic; }
-    .bm-score { font-size:16px; font-weight:800; color:var(--gold); text-align:right; white-space:nowrap; }
-    .bm-vs { font-size:10px; color:var(--border); }
-    .bm-badge { font-size:9px; color:var(--gray); margin-left:6px; }
+    /* GOKKEN */
+    .gok-profile{display:flex;align-items:center;gap:12px;padding:16px;background:var(--card);border-bottom:1px solid var(--border);}
+    .gok-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:var(--black);flex-shrink:0;}
+    .gok-name{font-size:14px;font-weight:700;}
+    .gok-credits{font-size:12px;color:var(--gold);margin-top:2px;}
+    .gok-setup{padding:40px 24px;text-align:center;}
+    .gok-setup h2{font-size:22px;font-weight:800;font-style:italic;color:var(--gold);text-transform:uppercase;margin-bottom:8px;}
+    .gok-setup p{font-size:13px;color:var(--gray);margin-bottom:24px;line-height:1.5;}
+    .gok-input{width:100%;padding:14px;background:var(--card2);border:1px solid var(--border);border-radius:12px;color:var(--white);font-size:16px;font-family:'Rubik',sans-serif;text-align:center;margin-bottom:16px;}
+    .gok-input:focus{outline:none;border-color:var(--gold);}
+    .btn-gok-start{width:100%;padding:14px;background:var(--gold);color:var(--black);border:none;border-radius:12px;font-size:15px;font-weight:800;font-family:'Rubik',sans-serif;cursor:pointer;}
+    .gok-bet-card{background:var(--card);border-radius:12px;margin:4px 12px;padding:14px;}
+    .gok-bet-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+    .gok-bet-cat{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;}
+    .gok-bet-time{font-size:11px;color:var(--gray);}
+    .gok-teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;margin-bottom:12px;}
+    .gok-team-name{font-size:13px;font-weight:600;line-height:1.3;}
+    .gok-team-name.right{text-align:right;}
+    .gok-vs-txt{font-size:11px;color:var(--gray);text-align:center;}
+    .gok-actions{display:flex;gap:8px;}
+    .btn-pick{flex:1;padding:9px;border-radius:8px;border:1px solid var(--border);background:var(--card2);color:var(--white);font-size:12px;font-weight:700;font-family:'Rubik',sans-serif;cursor:pointer;transition:all .15s;}
+    .btn-pick.selected{background:var(--gold);color:var(--black);border-color:var(--gold);}
+    .gok-my-bet{display:flex;align-items:center;justify-content:space-between;padding:6px 0;font-size:12px;}
+    .gok-bet-result.win{color:#4ade80;font-weight:700;}
+    .gok-bet-result.loss{color:#f87171;font-weight:700;}
+    .gok-bet-result.pending{color:var(--gray);}
+    .leaderboard-row{display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--card);border-radius:10px;margin:3px 12px;}
+    .lb-pos{font-size:14px;font-weight:800;color:var(--gray);width:24px;flex-shrink:0;}
+    .lb-pos.top3{color:var(--gold);}
+    .lb-name{flex:1;font-size:13px;font-weight:600;}
+    .lb-credits{font-size:13px;font-weight:800;color:var(--gold);}
 
     /* ADMIN */
-    .admin-lock { padding:50px 24px; text-align:center; }
-    .admin-lock h2 { font-size:24px; font-weight:800; font-style:italic; text-transform:uppercase; color:var(--gold); margin-bottom:8px; }
-    .admin-lock p { color:var(--gray); font-size:13px; margin-bottom:28px; }
-    .pin-dots { display:flex; gap:10px; justify-content:center; margin-bottom:20px; }
-    .pin-dot { width:14px; height:14px; border-radius:50%; background:var(--border); transition:background .15s; }
-    .pin-dot.filled { background:var(--gold); }
-    .pin-pad { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; max-width:240px; margin:0 auto; }
-    .pin-key {
-      padding:18px; background:var(--card); border:1px solid var(--border);
-      border-radius:12px; font-size:20px; font-weight:700; font-family:'Rubik',sans-serif;
-      color:var(--white); cursor:pointer; text-align:center; transition:all .1s;
-    }
-    .pin-key:active { background:var(--gold); color:var(--black); }
-    .pin-key.del { font-size:15px; color:var(--gray); }
+    .admin-lock{padding:50px 24px;text-align:center;}
+    .admin-lock h2{font-size:24px;font-weight:800;font-style:italic;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+    .admin-lock p{color:var(--gray);font-size:13px;margin-bottom:28px;}
+    .pin-dots{display:flex;gap:10px;justify-content:center;margin-bottom:20px;}
+    .pin-dot{width:14px;height:14px;border-radius:50%;background:var(--border);transition:background .15s;}
+    .pin-dot.filled{background:var(--gold);}
+    .pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:240px;margin:0 auto;}
+    .pin-key{padding:18px;background:var(--card);border:1px solid var(--border);border-radius:12px;font-size:20px;font-weight:700;font-family:'Rubik',sans-serif;color:var(--white);cursor:pointer;text-align:center;transition:all .1s;}
+    .pin-key:active{background:var(--gold);color:var(--black);}
+    .pin-key.del{font-size:15px;color:var(--gray);}
+    .admin-top{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;}
+    .admin-status{font-size:12px;color:var(--gold);font-weight:600;}
+    .btn-sm{padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--gray);font-size:12px;font-family:'Rubik',sans-serif;cursor:pointer;}
+    .admin-tabs{display:flex;padding:0 12px 10px;gap:8px;}
+    .atab{padding:7px 16px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--gray);font-size:12px;font-weight:700;font-family:'Rubik',sans-serif;cursor:pointer;transition:all .15s;}
+    .atab.active{background:var(--gold);color:var(--black);border-color:var(--gold);}
+    .admin-filter{display:flex;overflow-x:auto;padding:0 12px 8px;gap:6px;scrollbar-width:none;}
+    .admin-filter::-webkit-scrollbar{display:none;}
+    .af-btn{flex-shrink:0;padding:5px 10px;border-radius:6px;border:1px solid var(--border);background:none;color:var(--gray);font-size:11px;font-weight:600;font-family:'Rubik',sans-serif;cursor:pointer;transition:all .15s;}
+    .af-btn.active{background:var(--gold);color:var(--black);border-color:var(--gold);}
+    .admin-match{background:var(--card);border-radius:10px;padding:11px 13px;margin:3px 12px;display:flex;justify-content:space-between;align-items:center;gap:8px;}
+    .am-info{flex:1;min-width:0;}
+    .am-title{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .am-sub{font-size:11px;color:var(--gray);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .am-btns{display:flex;gap:6px;flex-shrink:0;}
+    .btn-edit{padding:6px 12px;background:var(--card2);color:var(--white);border:1px solid var(--border);border-radius:8px;font-size:12px;font-family:'Rubik',sans-serif;cursor:pointer;}
+    .btn-lock{padding:6px 10px;background:var(--gold);color:var(--black);border:none;border-radius:8px;font-size:12px;font-family:'Rubik',sans-serif;cursor:pointer;font-weight:700;}
+    .deeln-block{margin:8px 12px 16px;}
+    .deeln-poule-head{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;padding-left:2px;}
+    .deeln-team{background:var(--card);border-radius:10px;padding:12px 13px;margin-bottom:6px;}
+    .deeln-team-title{font-size:12px;font-weight:700;color:var(--gold);margin-bottom:10px;}
+    .deeln-row{display:flex;gap:6px;align-items:center;margin-bottom:6px;}
+    .deeln-lbl{font-size:10px;color:var(--gray);width:58px;flex-shrink:0;text-transform:uppercase;}
+    .deeln-inp{flex:1;padding:8px 10px;background:var(--card2);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:13px;font-family:'Rubik',sans-serif;}
+    .deeln-inp:focus{outline:none;border-color:var(--gold);}
+    .deeln-search{padding:8px 11px;background:var(--card2);border:1px solid var(--border);border-radius:8px;color:var(--gold);font-size:13px;cursor:pointer;flex-shrink:0;text-decoration:none;line-height:1;}
+    .btn-deeln-save{width:100%;padding:9px;background:var(--gold);color:var(--black);border:none;border-radius:8px;font-size:13px;font-weight:700;font-family:'Rubik',sans-serif;cursor:pointer;margin-top:8px;}
 
-    .admin-top { display:flex; justify-content:space-between; align-items:center; padding:12px 16px; }
-    .admin-status { font-size:12px; color:var(--gold); font-weight:600; }
-    .btn-sm {
-      padding:6px 12px; border-radius:8px; border:1px solid var(--border);
-      background:var(--card); color:var(--gray); font-size:12px; font-family:'Rubik',sans-serif; cursor:pointer;
-    }
-
-    /* Admin tabs */
-    .admin-tabs { display:flex; padding:0 12px 10px; gap:8px; }
-    .atab {
-      padding:7px 16px; border-radius:8px; border:1px solid var(--border);
-      background:none; color:var(--gray); font-size:12px; font-weight:700;
-      font-family:'Rubik',sans-serif; cursor:pointer; transition:all .15s;
-    }
-    .atab.active { background:var(--gold); color:var(--black); border-color:var(--gold); }
-
-    .admin-filter { display:flex; overflow-x:auto; padding:0 12px 8px; gap:6px; scrollbar-width:none; }
-    .admin-filter::-webkit-scrollbar { display:none; }
-    .af-btn {
-      flex-shrink:0; padding:5px 10px; border-radius:6px; border:1px solid var(--border);
-      background:none; color:var(--gray); font-size:11px; font-weight:600;
-      font-family:'Rubik',sans-serif; cursor:pointer; transition:all .15s;
-    }
-    .af-btn.active { background:var(--gold); color:var(--black); border-color:var(--gold); }
-
-    .admin-match {
-      background:var(--card); border-radius:10px; padding:11px 13px;
-      margin:3px 12px; display:flex; justify-content:space-between; align-items:center; gap:8px;
-    }
-    .am-info { flex:1; min-width:0; }
-    .am-title { font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .am-sub { font-size:11px; color:var(--gray); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .am-btns { display:flex; gap:6px; flex-shrink:0; }
-    .btn-edit {
-      padding:6px 12px; background:var(--card2); color:var(--white);
-      border:1px solid var(--border); border-radius:8px; font-size:12px;
-      font-family:'Rubik',sans-serif; cursor:pointer;
-    }
-    .btn-lock {
-      padding:6px 10px; background:var(--gold); color:var(--black);
-      border:none; border-radius:8px; font-size:12px; font-family:'Rubik',sans-serif;
-      cursor:pointer; font-weight:700;
-    }
-
-    /* Deelnemers */
-    .deeln-block { margin:8px 12px 16px; }
-    .deeln-poule-head { font-size:11px; font-weight:700; color:var(--gray); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; padding-left:2px; }
-    .deeln-team { background:var(--card); border-radius:10px; padding:12px 13px; margin-bottom:6px; }
-    .deeln-team-title { font-size:12px; font-weight:700; color:var(--gold); margin-bottom:10px; }
-    .deeln-row { display:flex; gap:6px; align-items:center; margin-bottom:6px; }
-    .deeln-lbl { font-size:10px; color:var(--gray); width:58px; flex-shrink:0; text-transform:uppercase; letter-spacing:.3px; }
-    .deeln-inp { flex:1; padding:8px 10px; background:var(--card2); border:1px solid var(--border); border-radius:8px; color:var(--white); font-size:13px; font-family:'Rubik',sans-serif; }
-    .deeln-inp:focus { outline:none; border-color:var(--gold); }
-    .deeln-search { padding:8px 11px; background:var(--card2); border:1px solid var(--border); border-radius:8px; color:var(--gold); font-size:13px; cursor:pointer; flex-shrink:0; text-decoration:none; line-height:1; }
-    .btn-deeln-save { width:100%; padding:9px; background:var(--gold); color:var(--black); border:none; border-radius:8px; font-size:13px; font-weight:700; font-family:'Rubik',sans-serif; cursor:pointer; margin-top:8px; }
+    /* MATCH CARD (list fallback + detail modal) */
+    .match-card{background:var(--card);margin:4px 12px;border-radius:12px;padding:11px 14px;border-left:3px solid transparent;}
+    .match-card.played{border-left-color:var(--gold);}
+    .match-card.eindronde{border-left-color:#555;}
+    .mc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+    .mc-meta{font-size:11px;color:var(--gray);}
+    .mc-badge{font-size:10px;background:var(--card2);padding:2px 8px;border-radius:10px;color:var(--gray);}
+    .mc-badge.gold{background:#2a1f00;color:var(--gold);}
+    .mc-teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px;}
+    .mc-team{font-size:13px;font-weight:500;line-height:1.3;}
+    .mc-team.right{text-align:right;}
+    .mc-team.tbd{color:var(--gray);font-style:italic;font-weight:400;font-size:12px;}
+    .mc-team.won{color:var(--gold);font-weight:700;}
+    .mc-score{display:flex;align-items:center;gap:4px;font-size:20px;font-weight:800;white-space:nowrap;}
+    .mc-score .w{color:var(--gold);}
+    .mc-score .l{color:var(--gray);}
+    .mc-score .d{color:var(--border);font-size:16px;}
+    .mc-vs{color:var(--gray);font-size:11px;text-align:center;}
 
     /* MODAL */
-    .modal-bg {
-      position:fixed; inset:0; background:rgba(0,0,0,.9); z-index:200;
-      display:flex; align-items:flex-end; backdrop-filter:blur(8px);
-    }
-    .modal {
-      background:#111; border-radius:20px 20px 0 0;
-      padding:24px 20px 36px; width:100%; max-height:90vh; overflow-y:auto;
-      border-top:1px solid var(--border);
-    }
-    .modal-title { font-size:18px; font-weight:800; font-style:italic; color:var(--gold); text-transform:uppercase; margin-bottom:4px; }
-    .modal-sub { font-size:12px; color:var(--gray); margin-bottom:20px; }
-    .form-lbl { display:block; font-size:11px; color:var(--gray); text-transform:uppercase; letter-spacing:.5px; margin-bottom:6px; }
-    .form-grp { margin-bottom:16px; }
-    input[type=text], input[type=password], input[type=number], select {
-      width:100%; padding:12px 14px; background:var(--card2);
-      border:1px solid var(--border); border-radius:10px;
-      color:var(--white); font-size:14px; font-family:'Rubik',sans-serif;
-    }
-    input:focus, select:focus { outline:none; border-color:var(--gold); }
-    option { background:#111; }
+    .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:200;display:flex;align-items:flex-end;backdrop-filter:blur(8px);}
+    .modal{background:#111;border-radius:20px 20px 0 0;padding:24px 20px 36px;width:100%;max-height:90vh;overflow-y:auto;border-top:1px solid var(--border);}
+    .modal-title{font-size:18px;font-weight:800;font-style:italic;color:var(--gold);text-transform:uppercase;margin-bottom:4px;}
+    .modal-sub{font-size:12px;color:var(--gray);margin-bottom:20px;}
+    .form-lbl{display:block;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+    .form-grp{margin-bottom:16px;}
+    input[type=text],input[type=number],select{width:100%;padding:12px 14px;background:var(--card2);border:1px solid var(--border);border-radius:10px;color:var(--white);font-size:14px;font-family:'Rubik',sans-serif;}
+    input:focus,select:focus{outline:none;border-color:var(--gold);}
+    option{background:#111;}
+    .score-row{display:grid;grid-template-columns:1fr 48px 1fr;gap:8px;align-items:center;margin-bottom:12px;}
+    .score-team-lbl{font-size:13px;font-weight:600;text-align:center;}
+    .score-vs-lbl{text-align:center;color:var(--gray);font-size:12px;}
+    .score-input{text-align:center;font-size:24px;font-weight:800;}
+    .modal-row{display:flex;gap:8px;margin-top:20px;}
+    .btn-cancel{flex:1;padding:13px;background:var(--card2);color:var(--white);border:none;border-radius:10px;font-size:14px;font-family:'Rubik',sans-serif;cursor:pointer;}
+    .btn-save{flex:2;padding:13px;background:var(--gold);color:var(--black);border:none;border-radius:10px;font-size:14px;font-weight:800;font-family:'Rubik',sans-serif;cursor:pointer;}
 
-    .score-row { display:grid; grid-template-columns:1fr 48px 1fr; gap:8px; align-items:center; margin-bottom:12px; }
-    .score-team-lbl { font-size:13px; font-weight:600; text-align:center; }
-    .score-vs-lbl { text-align:center; color:var(--gray); font-size:12px; }
-    .score-input { text-align:center; font-size:24px; font-weight:800; }
-
-    .modal-row { display:flex; gap:8px; margin-top:20px; }
-    .btn-cancel { flex:1; padding:13px; background:var(--card2); color:var(--white); border:none; border-radius:10px; font-size:14px; font-family:'Rubik',sans-serif; cursor:pointer; }
-    .btn-save { flex:2; padding:13px; background:var(--gold); color:var(--black); border:none; border-radius:10px; font-size:14px; font-weight:800; font-family:'Rubik',sans-serif; cursor:pointer; }
+    /* DETAIL MODAL (match info) */
+    .detail-team-row{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--border);}
+    .detail-team{font-size:15px;font-weight:600;flex:1;}
+    .detail-team.right{text-align:right;}
+    .detail-score-big{font-size:32px;font-weight:800;color:var(--gold);padding:0 16px;}
+    .detail-meta-row{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);}
+    .detail-meta-item{font-size:12px;color:var(--gray);}
+    .detail-meta-item span{color:var(--white);font-weight:600;display:block;margin-top:2px;}
+    .btn-gok-match{width:100%;padding:13px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--black);border:none;border-radius:10px;font-size:14px;font-weight:800;font-family:'Rubik',sans-serif;cursor:pointer;margin-top:16px;}
 
     /* TOAST */
-    .toast {
-      position:fixed; bottom:calc(var(--nav-h) + 12px); left:50%;
-      transform:translateX(-50%) translateY(10px);
-      background:#222; border:1px solid #444; color:var(--white);
-      padding:10px 20px; border-radius:20px; font-size:13px;
-      opacity:0; transition:all .25s; z-index:500;
-      white-space:nowrap; pointer-events:none; font-family:'Rubik',sans-serif;
-    }
-    .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+    .toast{position:fixed;bottom:calc(var(--nav-h)+12px);left:50%;transform:translateX(-50%) translateY(10px);background:#222;border:1px solid #444;color:var(--white);padding:10px 20px;border-radius:20px;font-size:13px;opacity:0;transition:all .25s;z-index:500;white-space:nowrap;pointer-events:none;font-family:'Rubik',sans-serif;}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
     /* FOOTER */
-    .app-footer {
-      text-align:center; padding:20px 16px 8px;
-      font-size:10px; color:#444; line-height:1.6;
-    }
+    .app-footer{text-align:center;padding:20px 16px 8px;font-size:10px;color:#444;line-height:1.6;}
 
     /* MISC */
-    .empty { padding:32px; text-align:center; color:var(--gray); font-size:13px; }
-    .divider { height:1px; background:var(--border); margin:8px 0; }
+    .empty{padding:32px;text-align:center;color:var(--gray);font-size:13px;}
+    .prog-wrap{padding:16px 16px 8px;}
+    .prog-row{display:flex;justify-content:space-between;font-size:12px;color:var(--gray);margin-bottom:6px;}
+    .prog-bar{height:4px;background:var(--border);border-radius:3px;overflow:hidden;}
+    .prog-fill{height:100%;background:var(--gold);border-radius:3px;transition:width .6s ease;}
   </style>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -315,15 +261,16 @@
   <div class="fb-spin"></div>
 </div>
 
-<!-- PAGE: HOME -->
+<!-- HOME -->
 <div class="page active" id="page-home">
   <div class="home-hero">
-    <div class="hero-eyebrow">Padel Vlaanderen officieel</div>
+    <div class="hero-eyebrow">Padel Vlaanderen officieel toernooi</div>
     <div class="hero-title">Pachanga Summer Open</div>
-    <div class="hero-dates">15 t/m 21 juni 2026 · Pachanga Padel, Muizen</div>
+    <div class="hero-dates">15 t/m 21 juni 2026 &middot; Pachanga Padel, Muizen</div>
+    <div class="hero-countdown" id="hero-countdown"></div>
     <div class="hero-stats">
       <div class="hstat"><div class="hstat-v" id="h-played">0</div><div class="hstat-l">Gespeeld</div></div>
-      <div class="hstat"><div class="hstat-v" id="h-total">0</div><div class="hstat-l">Totaal</div></div>
+      <div class="hstat"><div class="hstat-v" id="h-total">0</div><div class="hstat-l">Matches</div></div>
       <div class="hstat"><div class="hstat-v" id="h-pct">0%</div><div class="hstat-l">Klaar</div></div>
     </div>
   </div>
@@ -331,54 +278,86 @@
     <div class="prog-row"><span>Voortgang toernooi</span><span id="h-prog-lbl">0 / 0</span></div>
     <div class="prog-bar"><div class="prog-fill" id="h-prog-fill" style="width:0%"></div></div>
   </div>
+
+  <div class="sec-title">Randactiviteiten</div>
+  <div class="activities-scroll">
+    <div class="act-card" onclick="goPage('gokken')">
+      <div class="act-img" style="background:linear-gradient(135deg,#E9B745,#c9972a)">
+        <svg viewBox="0 0 24 24" fill="#000" width="44" height="44"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+      </div>
+      <div class="act-body"><div class="act-title">Lucky Legend</div><div class="act-desc">Gok op matches, verdien credits</div></div>
+    </div>
+    <div class="act-card">
+      <div class="act-img" style="background:linear-gradient(135deg,#1a1a2e,#16213e)">
+        <svg viewBox="0 0 24 24" fill="#E9B745" width="44" height="44"><path d="M18.5 3H6c-1.1 0-2 .9-2 2v5.71c0 3.83 2.95 7.18 6.78 7.29 3.96.12 7.22-3.06 7.22-7V5c0-1.1-.9-2-2-2zm-5 8v2.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5V11H11c-.28 0-.5-.22-.5-.5s.22-.5.5-.5h1.5V8.5c0-.28.22-.5.5-.5s.5.22.5.5V10H15c.28 0 .5.22.5.5s-.22.5-.5.5h-1.5zM4 19h16v2H4z"/></svg>
+      </div>
+      <div class="act-body"><div class="act-title">Bar &amp; Tapas</div><div class="act-desc">Sfeer, hapjes en drankjes</div></div>
+    </div>
+    <div class="act-card">
+      <div class="act-img" style="background:linear-gradient(135deg,#0f3460,#533483)">
+        <svg viewBox="0 0 24 24" fill="#fff" width="44" height="44"><path d="M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5zM19 19.09H5V4.91h14v14.18zM6 15h12v2H6zm0-4h12v2H6zm0-4h12v2H6z"/></svg>
+      </div>
+      <div class="act-body"><div class="act-title">Merchandise</div><div class="act-desc">Officiële Pachanga collectie</div></div>
+    </div>
+    <div class="act-card">
+      <div class="act-img" style="background:linear-gradient(135deg,#2d1b69,#11998e)">
+        <svg viewBox="0 0 24 24" fill="#fff" width="44" height="44"><path d="M20 4h-3.17L15 2H9L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+      </div>
+      <div class="act-body"><div class="act-title">Foto &amp; Video</div><div class="act-desc">Deel je moment #SummerOpen26</div></div>
+    </div>
+    <div class="act-card">
+      <div class="act-img" style="background:linear-gradient(135deg,#134e5e,#71b280)">
+        <svg viewBox="0 0 24 24" fill="#fff" width="44" height="44"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+      </div>
+      <div class="act-body"><div class="act-title">Club Community</div><div class="act-desc">Ontmoet je medespelers</div></div>
+    </div>
+  </div>
+
   <div class="sec-title">Reeksen</div>
   <div id="home-cats"></div>
   <div class="app-footer">
-    Dit is geen officieel scherm van Padel Vlaanderen. Live scores zijn indicatief.<br>
+    Niet officieel scherm van Padel Vlaanderen. Scores zijn indicatief.<br>
     Officieel: <a href="https://www.tennisenpadelvlaanderen.be" style="color:#555">tennisenpadelvlaanderen.be</a>
   </div>
 </div>
 
-<!-- PAGE: DAG -->
+<!-- DAG -->
 <div class="page" id="page-dag">
   <div class="day-tabs" id="day-tabs"></div>
   <div id="dag-content"></div>
-  <div class="app-footer">Niet officieel · tennisenpadelvlaanderen.be</div>
+  <div class="app-footer">Niet officieel &middot; tennisenpadelvlaanderen.be</div>
 </div>
 
-<!-- PAGE: STANDEN -->
+<!-- STANDEN -->
 <div class="page" id="page-standen">
   <div class="cat-selector" id="cat-selector"></div>
   <div id="standen-content"></div>
-  <div class="app-footer">Niet officieel · tennisenpadelvlaanderen.be</div>
+  <div class="app-footer">Niet officieel &middot; tennisenpadelvlaanderen.be</div>
 </div>
 
-<!-- PAGE: ADMIN -->
+<!-- GOKKEN -->
+<div class="page" id="page-gokken">
+  <div id="gokken-content"></div>
+</div>
+
+<!-- ADMIN -->
 <div class="page" id="page-admin">
   <div id="admin-lock-screen">
     <div class="admin-lock">
-      <div style="font-size:40px; margin-bottom:12px;">🔐</div>
+      <div style="font-size:40px;margin-bottom:12px">
+        <svg viewBox="0 0 24 24" fill="#E9B745" width="48" height="48"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+      </div>
       <h2>Admin Paneel</h2>
       <p>Voer de PIN in om scores in te geven.</p>
       <div class="pin-dots" id="pin-dots">
-        <div class="pin-dot" id="pd0"></div>
-        <div class="pin-dot" id="pd1"></div>
-        <div class="pin-dot" id="pd2"></div>
-        <div class="pin-dot" id="pd3"></div>
+        <div class="pin-dot" id="pd0"></div><div class="pin-dot" id="pd1"></div>
+        <div class="pin-dot" id="pd2"></div><div class="pin-dot" id="pd3"></div>
       </div>
       <div class="pin-pad">
-        <button class="pin-key" onclick="pinKey('1')">1</button>
-        <button class="pin-key" onclick="pinKey('2')">2</button>
-        <button class="pin-key" onclick="pinKey('3')">3</button>
-        <button class="pin-key" onclick="pinKey('4')">4</button>
-        <button class="pin-key" onclick="pinKey('5')">5</button>
-        <button class="pin-key" onclick="pinKey('6')">6</button>
-        <button class="pin-key" onclick="pinKey('7')">7</button>
-        <button class="pin-key" onclick="pinKey('8')">8</button>
-        <button class="pin-key" onclick="pinKey('9')">9</button>
-        <button class="pin-key" onclick="pinKey('')"></button>
-        <button class="pin-key" onclick="pinKey('0')">0</button>
-        <button class="pin-key del" onclick="pinDel()">⌫</button>
+        <button class="pin-key" onclick="pinKey('1')">1</button><button class="pin-key" onclick="pinKey('2')">2</button><button class="pin-key" onclick="pinKey('3')">3</button>
+        <button class="pin-key" onclick="pinKey('4')">4</button><button class="pin-key" onclick="pinKey('5')">5</button><button class="pin-key" onclick="pinKey('6')">6</button>
+        <button class="pin-key" onclick="pinKey('7')">7</button><button class="pin-key" onclick="pinKey('8')">8</button><button class="pin-key" onclick="pinKey('9')">9</button>
+        <button class="pin-key" onclick="pinKey('')"></button><button class="pin-key" onclick="pinKey('0')">0</button><button class="pin-key del" onclick="pinDel()">&#9003;</button>
       </div>
     </div>
   </div>
@@ -391,14 +370,10 @@
       <button class="atab active" id="atab-wedstrijden" onclick="setAdminTab('wedstrijden')">Wedstrijden</button>
       <button class="atab" id="atab-deelnemers" onclick="setAdminTab('deelnemers')">Deelnemers</button>
     </div>
-
-    <!-- Tab: Wedstrijden -->
     <div id="admin-tab-wedstrijden">
       <div class="admin-filter" id="admin-filter"></div>
       <div id="admin-list"></div>
     </div>
-
-    <!-- Tab: Deelnemers -->
     <div id="admin-tab-deelnemers" style="display:none">
       <div class="cat-selector" id="deeln-cat-sel"></div>
       <div id="deeln-content"></div>
@@ -406,42 +381,39 @@
   </div>
 </div>
 
-<!-- BOTTOM NAV -->
+<!-- NAV -->
 <nav class="bottom-nav">
   <button class="nav-btn active" id="nav-home" onclick="goPage('home')">
-    <span class="nav-icon">🏠</span>Home
+    <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Home
   </button>
   <button class="nav-btn" id="nav-dag" onclick="goPage('dag')">
-    <span class="nav-icon">📅</span>Dag
+    <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5C3.89 4 3 4.9 3 6L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-1V1h-2zm3 19H5V9h14v11z"/></svg>Dag
   </button>
   <button class="nav-btn" id="nav-standen" onclick="goPage('standen')">
-    <span class="nav-icon">🏆</span>Standen
+    <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C18.08 12.63 20 10.55 20 8V7c0-1.1-.9-2-1-2zM7 8V7h2v2.82C7.86 9.59 7 8.82 7 8zm10 0c0 .82-.86 1.59-2 1.82V7h2v1z"/></svg>Standen
+  </button>
+  <button class="nav-btn" id="nav-gokken" onclick="goPage('gokken')">
+    <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>Gokken
   </button>
   <button class="nav-btn" id="nav-admin" onclick="goPage('admin')">
-    <span class="nav-icon">🔐</span>Admin
+    <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>Admin
   </button>
 </nav>
 
-<!-- MODAL: Score ingeven -->
+<!-- MODAL: Score -->
 <div class="modal-bg" id="modal-bg" style="display:none" onclick="if(event.target===this)closeModal()">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-title" id="modal-title">Score ingeven</div>
     <div class="modal-sub" id="modal-sub"></div>
+    <div class="form-grp"><label class="form-lbl">Tijd</label><input type="text" id="edit-time" placeholder="18:00"></div>
+    <div class="form-grp"><label class="form-lbl">Veld</label><input type="number" id="edit-court" min="1" max="8" placeholder="1-8"></div>
     <div class="form-grp">
-      <label class="form-lbl">Tijd</label>
-      <input type="text" id="edit-time" placeholder="bijv. 18:00">
+      <label class="form-lbl">Teamnamen</label>
+      <input type="text" id="edit-t1name" placeholder="Team 1" style="margin-bottom:6px">
+      <input type="text" id="edit-t2name" placeholder="Team 2">
     </div>
     <div class="form-grp">
-      <label class="form-lbl">Veld</label>
-      <input type="number" id="edit-court" min="1" max="8" placeholder="1-8">
-    </div>
-    <div class="form-grp">
-      <label class="form-lbl">Teamnamen (optioneel updaten)</label>
-      <input type="text" id="edit-t1name" placeholder="Team 1 naam" style="margin-bottom:6px">
-      <input type="text" id="edit-t2name" placeholder="Team 2 naam">
-    </div>
-    <div class="form-grp">
-      <label class="form-lbl">Score (sets gewonnen)</label>
+      <label class="form-lbl">Score (sets)</label>
       <div class="score-row">
         <div class="score-team-lbl" id="edit-t1lbl">Team 1</div>
         <div class="score-vs-lbl">vs</div>
@@ -449,7 +421,7 @@
       </div>
       <div class="score-row">
         <input type="number" class="score-input" id="edit-s1" min="0" max="3" placeholder="0">
-        <div class="score-vs-lbl" style="font-size:20px; font-weight:800; color:var(--border)">-</div>
+        <div class="score-vs-lbl" style="font-size:20px;font-weight:800;color:var(--border)">-</div>
         <input type="number" class="score-input" id="edit-s2" min="0" max="3" placeholder="0">
       </div>
     </div>
@@ -460,772 +432,545 @@
   </div>
 </div>
 
+<!-- MODAL: Match detail -->
+<div class="modal-bg" id="detail-bg" style="display:none" onclick="if(event.target===this)closeDetail()">
+  <div class="modal" onclick="event.stopPropagation()" id="detail-modal"></div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
 // ============================================================
 // CONSTANTEN
 // ============================================================
-const CATS = {
-  h_p100: { label:'Heren P100', short:'H P100', type:'outdoor', color:'#4a9eff',
-            poules:['A','B','C','D'], bracket:'QF', days_poule:['ma','do'], day_final:'za' },
-  h_p300: { label:'Heren P300', short:'H P300', type:'outdoor', color:'#9775fa',
-            poules:['A','B','C','D'], bracket:'QF', days_poule:['ma','do'], day_final:'za' },
-  h_p500: { label:'Heren P500', short:'H P500', type:'outdoor', color:'#ff6b6b',
-            poules:['A','B','C','D'], bracket:'QF', days_poule:['di','wo'], day_final:'za' },
-  h_p700: { label:'Heren P700', short:'H P700', type:'indoor',  color:'#ffa94d',
-            poules:['A','B'],       bracket:'SF', days_poule:['ma','wo'], day_final:'zo' },
-  d_p100: { label:'Dames P100', short:'D P100', type:'outdoor', color:'#f783ac',
-            poules:['A','B','C','D'], bracket:'QF', days_poule:['di','wo','vr'], day_final:'zo' },
-  d_p300: { label:'Dames P300', short:'D P300', type:'outdoor', color:'#a9e34b',
-            poules:['A','B','C','D'], bracket:'QF', days_poule:['di','wo','vr'], day_final:'zo' },
-  d_p500: { label:'Dames P500', short:'D P500', type:'indoor',  color:'#69db7c',
-            poules:['A','B','C','D'], bracket:'QF', days_poule:['di','do','vr'], day_final:'zo' },
+const CATS={
+  h_p100:{label:'Heren P100',short:'H P100',type:'outdoor',color:'#4a9eff',poules:['A','B','C','D'],bracket:'QF',days_poule:['ma','do'],day_final:'za'},
+  h_p300:{label:'Heren P300',short:'H P300',type:'outdoor',color:'#9775fa',poules:['A','B','C','D'],bracket:'QF',days_poule:['ma','do'],day_final:'za'},
+  h_p500:{label:'Heren P500',short:'H P500',type:'outdoor',color:'#ff6b6b',poules:['A','B','C','D'],bracket:'QF',days_poule:['di','wo'],day_final:'za'},
+  h_p700:{label:'Heren P700',short:'H P700',type:'indoor',color:'#ffa94d',poules:['A','B'],bracket:'SF',days_poule:['ma','wo'],day_final:'zo'},
+  d_p100:{label:'Dames P100',short:'D P100',type:'outdoor',color:'#f783ac',poules:['A','B','C','D'],bracket:'QF',days_poule:['di','wo','vr'],day_final:'zo'},
+  d_p300:{label:'Dames P300',short:'D P300',type:'outdoor',color:'#a9e34b',poules:['A','B','C','D'],bracket:'QF',days_poule:['di','wo','vr'],day_final:'zo'},
+  d_p500:{label:'Dames P500',short:'D P500',type:'indoor',color:'#69db7c',poules:['A','B','C','D'],bracket:'QF',days_poule:['di','do','vr'],day_final:'zo'},
 };
-
-// Per poule: welke dag, welke 2 courts, begintijd
-// Afgeleid uit courtplanning screenshots
-const POULE_SCHED = {
-  h_p100: { A:{day:'ma',c1:4,c2:5,t:'18:00'}, B:{day:'ma',c1:4,c2:5,t:'19:30'},
-            C:{day:'do',c1:4,c2:5,t:'18:00'}, D:{day:'do',c1:4,c2:5,t:'19:30'} },
-  h_p300: { A:{day:'ma',c1:1,c2:2,t:'18:00'}, B:{day:'ma',c1:1,c2:2,t:'19:30'},
-            C:{day:'do',c1:1,c2:2,t:'18:00'}, D:{day:'do',c1:1,c2:2,t:'19:30'} },
-  h_p500: { A:{day:'di',c1:1,c2:2,t:'18:00'}, B:{day:'di',c1:1,c2:2,t:'19:30'},
-            C:{day:'wo',c1:1,c2:2,t:'18:00'}, D:{day:'wo',c1:1,c2:2,t:'19:30'} },
-  h_p700: { A:{day:'ma',c1:6,c2:7,t:'19:00'}, B:{day:'wo',c1:6,c2:7,t:'19:00'} },
-  d_p100: { A:{day:'di',c1:4,c2:5,t:'18:00'}, B:{day:'wo',c1:4,c2:5,t:'18:45'},
-            C:{day:'vr',c1:1,c2:2,t:'18:00'}, D:{day:'vr',c1:4,c2:5,t:'18:45'} },
-  d_p300: { A:{day:'di',c1:4,c2:5,t:'18:45'}, B:{day:'wo',c1:4,c2:5,t:'18:00'},
-            C:{day:'vr',c1:4,c2:5,t:'18:00'}, D:{day:'vr',c1:1,c2:2,t:'18:45'} },
-  d_p500: { A:{day:'di',c1:6,c2:7,t:'18:00'}, B:{day:'di',c1:6,c2:7,t:'19:30'},
-            C:{day:'do',c1:6,c2:7,t:'18:00'}, D:{day:'do',c1:6,c2:7,t:'19:30'} },
+const POULE_SCHED={
+  h_p100:{A:{day:'ma',c1:4,c2:5,t:'18:00'},B:{day:'ma',c1:4,c2:5,t:'19:30'},C:{day:'do',c1:4,c2:5,t:'18:00'},D:{day:'do',c1:4,c2:5,t:'19:30'}},
+  h_p300:{A:{day:'ma',c1:1,c2:2,t:'18:00'},B:{day:'ma',c1:1,c2:2,t:'19:30'},C:{day:'do',c1:1,c2:2,t:'18:00'},D:{day:'do',c1:1,c2:2,t:'19:30'}},
+  h_p500:{A:{day:'di',c1:1,c2:2,t:'18:00'},B:{day:'di',c1:1,c2:2,t:'19:30'},C:{day:'wo',c1:1,c2:2,t:'18:00'},D:{day:'wo',c1:1,c2:2,t:'19:30'}},
+  h_p700:{A:{day:'ma',c1:6,c2:7,t:'19:00'},B:{day:'wo',c1:6,c2:7,t:'19:00'}},
+  d_p100:{A:{day:'di',c1:4,c2:5,t:'18:00'},B:{day:'wo',c1:4,c2:5,t:'18:45'},C:{day:'vr',c1:1,c2:2,t:'18:00'},D:{day:'vr',c1:4,c2:5,t:'18:45'}},
+  d_p300:{A:{day:'di',c1:4,c2:5,t:'18:45'},B:{day:'wo',c1:4,c2:5,t:'18:00'},C:{day:'vr',c1:4,c2:5,t:'18:00'},D:{day:'vr',c1:1,c2:2,t:'18:45'}},
+  d_p500:{A:{day:'di',c1:6,c2:7,t:'18:00'},B:{day:'di',c1:6,c2:7,t:'19:30'},C:{day:'do',c1:6,c2:7,t:'18:00'},D:{day:'do',c1:6,c2:7,t:'19:30'}},
 };
-
-// Eindrondetijden + courts per categorie
-const EINDRONDE_SCHED = {
-  h_p500: { QF:{t:'10:00',courts:[1,2,4,5]}, SF:{t:'11:00',courts:[1,2]}, F:{t:'12:00',courts:[1]} },
-  h_p100: { QF:{t:'12:00',courts:[2,3,4,5]}, SF:{t:'13:30',courts:[4,5]}, F:{t:'15:00',courts:[5]} },
-  h_p300: { QF:{t:'15:30',courts:[1,2,3,4]}, SF:{t:'16:30',courts:[1,2]}, F:{t:'17:30',courts:[1]} },
-  d_p300: { QF:{t:'10:00',courts:[1,2,3,4]}, SF:{t:'11:00',courts:[1,2]}, F:{t:'12:00',courts:[1]} },
-  d_p500: { QF:{t:'11:00',courts:[6,7]},     SF:{t:'12:00',courts:[6,7]}, F:{t:'13:00',courts:[6]} },
-  d_p100: { QF:{t:'13:30',courts:[2,3,4,5]}, SF:{t:'14:30',courts:[1,2]}, F:{t:'16:00',courts:[1]} },
-  h_p700: {                                   SF:{t:'14:30',courts:[7,8]}, F:{t:'16:00',courts:[7]} },
+const EINDRONDE_SCHED={
+  h_p500:{QF:{t:'10:00',courts:[1,2,4,5]},SF:{t:'11:00',courts:[1,2]},F:{t:'12:00',courts:[1]}},
+  h_p100:{QF:{t:'12:00',courts:[2,3,4,5]},SF:{t:'13:30',courts:[4,5]},F:{t:'15:00',courts:[5]}},
+  h_p300:{QF:{t:'15:30',courts:[1,2,3,4]},SF:{t:'16:30',courts:[1,2]},F:{t:'17:30',courts:[1]}},
+  d_p300:{QF:{t:'10:00',courts:[1,2,3,4]},SF:{t:'11:00',courts:[1,2]},F:{t:'12:00',courts:[1]}},
+  d_p500:{QF:{t:'11:00',courts:[6,7]},SF:{t:'12:00',courts:[6,7]},F:{t:'13:00',courts:[6]}},
+  d_p100:{QF:{t:'13:30',courts:[2,3,4,5]},SF:{t:'14:30',courts:[1,2]},F:{t:'16:00',courts:[1]}},
+  h_p700:{SF:{t:'14:30',courts:[7,8]},F:{t:'16:00',courts:[7]}},
 };
-
-const DAYS = [
-  { key:'ma', label:'MA', full:'Maandag 15/06',   date:'2026-06-15' },
-  { key:'di', label:'DI', full:'Dinsdag 16/06',   date:'2026-06-16' },
-  { key:'wo', label:'WO', full:'Woensdag 17/06',  date:'2026-06-17' },
-  { key:'do', label:'DO', full:'Donderdag 18/06', date:'2026-06-18' },
-  { key:'vr', label:'VR', full:'Vrijdag 19/06',   date:'2026-06-19' },
-  { key:'za', label:'ZA', full:'Zaterdag 20/06',  date:'2026-06-20' },
-  { key:'zo', label:'ZO', full:'Zondag 21/06',    date:'2026-06-21' },
+const DAYS=[
+  {key:'ma',label:'MA',full:'Maandag 15/06',date:'2026-06-15'},
+  {key:'di',label:'DI',full:'Dinsdag 16/06',date:'2026-06-16'},
+  {key:'wo',label:'WO',full:'Woensdag 17/06',date:'2026-06-17'},
+  {key:'do',label:'DO',full:'Donderdag 18/06',date:'2026-06-18'},
+  {key:'vr',label:'VR',full:'Vrijdag 19/06',date:'2026-06-19'},
+  {key:'za',label:'ZA',full:'Zaterdag 20/06',date:'2026-06-20'},
+  {key:'zo',label:'ZO',full:'Zondag 21/06',date:'2026-06-21'},
 ];
-
-const FIREBASE_CONFIG = {
-  apiKey:            "AIzaSyDrlCpuO2a5yzSUB1JoZ96KSaYjCQniu48",
-  authDomain:        "mgpc-2026.firebaseapp.com",
-  databaseURL:       "https://mgpc-2026-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId:         "mgpc-2026",
-  storageBucket:     "mgpc-2026.firebasestorage.app",
-  messagingSenderId: "78506921375",
-  appId:             "1:78506921375:web:3a4b325a3981a9195901aa"
-};
-const FB_PATH   = 'summer2026b'; // b = correcte schema met 4 poules
-const ADMIN_PIN = '2606';
+const FIREBASE_CONFIG={apiKey:"AIzaSyDrlCpuO2a5yzSUB1JoZ96KSaYjCQniu48",authDomain:"mgpc-2026.firebaseapp.com",databaseURL:"https://mgpc-2026-default-rtdb.europe-west1.firebasedatabase.app",projectId:"mgpc-2026",storageBucket:"mgpc-2026.firebasestorage.app",messagingSenderId:"78506921375",appId:"1:78506921375:web:3a4b325a3981a9195901aa"};
+const FB_PATH='summer2026b';
+const ADMIN_PIN='2606';
+const INIT_CREDITS=10;
 
 // ============================================================
 // HELPERS
 // ============================================================
-function addMins(time, mins) {
-  const [h, m] = time.split(':').map(Number);
-  const total = h * 60 + m + mins;
-  return `${String(Math.floor(total/60)).padStart(2,'0')}:${String(total%60).padStart(2,'0')}`;
-}
+function addMins(t,m){const[h,mi]=t.split(':').map(Number),tot=h*60+mi+m;return`${String(Math.floor(tot/60)).padStart(2,'0')}:${String(tot%60).padStart(2,'0')}`;}
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function teamName(cat,poule,key){if(!key)return null;return(S.teams&&S.teams[cat]&&poule&&S.teams[cat][poule]&&S.teams[cat][poule][key])||key;}
+function phaseLabel(ph){return{poule:'Pouleduel',QF:'Kwartfinale',SF:'Halve Finale',F:'Finale'}[ph]||ph;}
+function courtLbl(c){if(!c)return'?';return`V${c}`;}
 
 // ============================================================
-// SEED DATA
+// SEED
 // ============================================================
-function makeSeed() {
-  const teams = {};
-  const deelnemers = {};
-  const matches = [];
-
-  // Round-robin pairs voor 4 teams: 6 matches in 3 rondes
-  // Ronde 1: [1v2, 3v4], Ronde 2: [1v3, 2v4], Ronde 3: [1v4, 2v3]
-  const RR = [
-    [['1','2'],['3','4']],
-    [['1','3'],['2','4']],
-    [['1','4'],['2','3']],
-  ];
-
-  Object.keys(CATS).forEach(cat => {
-    const shortClean = CATS[cat].short.replace(' ','');
-    const poules = CATS[cat].poules;
-
-    teams[cat] = {};
-    deelnemers[cat] = {};
-
-    poules.forEach(poule => {
-      // Team placeholders
-      teams[cat][poule] = {
-        '1': `${shortClean} ${poule}1`,
-        '2': `${shortClean} ${poule}2`,
-        '3': `${shortClean} ${poule}3`,
-        '4': `${shortClean} ${poule}4`,
-      };
-
-      // Deelnemers placeholders
-      deelnemers[cat][poule] = {
-        '1': { lidnr1:'', lidnr2:'' },
-        '2': { lidnr1:'', lidnr2:'' },
-        '3': { lidnr1:'', lidnr2:'' },
-        '4': { lidnr1:'', lidnr2:'' },
-      };
-
-      // Poule matches
-      const ps = POULE_SCHED[cat][poule];
-      RR.forEach((ronde, ri) => {
-        ronde.forEach((pair, pi) => {
-          const court = pi === 0 ? ps.c1 : ps.c2;
-          const time  = addMins(ps.t, ri * 45);
-          matches.push({
-            id: `${cat}-${poule}-r${ri+1}m${pi+1}`,
-            cat, poule, phase:'poule',
-            t1: pair[0], t2: pair[1],
-            s1: null, s2: null,
-            day: ps.day, time, court,
-            locked: false
-          });
-        });
-      });
+function makeSeed(){
+  const teams={},deelnemers={},matches=[];
+  const RR=[[['1','2'],['3','4']],[['1','3'],['2','4']],[['1','4'],['2','3']]];
+  Object.keys(CATS).forEach(cat=>{
+    const sh=CATS[cat].short.replace(' ','');
+    teams[cat]={};deelnemers[cat]={};
+    CATS[cat].poules.forEach(poule=>{
+      teams[cat][poule]={'1':`${sh}${poule}1`,'2':`${sh}${poule}2`,'3':`${sh}${poule}3`,'4':`${sh}${poule}4`};
+      deelnemers[cat][poule]={'1':{lidnr1:'',lidnr2:''},'2':{lidnr1:'',lidnr2:''},'3':{lidnr1:'',lidnr2:''},'4':{lidnr1:'',lidnr2:''}};
+      const ps=POULE_SCHED[cat][poule];
+      RR.forEach((ronde,ri)=>ronde.forEach((pair,pi)=>{
+        matches.push({id:`${cat}-${poule}-r${ri+1}m${pi+1}`,cat,poule,phase:'poule',t1:pair[0],t2:pair[1],s1:null,s2:null,day:ps.day,time:addMins(ps.t,ri*45),court:pi===0?ps.c1:ps.c2,locked:false});
+      }));
     });
-
-    // Eindronde
-    const es = EINDRONDE_SCHED[cat] || {};
-    const fd = CATS[cat].day_final;
-    const bracket = CATS[cat].bracket;
-
-    if (bracket === 'QF') {
-      // 4 QF matches
-      const qfS = es.QF || { t:'10:00', courts:[1,2,3,4] };
-      const qfPairs = [
-        { label:'QF1', t1_desc:'1e Poule A', t2_desc:'2e Poule B', court: qfS.courts[0] || 1 },
-        { label:'QF2', t1_desc:'1e Poule B', t2_desc:'2e Poule A', court: qfS.courts[1] || 2 },
-        { label:'QF3', t1_desc:'1e Poule C', t2_desc:'2e Poule D', court: qfS.courts[2] || 3 },
-        { label:'QF4', t1_desc:'1e Poule D', t2_desc:'2e Poule C', court: qfS.courts[3] || 4 },
-      ];
-      qfPairs.forEach((qf, i) => {
-        matches.push({
-          id:`${cat}-qf${i+1}`, cat, poule:null, phase:'QF',
-          t1:null, t2:null, s1:null, s2:null,
-          day:fd, time:qfS.t, court:qf.court, locked:false,
-          label:qf.label, t1_desc:qf.t1_desc, t2_desc:qf.t2_desc
-        });
+    const es=EINDRONDE_SCHED[cat]||{},fd=CATS[cat].day_final,br=CATS[cat].bracket;
+    if(br==='QF'){
+      const q=es.QF||{t:'10:00',courts:[1,2,3,4]};
+      [{l:'QF1',d1:'1e Poule A',d2:'2e Poule B',c:q.courts[0]||1},{l:'QF2',d1:'1e Poule B',d2:'2e Poule A',c:q.courts[1]||2},{l:'QF3',d1:'1e Poule C',d2:'2e Poule D',c:q.courts[2]||3},{l:'QF4',d1:'1e Poule D',d2:'2e Poule C',c:q.courts[3]||4}].forEach((qf,i)=>{
+        matches.push({id:`${cat}-qf${i+1}`,cat,poule:null,phase:'QF',t1:null,t2:null,s1:null,s2:null,day:fd,time:q.t,court:qf.c,locked:false,label:qf.l,t1_desc:qf.d1,t2_desc:qf.d2});
       });
-      // 2 SF
-      const sfS = es.SF || { t:'12:00', courts:[1,2] };
-      [1,2].forEach(n => {
-        matches.push({
-          id:`${cat}-sf${n}`, cat, poule:null, phase:'SF',
-          t1:null, t2:null, s1:null, s2:null,
-          day:fd, time:sfS.t, court:sfS.courts[n-1]||n, locked:false,
-          label:`SF${n}`, t1_desc:`Winnaar QF${n*2-1}`, t2_desc:`Winnaar QF${n*2}`
-        });
-      });
+      const sf=es.SF||{t:'12:00',courts:[1,2]};
+      [1,2].forEach(n=>matches.push({id:`${cat}-sf${n}`,cat,poule:null,phase:'SF',t1:null,t2:null,s1:null,s2:null,day:fd,time:sf.t,court:sf.courts[n-1]||n,locked:false,label:`SF${n}`,t1_desc:`Winnaar QF${n*2-1}`,t2_desc:`Winnaar QF${n*2}`}));
     } else {
-      // SF only (H P700, 2 poules)
-      const sfS = es.SF || { t:'14:30', courts:[7,8] };
-      matches.push({
-        id:`${cat}-sf1`, cat, poule:null, phase:'SF',
-        t1:null, t2:null, s1:null, s2:null,
-        day:fd, time:sfS.t, court:sfS.courts[0]||7, locked:false,
-        label:'SF1', t1_desc:'1e Poule A', t2_desc:'2e Poule B'
-      });
-      matches.push({
-        id:`${cat}-sf2`, cat, poule:null, phase:'SF',
-        t1:null, t2:null, s1:null, s2:null,
-        day:fd, time:sfS.t, court:sfS.courts[1]||8, locked:false,
-        label:'SF2', t1_desc:'1e Poule B', t2_desc:'2e Poule A'
-      });
+      const sf=es.SF||{t:'14:30',courts:[7,8]};
+      [1,2].forEach(n=>matches.push({id:`${cat}-sf${n}`,cat,poule:null,phase:'SF',t1:null,t2:null,s1:null,s2:null,day:fd,time:sf.t,court:sf.courts[n-1]||7,locked:false,label:`SF${n}`,t1_desc:n===1?'1e Poule A':'1e Poule B',t2_desc:n===1?'2e Poule B':'2e Poule A'}));
     }
-
-    // Finale
-    const fS = es.F || { t:'16:00', courts:[1] };
-    matches.push({
-      id:`${cat}-f`, cat, poule:null, phase:'F',
-      t1:null, t2:null, s1:null, s2:null,
-      day:fd, time:fS.t, court:fS.courts[0]||1, locked:false,
-      label:'Finale', t1_desc:'Winnaar SF1', t2_desc:'Winnaar SF2'
-    });
+    const f=es.F||{t:'16:00',courts:[1]};
+    matches.push({id:`${cat}-f`,cat,poule:null,phase:'F',t1:null,t2:null,s1:null,s2:null,day:fd,time:f.t,court:f.courts[0]||1,locked:false,label:'Finale',t1_desc:'Winnaar SF1',t2_desc:'Winnaar SF2'});
   });
-
-  return { teams, deelnemers, matches };
+  return{teams,deelnemers,matches};
 }
 
 // ============================================================
 // STATE
 // ============================================================
-let S = { teams:{}, deelnemers:{}, matches:[] };
-let fbRef = null;
-let adminActive = false;
-let currentDay = 'ma';
-let currentCat = 'h_p100';
-let adminFilterCat = 'all';
-let adminTab = 'wedstrijden';
-let deelnCat = 'h_p100';
-let editMatchId = null;
-let pinBuffer = '';
+let S={teams:{},deelnemers:{},matches:[]};
+let fbRef=null,usersRef=null;
+let adminActive=false,currentDay='ma',currentCat='h_p100',adminFilterCat='all',adminTab='wedstrijden',deelnCat='h_p100',editMatchId=null,detailMatchId=null,pinBuffer='';
+let GokState={deviceId:'',nickname:'',credits:INIT_CREDITS,bets:{}};
 
 // ============================================================
 // FIREBASE
 // ============================================================
-function normalizeMatches(arr) {
-  return arr.map(m => ({
-    ...m,
-    s1: m.s1 != null ? m.s1 : null,
-    s2: m.s2 != null ? m.s2 : null,
-    locked: !!m.locked,
-    t1: m.t1 != null ? m.t1 : null,
-    t2: m.t2 != null ? m.t2 : null,
-  }));
-}
-
-function initFirebase() {
-  try {
+function initFirebase(){
+  try{
     firebase.initializeApp(FIREBASE_CONFIG);
-    fbRef = firebase.database().ref(FB_PATH);
-    fbRef.on('value', snap => {
-      const data = snap.val();
-      if (data && data.matches && data.matches.length) {
-        S.matches     = normalizeMatches(data.matches);
-        S.teams       = data.teams || {};
-        S.deelnemers  = data.deelnemers || {};
-      } else {
-        S = makeSeed();
-        fbRef.set(S);
-      }
-      document.getElementById('fb-loading').style.display = 'none';
+    fbRef=firebase.database().ref(FB_PATH);
+    usersRef=firebase.database().ref(FB_PATH+'/users');
+    fbRef.child('data').on('value',snap=>{
+      const d=snap.val();
+      if(d&&d.matches&&d.matches.length){S.matches=d.matches.map(m=>({...m,s1:m.s1??null,s2:m.s2??null,locked:!!m.locked,t1:m.t1??null,t2:m.t2??null}));S.teams=d.teams||{};S.deelnemers=d.deelnemers||{};}
+      else{S=makeSeed();fbRef.child('data').set(S);}
+      document.getElementById('fb-loading').style.display='none';
+      resolveGokBets();
       renderAll();
-    }, err => {
-      console.error('Firebase error:', err);
-      document.getElementById('fb-loading').style.display = 'none';
-      S = makeSeed();
-      renderAll();
-    });
-  } catch(e) {
-    console.error('Firebase init failed:', e);
-    document.getElementById('fb-loading').style.display = 'none';
-    S = makeSeed();
-    renderAll();
-  }
+    },err=>{console.error(err);document.getElementById('fb-loading').style.display='none';S=makeSeed();renderAll();});
+  }catch(e){console.error(e);document.getElementById('fb-loading').style.display='none';S=makeSeed();renderAll();}
 }
-
-function save() { if (fbRef) fbRef.set(S); }
+function save(){if(fbRef)fbRef.child('data').set(S);}
 
 // ============================================================
 // NAVIGATION
 // ============================================================
-function goPage(page) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('page-' + page).classList.add('active');
-  document.getElementById('nav-' + page).classList.add('active');
-  if (page === 'dag') renderDag();
-  if (page === 'standen') renderStanden();
-  if (page === 'admin') renderAdmin();
+function goPage(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.getElementById('nav-'+page).classList.add('active');
+  if(page==='dag')renderDag();
+  if(page==='standen')renderStanden();
+  if(page==='admin')renderAdmin();
+  if(page==='gokken')renderGokken();
 }
-
-function renderAll() {
-  renderHome();
-  const active = document.querySelector('.page.active');
-  if (active && active.id === 'page-dag') renderDag();
-  if (active && active.id === 'page-standen') renderStanden();
-  if (active && active.id === 'page-admin' && adminActive) renderAdmin();
-}
+function renderAll(){renderHome();const a=document.querySelector('.page.active');if(a){const id=a.id.replace('page-','');if(id==='dag')renderDag();if(id==='standen')renderStanden();if(id==='gokken')renderGokken();if(id==='admin'&&adminActive)renderAdmin();}}
+function goCat(cat){currentCat=cat;goPage('standen');}
 
 // ============================================================
-// HELPERS
+// COUNTDOWN
 // ============================================================
-function teamName(cat, poule, key) {
-  if (!key) return null;
-  if (S.teams && S.teams[cat] && poule && S.teams[cat][poule] && S.teams[cat][poule][key])
-    return S.teams[cat][poule][key];
-  return key;
+function renderCountdown(){
+  const target=new Date('2026-06-15T18:00:00'),now=new Date(),diff=target-now;
+  const el=document.getElementById('hero-countdown');
+  if(!el)return;
+  if(diff<=0){el.innerHTML='<div style="color:var(--gold);font-weight:700;font-size:14px">Toernooi is bezig!</div>';return;}
+  const d=Math.floor(diff/86400000),h=Math.floor((diff%86400000)/3600000),m=Math.floor((diff%3600000)/60000);
+  el.innerHTML=`<div class="hcd-unit"><div class="hcd-val">${d}</div><div class="hcd-lbl">dagen</div></div><div class="hcd-unit"><div class="hcd-val">${h}</div><div class="hcd-lbl">uren</div></div><div class="hcd-unit"><div class="hcd-val">${m}</div><div class="hcd-lbl">min</div></div>`;
 }
-
-function getPouleMatches(cat, poule) {
-  return S.matches.filter(m => m.cat === cat && m.poule === poule && m.phase === 'poule');
-}
-
-function calcStandings(cat, poule) {
-  const ms = getPouleMatches(cat, poule);
-  const tkeys = S.teams[cat] && S.teams[cat][poule] ? Object.keys(S.teams[cat][poule]) : ['1','2','3','4'];
-  const rows = {};
-  tkeys.forEach(t => rows[t] = { key:t, gs:0, gc:0, pts:0, w:0, l:0 });
-  ms.forEach(m => {
-    if (!m.locked || m.s1 === null || m.s2 === null) return;
-    const s1 = +m.s1, s2 = +m.s2;
-    if (!rows[m.t1] || !rows[m.t2]) return;
-    rows[m.t1].gs += s1; rows[m.t1].gc += s2;
-    rows[m.t2].gs += s2; rows[m.t2].gc += s1;
-    if (s1 > s2) { rows[m.t1].pts+=2; rows[m.t1].w++; rows[m.t2].pts+=1; rows[m.t2].l++; }
-    else if (s2 > s1) { rows[m.t2].pts+=2; rows[m.t2].w++; rows[m.t1].pts+=1; rows[m.t1].l++; }
-    else { rows[m.t1].pts+=1; rows[m.t2].pts+=1; }
-  });
-  return Object.values(rows).sort((a,b) => {
-    if (b.pts !== a.pts) return b.pts - a.pts;
-    return (b.gs-b.gc) - (a.gs-a.gc);
-  });
-}
-
-function courtLabel(c) {
-  if (!c) return '?';
-  return c <= 5 ? `V${c}` : `I${c}`;
-}
-
-function phaseLabel(ph) {
-  return { poule:'Pouleduel', QF:'Kwartfinale', SF:'Halve Finale', F:'Finale' }[ph] || ph;
-}
+setInterval(renderCountdown,30000);
 
 // ============================================================
 // HOME
 // ============================================================
-function renderHome() {
-  const total  = S.matches.filter(m => m.phase === 'poule').length;
-  const played = S.matches.filter(m => m.phase === 'poule' && m.locked).length;
-  const pct    = total ? Math.round(played / total * 100) : 0;
-  document.getElementById('h-played').textContent   = played;
-  document.getElementById('h-total').textContent    = total;
-  document.getElementById('h-pct').textContent      = pct + '%';
-  document.getElementById('h-prog-lbl').textContent = `${played} / ${total} poulewedstrijden`;
-  document.getElementById('h-prog-fill').style.width = pct + '%';
-
-  document.getElementById('home-cats').innerHTML = Object.entries(CATS).map(([key, cat]) => {
-    const cT = S.matches.filter(m => m.cat===key && m.phase==='poule').length;
-    const cP = S.matches.filter(m => m.cat===key && m.phase==='poule' && m.locked).length;
-    const cp = cT ? Math.round(cP/cT*100) : 0;
-    const icon = cat.type==='indoor' ? '🏛' : '🌤';
-    return `<div class="cat-card" onclick="goCat('${key}')">
-      <div class="cat-dot" style="background:${cat.color}"></div>
-      <div class="cat-info">
-        <div class="cat-name">${cat.label}</div>
-        <div class="cat-meta">${icon} ${cat.type==='indoor'?'Indoor':'Outdoor'} · ${cat.poules.length} poules · ${cP}/${cT} gespeeld</div>
-      </div>
-      <div class="cat-pct">${cp}%</div>
-    </div>`;
+function renderHome(){
+  renderCountdown();
+  const total=S.matches.filter(m=>m.phase==='poule').length;
+  const played=S.matches.filter(m=>m.phase==='poule'&&m.locked).length;
+  const pct=total?Math.round(played/total*100):0;
+  document.getElementById('h-played').textContent=played;
+  document.getElementById('h-total').textContent=total;
+  document.getElementById('h-pct').textContent=pct+'%';
+  document.getElementById('h-prog-lbl').textContent=`${played} / ${total} poulewedstrijden`;
+  document.getElementById('h-prog-fill').style.width=pct+'%';
+  document.getElementById('home-cats').innerHTML=Object.entries(CATS).map(([key,cat])=>{
+    const cT=S.matches.filter(m=>m.cat===key&&m.phase==='poule').length;
+    const cP=S.matches.filter(m=>m.cat===key&&m.phase==='poule'&&m.locked).length;
+    const cp=cT?Math.round(cP/cT*100):0;
+    const icon=cat.type==='indoor'?'🏛':'🌤';
+    return`<div class="cat-card" onclick="goCat('${key}')"><div class="cat-dot" style="background:${cat.color}"></div><div class="cat-info"><div class="cat-name">${cat.label}</div><div class="cat-meta">${icon} ${cat.poules.length} poules &middot; ${cP}/${cT} gespeeld</div></div><div class="cat-pct">${cp}%</div></div>`;
   }).join('');
 }
 
-function goCat(cat) { currentCat = cat; goPage('standen'); }
-
 // ============================================================
-// DAG
+// DAG - GRID
 // ============================================================
-function renderDag() {
-  document.getElementById('day-tabs').innerHTML = DAYS.map(d =>
-    `<button class="day-tab ${d.key===currentDay?'active':''}" onclick="setDay('${d.key}')">${d.label}</button>`
-  ).join('');
-
-  const content = document.getElementById('dag-content');
-  const day = DAYS.find(d => d.key === currentDay);
-  const ms = S.matches.filter(m => m.day === currentDay).sort((a,b) => {
-    if (a.time < b.time) return -1;
-    if (a.time > b.time) return 1;
-    return (a.court||99) - (b.court||99);
+function renderDag(){
+  document.getElementById('day-tabs').innerHTML=DAYS.map(d=>`<button class="day-tab ${d.key===currentDay?'active':''}" onclick="setDay('${d.key}')">${d.label}</button>`).join('');
+  const content=document.getElementById('dag-content');
+  const day=DAYS.find(d=>d.key===currentDay);
+  const ms=S.matches.filter(m=>m.day===currentDay);
+  if(!ms.length){content.innerHTML=`<div class="empty">Geen wedstrijden op ${day.full}</div>`;return;}
+  const times=[...new Set(ms.map(m=>m.time||'00:00'))].sort();
+  const courts=[...new Set(ms.map(m=>m.court).filter(Boolean))].sort((a,b)=>a-b);
+  let html=`<div class="day-full-lbl">${day.full}</div><div class="court-grid-wrap"><div class="court-grid">`;
+  // Header
+  html+=`<div class="cg-header-row"><div class="cg-time-hdr"></div>${courts.map(c=>`<div class="cg-court-hdr">V${c}</div>`).join('')}</div>`;
+  // Rows
+  times.forEach(time=>{
+    html+=`<div class="cg-row"><div class="cg-time">${time}</div>`;
+    courts.forEach(court=>{
+      const m=ms.find(x=>(x.time||'00:00')===time&&x.court===court);
+      if(m){html+=`<div class="cg-cell has-match" onclick="openDetail('${m.id}')">${renderGridCell(m)}</div>`;}
+      else{html+=`<div class="cg-cell empty"><div class="cg-empty-dot"></div></div>`;}
+    });
+    html+=`</div>`;
   });
+  html+=`</div></div>`;
+  content.innerHTML=html;
+}
+function setDay(d){currentDay=d;renderDag();}
+function renderGridCell(m){
+  const cat=CATS[m.cat]||{};
+  const isEdr=m.phase!=='poule';
+  const t1n=isEdr?(m.t1?teamName(m.cat,null,m.t1):(m.t1_desc||'TBD')):(teamName(m.cat,m.poule,m.t1)||'?');
+  const t2n=isEdr?(m.t2?teamName(m.cat,null,m.t2):(m.t2_desc||'TBD')):(teamName(m.cat,m.poule,m.t2)||'?');
+  const played=m.locked&&m.s1!==null&&m.s2!==null;
+  const badge=isEdr?(m.label||cat.short):`${cat.short} ${m.poule}`;
+  const t1won=played&&+m.s1>+m.s2,t2won=played&&+m.s2>+m.s1;
+  return`<div class="gc-badge" style="background:${cat.color}22;color:${cat.color}">${badge}</div><div class="gc-team ${t1won?'won':''}">${escHtml(t1n)}</div><div class="gc-vs">vs</div><div class="gc-team ${t2won?'won':''}">${escHtml(t2n)}</div>${played?`<div class="gc-score">${m.s1}-${m.s2}</div>`:''}`;
+}
 
-  if (!ms.length) {
-    content.innerHTML = `<div class="empty">Geen wedstrijden op ${day.full}</div>`;
-    return;
+// ============================================================
+// MATCH DETAIL MODAL
+// ============================================================
+function openDetail(id){
+  const m=S.matches.find(x=>x.id===id);if(!m)return;
+  detailMatchId=id;
+  const cat=CATS[m.cat]||{};
+  const isEdr=m.phase!=='poule';
+  const t1n=isEdr?(m.t1?teamName(m.cat,null,m.t1):(m.t1_desc||'TBD')):(teamName(m.cat,m.poule,m.t1)||'?');
+  const t2n=isEdr?(m.t2?teamName(m.cat,null,m.t2):(m.t2_desc||'TBD')):(teamName(m.cat,m.poule,m.t2)||'?');
+  const played=m.locked&&m.s1!==null&&m.s2!==null;
+  const t1won=played&&+m.s1>+m.s2,t2won=played&&+m.s2>+m.s1;
+  const badge=isEdr?(m.label||cat.short):`${cat.short} - Poule ${m.poule}`;
+  const myBet=GokState.bets[id];
+  const canBet=!m.locked&&GokState.nickname&&!myBet;
+  let html=`<div class="modal-title">${escHtml(badge)}</div><div class="modal-sub">${DAYS.find(d=>d.key===m.day)?.full||m.day} &middot; Veld ${m.court||'?'} &middot; ${m.time||'?'}</div>`;
+  html+=`<div class="detail-team-row"><div class="detail-team ${t1won?'won':''}">${escHtml(t1n)}</div><div class="detail-score-big">${played?`${m.s1}-${m.s2}`:'vs'}</div><div class="detail-team right ${t2won?'won':''}">${escHtml(t2n)}</div></div>`;
+  if(myBet){
+    const winnerName=myBet.pick==='1'?t1n:t2n;
+    const resolved=played;
+    const won=resolved&&((myBet.pick==='1'&&t1won)||(myBet.pick==='2'&&t2won));
+    html+=`<div style="padding:12px 0;border-bottom:1px solid var(--border)"><div style="font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Mijn gok</div><div class="gok-my-bet"><span style="font-size:13px">${escHtml(winnerName)} &middot; ${myBet.amount} credits</span><span class="gok-bet-result ${resolved?(won?'win':'loss'):'pending'}">${resolved?(won?'+'+myBet.amount+' gewonnen':'verloren'):'Wacht op uitslag'}</span></div></div>`;
   }
-
-  const byTime = {};
-  ms.forEach(m => { const t=m.time||'00:00'; if(!byTime[t]) byTime[t]=[]; byTime[t].push(m); });
-
-  let html = `<div style="padding:12px 16px 4px;font-size:13px;font-weight:700;color:var(--gray)">${day.full}</div>`;
-  Object.keys(byTime).sort().forEach(time => {
-    html += `<div class="time-group-lbl">${time}</div>`;
-    byTime[time].forEach(m => { html += renderMatchCard(m); });
-  });
-  content.innerHTML = html;
+  if(canBet){html+=`<button class="btn-gok-match" onclick="openGokMatch('${id}')">Gok op deze match</button>`;}
+  if(adminActive){html+=`<button class="btn-sm" style="width:100%;margin-top:12px;text-align:center" onclick="closeDetail();openEdit('${id}')">Score ingeven (admin)</button>`;}
+  html+=`<div class="modal-row"><button class="btn-cancel" onclick="closeDetail()">Sluiten</button></div>`;
+  document.getElementById('detail-modal').innerHTML=html;
+  document.getElementById('detail-bg').style.display='flex';
 }
-
-function setDay(d) { currentDay = d; renderDag(); }
-
-function renderMatchCard(m) {
-  const cat = CATS[m.cat] || {};
-  const isEdr = m.phase !== 'poule';
-  const t1n = isEdr ? (m.t1 ? teamName(m.cat, null, m.t1) : (m.t1_desc||'TBD')) : (teamName(m.cat, m.poule, m.t1)||'?');
-  const t2n = isEdr ? (m.t2 ? teamName(m.cat, null, m.t2) : (m.t2_desc||'TBD')) : (teamName(m.cat, m.poule, m.t2)||'?');
-  const played = m.locked && m.s1 !== null && m.s2 !== null;
-  const t1won  = played && +m.s1 > +m.s2;
-  const t2won  = played && +m.s2 > +m.s1;
-  const courtTxt = m.court ? `Veld ${m.court} (${courtLabel(m.court)})` : '';
-  const badgeTxt = isEdr ? (m.label || phaseLabel(m.phase)) : `Poule ${m.poule}`;
-  return `<div class="match-card ${played?'played':''} ${isEdr?'eindronde':''}">
-    <div class="mc-top">
-      <div class="mc-meta">${courtTxt}</div>
-      <div class="mc-badge ${isEdr?'gold':''}">${cat.short||''} · ${badgeTxt}</div>
-    </div>
-    <div class="mc-teams">
-      <div class="mc-team ${t1won?'won':''} ${!m.t1&&isEdr?'tbd':''}">${t1n}</div>
-      ${played
-        ? `<div class="mc-score"><span class="${t1won?'w':'l'}">${m.s1}</span><span class="d">-</span><span class="${t2won?'w':'l'}">${m.s2}</span></div>`
-        : `<div class="mc-vs">vs</div>`}
-      <div class="mc-team right ${t2won?'won':''} ${!m.t2&&isEdr?'tbd':''}">${t2n}</div>
-    </div>
-  </div>`;
-}
+function closeDetail(){document.getElementById('detail-bg').style.display='none';detailMatchId=null;}
 
 // ============================================================
 // STANDEN
 // ============================================================
-function renderStanden() {
-  const sel = document.getElementById('cat-selector');
-  sel.innerHTML = Object.entries(CATS).map(([key, cat]) =>
-    `<button class="cat-pill ${key===currentCat?'active':''}" onclick="setCat('${key}')">${cat.short}</button>`
-  ).join('');
-
-  const content = document.getElementById('standen-content');
-  const cat = CATS[currentCat];
-  if (!cat) return;
-
-  let html = `<div class="sec-title">${cat.label}</div>`;
-
-  // Poules
-  cat.poules.forEach(poule => {
-    const rows = calcStandings(currentCat, poule);
-    html += `<div class="poule-block">
-      <div class="poule-head">Poule ${poule}</div>
-      <div class="standings-table">
-        <div class="st-row header">
-          <div></div><div>Team</div>
-          <div style="text-align:center">W</div><div style="text-align:center">V</div>
-          <div style="text-align:center">GS</div><div style="text-align:center">GT</div>
-          <div style="text-align:center">PTS</div>
-        </div>`;
-    rows.forEach((r, i) => {
-      const name = teamName(currentCat, poule, r.key) || r.key;
-      const isTop = i < 2;
-      html += `<div class="st-row">
-        <div class="st-pos ${isTop?'top':''}">${i+1}</div>
-        <div class="st-team ${isTop?'leader':''}">${name}</div>
-        <div class="st-num">${r.w}</div><div class="st-num">${r.l}</div>
-        <div class="st-num">${r.gs}</div><div class="st-num">${r.gc}</div>
-        <div class="st-pts">${r.pts}</div>
-      </div>`;
-    });
-    html += `</div></div>`;
-
-    const pm = getPouleMatches(currentCat, poule);
-    if (pm.length) {
-      html += `<div style="margin:4px 12px 12px">`;
-      pm.sort((a,b) => a.time > b.time ? 1 : -1).forEach(m => { html += renderMatchCard(m); });
-      html += `</div>`;
-    }
+function renderStanden(){
+  document.getElementById('cat-selector').innerHTML=Object.entries(CATS).map(([key,cat])=>`<button class="cat-pill ${key===currentCat?'active':''}" onclick="setCat('${key}')">${cat.short}</button>`).join('');
+  const content=document.getElementById('standen-content');
+  const cat=CATS[currentCat];if(!cat)return;
+  let html=`<div class="sec-title">${cat.label}</div>`;
+  cat.poules.forEach(poule=>{
+    const rows=calcStandings(currentCat,poule);
+    html+=`<div class="poule-block"><div class="poule-head">Poule ${poule}</div><div class="standings-table"><div class="st-row header"><div></div><div>Team</div><div style="text-align:center">W</div><div style="text-align:center">V</div><div style="text-align:center">GS</div><div style="text-align:center">GT</div><div style="text-align:center">PTS</div></div>`;
+    rows.forEach((r,i)=>{const name=teamName(currentCat,poule,r.key)||r.key;const isTop=i<2;html+=`<div class="st-row"><div class="st-pos ${isTop?'top':''}">${i+1}</div><div class="st-team ${isTop?'leader':''}">${escHtml(name)}</div><div class="st-num">${r.w}</div><div class="st-num">${r.l}</div><div class="st-num">${r.gs}</div><div class="st-num">${r.gc}</div><div class="st-pts">${r.pts}</div></div>`;});
+    html+=`</div></div>`;
+    const pm=S.matches.filter(m=>m.cat===currentCat&&m.poule===poule&&m.phase==='poule');
+    if(pm.length){html+=`<div style="margin:4px 12px 12px">`;pm.sort((a,b)=>a.time>b.time?1:-1).forEach(m=>{html+=renderMatchCard(m);});html+=`</div>`;}
   });
-
-  // Eindronde bracket
-  const em = S.matches.filter(m => m.cat === currentCat && m.phase !== 'poule')
-    .sort((a,b) => { const o={QF:0,SF:1,F:2}; return (o[a.phase]||99)-(o[b.phase]||99); });
-
-  if (em.length) {
-    html += `<div class="bracket-wrap">
-      <div class="bracket-title">Eindrondes - ${DAYS.find(d=>d.key===cat.day_final)?.full||''}</div>`;
-    const phases = cat.bracket === 'QF' ? ['QF','SF','F'] : ['SF','F'];
-    phases.forEach(ph => {
-      const phMs = em.filter(m => m.phase === ph);
-      if (!phMs.length) return;
-      const lbl = { QF:'Kwartfinales', SF:'Halve Finales', F:'Finale' }[ph];
-      html += `<div class="bracket-round"><div class="bracket-lbl">${lbl}</div>`;
-      phMs.forEach(m => {
-        const t1n = m.t1 ? teamName(m.cat, null, m.t1) : (m.t1_desc||'TBD');
-        const t2n = m.t2 ? teamName(m.cat, null, m.t2) : (m.t2_desc||'TBD');
-        const played = m.locked && m.s1 !== null;
-        const t1won  = played && +m.s1 > +m.s2;
-        const t2won  = played && +m.s2 > +m.s1;
-        html += `<div class="bracket-match">
-          <div class="bm-left">
-            <div class="bm-team ${!m.t1?'tbd':t1won?'won':''}">${t1n}${m.time?' <span class="bm-badge">'+m.time+'</span>':''}</div>
-            <div class="bm-vs">vs</div>
-            <div class="bm-team ${!m.t2?'tbd':t2won?'won':''}">${t2n}</div>
-          </div>
-          ${played ? `<div class="bm-score">${m.s1}-${m.s2}</div>` : `<div class="bm-score" style="color:var(--border)">-</div>`}
-        </div>`;
+  const em=S.matches.filter(m=>m.cat===currentCat&&m.phase!=='poule').sort((a,b)=>({QF:0,SF:1,F:2}[a.phase]||99)-({QF:0,SF:1,F:2}[b.phase]||99));
+  if(em.length){
+    html+=`<div class="bracket-wrap"><div class="bracket-title">Eindrondes - ${DAYS.find(d=>d.key===cat.day_final)?.full||''}</div>`;
+    (cat.bracket==='QF'?['QF','SF','F']:['SF','F']).forEach(ph=>{
+      const phMs=em.filter(m=>m.phase===ph);if(!phMs.length)return;
+      html+=`<div class="bracket-round"><div class="bracket-lbl">${{QF:'Kwartfinales',SF:'Halve Finales',F:'Finale'}[ph]}</div>`;
+      phMs.forEach(m=>{
+        const t1n=m.t1?teamName(m.cat,null,m.t1):(m.t1_desc||'TBD');
+        const t2n=m.t2?teamName(m.cat,null,m.t2):(m.t2_desc||'TBD');
+        const played=m.locked&&m.s1!==null;const t1won=played&&+m.s1>+m.s2,t2won=played&&+m.s2>+m.s1;
+        html+=`<div class="bracket-match"><div class="bm-left"><div class="bm-team ${!m.t1?'tbd':t1won?'won':''}">${escHtml(t1n)}${m.time?` <span class="bm-badge">${m.time}</span>`:''}</div><div class="bm-vs">vs</div><div class="bm-team ${!m.t2?'tbd':t2won?'won':''}">${escHtml(t2n)}</div></div>${played?`<div class="bm-score">${m.s1}-${m.s2}</div>`:`<div class="bm-score" style="color:var(--border)">-</div>`}</div>`;
       });
-      html += `</div>`;
+      html+=`</div>`;
     });
-    html += `</div>`;
+    html+=`</div>`;
   }
-
-  content.innerHTML = html;
+  content.innerHTML=html;
+}
+function setCat(cat){currentCat=cat;renderStanden();}
+function calcStandings(cat,poule){
+  const ms=S.matches.filter(m=>m.cat===cat&&m.poule===poule&&m.phase==='poule');
+  const tkeys=S.teams[cat]&&S.teams[cat][poule]?Object.keys(S.teams[cat][poule]):['1','2','3','4'];
+  const rows={};tkeys.forEach(t=>rows[t]={key:t,gs:0,gc:0,pts:0,w:0,l:0});
+  ms.forEach(m=>{if(!m.locked||m.s1===null||m.s2===null)return;const s1=+m.s1,s2=+m.s2;if(!rows[m.t1]||!rows[m.t2])return;rows[m.t1].gs+=s1;rows[m.t1].gc+=s2;rows[m.t2].gs+=s2;rows[m.t2].gc+=s1;if(s1>s2){rows[m.t1].pts+=2;rows[m.t1].w++;rows[m.t2].pts+=1;rows[m.t2].l++;}else if(s2>s1){rows[m.t2].pts+=2;rows[m.t2].w++;rows[m.t1].pts+=1;rows[m.t1].l++;}else{rows[m.t1].pts+=1;rows[m.t2].pts+=1;}});
+  return Object.values(rows).sort((a,b)=>b.pts!==a.pts?b.pts-a.pts:(b.gs-b.gc)-(a.gs-a.gc));
+}
+function renderMatchCard(m){
+  const cat=CATS[m.cat]||{};const isEdr=m.phase!=='poule';
+  const t1n=isEdr?(m.t1?teamName(m.cat,null,m.t1):(m.t1_desc||'TBD')):(teamName(m.cat,m.poule,m.t1)||'?');
+  const t2n=isEdr?(m.t2?teamName(m.cat,null,m.t2):(m.t2_desc||'TBD')):(teamName(m.cat,m.poule,m.t2)||'?');
+  const played=m.locked&&m.s1!==null&&m.s2!==null;const t1won=played&&+m.s1>+m.s2,t2won=played&&+m.s2>+m.s1;
+  const courtTxt=m.court?`Veld ${m.court}`:'';const badgeTxt=isEdr?(m.label||phaseLabel(m.phase)):`Poule ${m.poule}`;
+  return`<div class="match-card ${played?'played':''} ${isEdr?'eindronde':''}" onclick="openDetail('${m.id}')"><div class="mc-top"><div class="mc-meta">${courtTxt}</div><div class="mc-badge ${isEdr?'gold':''}">${cat.short||''} &middot; ${badgeTxt}</div></div><div class="mc-teams"><div class="mc-team ${t1won?'won':''} ${!m.t1&&isEdr?'tbd':''}">${escHtml(t1n)}</div>${played?`<div class="mc-score"><span class="${t1won?'w':'l'}">${m.s1}</span><span class="d">-</span><span class="${t2won?'w':'l'}">${m.s2}</span></div>`:`<div class="mc-vs">vs</div>`}<div class="mc-team right ${t2won?'won':''} ${!m.t2&&isEdr?'tbd':''}">${escHtml(t2n)}</div></div></div>`;
 }
 
-function setCat(cat) { currentCat = cat; renderStanden(); }
+// ============================================================
+// GOKKEN
+// ============================================================
+function initGokProfile(){
+  GokState.deviceId=localStorage.getItem('sum26_id')||'';
+  if(!GokState.deviceId){GokState.deviceId='dev_'+Math.random().toString(36).substr(2,9)+Date.now().toString(36);localStorage.setItem('sum26_id',GokState.deviceId);}
+  GokState.nickname=localStorage.getItem('sum26_nick')||'';
+  GokState.credits=parseInt(localStorage.getItem('sum26_credits')||INIT_CREDITS);
+  try{GokState.bets=JSON.parse(localStorage.getItem('sum26_bets')||'{}');}catch(e){GokState.bets={};}
+}
+function saveGokLocal(){
+  localStorage.setItem('sum26_credits',GokState.credits);
+  localStorage.setItem('sum26_bets',JSON.stringify(GokState.bets));
+  if(usersRef&&GokState.nickname)usersRef.child(GokState.deviceId).set({nickname:GokState.nickname,credits:GokState.credits,ts:Date.now()});
+}
+function resolveGokBets(){
+  let changed=false;
+  Object.entries(GokState.bets).forEach(([mid,bet])=>{
+    if(bet.resolved)return;
+    const m=S.matches.find(x=>x.id===mid);
+    if(!m||!m.locked||m.s1===null)return;
+    const t1won=+m.s1>+m.s2,t2won=+m.s2>+m.s1;
+    const won=(bet.pick==='1'&&t1won)||(bet.pick==='2'&&t2won);
+    GokState.bets[mid]={...bet,resolved:true,won};
+    if(won)GokState.credits+=bet.amount;
+    changed=true;
+  });
+  if(changed)saveGokLocal();
+}
+function renderGokken(){
+  resolveGokBets();
+  const el=document.getElementById('gokken-content');
+  if(!GokState.nickname){
+    el.innerHTML=`<div class="gok-setup"><div style="font-size:48px;margin-bottom:16px"><svg viewBox="0 0 24 24" fill="#E9B745" width="56" height="56"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div><h2>Lucky Legend</h2><p>Gok op wedstrijden en verdien Lucky Credits. Geen account nodig, gewoon een naam kiezen.</p><p style="margin-bottom:24px">Je start met <strong style="color:var(--gold)">${INIT_CREDITS} credits</strong>. Per 50 credits maak je kans om Lucky Legend te worden.</p><input class="gok-input" id="gok-nick-inp" placeholder="Kies een bijnaam..." maxlength="20"><button class="btn-gok-start" onclick="startGokken()">Start met gokken</button></div>`;
+    return;
+  }
+  const initial=GokState.nickname.charAt(0).toUpperCase();
+  let html=`<div class="gok-profile"><div class="gok-avatar">${initial}</div><div><div class="gok-name">${escHtml(GokState.nickname)}</div><div class="gok-credits"><svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12" style="vertical-align:middle;margin-right:3px"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>${GokState.credits} Lucky Credits</div></div></div>`;
+  // Open matches
+  const open=S.matches.filter(m=>!m.locked&&m.phase==='poule'&&!GokState.bets[m.id]);
+  const mybets=Object.entries(GokState.bets).filter(([,b])=>b).map(([id,bet])=>({...bet,matchId:id,match:S.matches.find(x=>x.id===id)})).filter(x=>x.match);
+  if(open.length){
+    html+=`<div class="sec-title">Gok op een match</div>`;
+    open.slice(0,8).forEach(m=>{
+      const cat=CATS[m.cat]||{};
+      const t1n=teamName(m.cat,m.poule,m.t1)||'?',t2n=teamName(m.cat,m.poule,m.t2)||'?';
+      html+=`<div class="gok-bet-card"><div class="gok-bet-top"><span class="gok-bet-cat" style="background:${cat.color}22;color:${cat.color}">${cat.short} Poule ${m.poule}</span><span class="gok-bet-time">${m.time||'?'} &middot; V${m.court||'?'}</span></div><div class="gok-teams"><div class="gok-team-name">${escHtml(t1n)}</div><div class="gok-vs-txt">vs</div><div class="gok-team-name right">${escHtml(t2n)}</div></div><div class="gok-actions"><button class="btn-pick" onclick="quickBet('${m.id}','1')">Gok ${escHtml(t1n)}</button><button class="btn-pick" onclick="quickBet('${m.id}','2')">Gok ${escHtml(t2n)}</button></div></div>`;
+    });
+  } else {html+=`<div class="empty" style="padding-top:20px">Geen open matches om op te gokken</div>`;}
+  if(mybets.length){
+    html+=`<div class="sec-title">Mijn gokken</div>`;
+    mybets.reverse().forEach(({matchId,match,pick,amount,resolved,won})=>{
+      if(!match)return;
+      const cat=CATS[match.cat]||{};
+      const t1n=teamName(match.cat,match.poule,match.t1)||'?',t2n=teamName(match.cat,match.poule,match.t2)||'?';
+      const pickName=pick==='1'?t1n:t2n;
+      html+=`<div class="leaderboard-row" style="flex-direction:column;align-items:flex-start;gap:4px"><div style="display:flex;width:100%;justify-content:space-between;align-items:center"><span style="font-size:11px;color:${cat.color};font-weight:700">${cat.short} &middot; ${match.time||'?'}</span><span class="gok-bet-result ${resolved?(won?'win':'loss'):'pending'}">${resolved?(won?'+'+amount+' gewonnen':'-'+amount+' verloren'):'Wacht...'}</span></div><div style="font-size:13px">${escHtml(t1n)} vs ${escHtml(t2n)}</div><div style="font-size:11px;color:var(--gray)">Gok: <strong style="color:var(--white)">${escHtml(pickName)}</strong> &middot; ${amount} credit${amount!==1?'s':''}</div></div>`;
+    });
+  }
+  // Leaderboard
+  html+=`<div class="sec-title">Lucky Legend Klassement</div><div id="leaderboard-list"><div class="empty">Laden...</div></div>`;
+  html+=`<div style="padding:16px;text-align:center;font-size:11px;color:var(--gray)">Per 50 credits maak je extra kans om Lucky Legend te worden.<br><a href="#" onclick="resetGok()" style="color:#444">Naam wijzigen</a></div>`;
+  el.innerHTML=html;
+  loadLeaderboard();
+}
+function loadLeaderboard(){
+  if(!usersRef){document.getElementById('leaderboard-list').innerHTML='<div class="empty">Niet beschikbaar</div>';return;}
+  usersRef.orderByChild('credits').limitToLast(10).once('value',snap=>{
+    const el=document.getElementById('leaderboard-list');if(!el)return;
+    const entries=[];snap.forEach(c=>{entries.push({nickname:c.val().nickname,credits:c.val().credits,isMe:c.key===GokState.deviceId});});
+    entries.sort((a,b)=>b.credits-a.credits);
+    if(!entries.length){el.innerHTML='<div class="empty">Nog geen spelers</div>';return;}
+    el.innerHTML=entries.map((e,i)=>`<div class="leaderboard-row"><div class="lb-pos ${i<3?'top3':''}">${i+1}</div><div class="lb-name">${escHtml(e.nickname)}${e.isMe?' <span style="color:var(--gold);font-size:10px">(jij)</span>':''}</div><div class="lb-credits"><svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12" style="vertical-align:middle;margin-right:2px"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>${e.credits}</div></div>`).join('');
+  });
+}
+function startGokken(){
+  const nick=document.getElementById('gok-nick-inp').value.trim();
+  if(!nick){toast('Voer een bijnaam in');return;}
+  GokState.nickname=nick;
+  GokState.credits=INIT_CREDITS;
+  GokState.bets={};
+  localStorage.setItem('sum26_nick',nick);
+  saveGokLocal();
+  renderGokken();
+}
+function resetGok(){if(confirm('Naam wijzigen? Je credits blijven bewaard.')){const n=prompt('Nieuwe bijnaam:','');if(n&&n.trim()){GokState.nickname=n.trim();localStorage.setItem('sum26_nick',GokState.nickname);saveGokLocal();renderGokken();}}}
+function quickBet(matchId,pick){
+  if(GokState.credits<1){toast('Niet genoeg credits');return;}
+  const amount=Math.min(2,GokState.credits);
+  GokState.bets[matchId]={pick,amount,resolved:false,won:null,ts:Date.now()};
+  GokState.credits-=amount;
+  saveGokLocal();
+  toast(`Gok geplaatst! -${amount} credit${amount!==1?'s':''}`);
+  renderGokken();
+}
+function openGokMatch(matchId){
+  closeDetail();
+  if(GokState.credits<1){toast('Niet genoeg credits');return;}
+  const m=S.matches.find(x=>x.id===matchId);if(!m)return;
+  const t1n=teamName(m.cat,m.poule,m.t1)||'?',t2n=teamName(m.cat,m.poule,m.t2)||'?';
+  const cat=CATS[m.cat]||{};
+  document.getElementById('modal-title').textContent='Gok plaatsen';
+  document.getElementById('modal-sub').textContent=`${cat.short} - Poule ${m.poule} - ${m.time||'?'}`;
+  document.getElementById('modal-bg').style.display='flex';
+  document.getElementById('modal-bg').querySelector('.modal').innerHTML=`<div class="modal-title">Gok plaatsen</div><div class="modal-sub">${escHtml(`${cat.short} - Poule ${m.poule}`)}</div><div style="padding:16px 0;border-bottom:1px solid var(--border);border-top:1px solid var(--border);margin-bottom:16px"><div style="text-align:center;font-size:13px;color:var(--gray);margin-bottom:12px">Kies de winnaar (2 credits inzet)</div><div class="gok-actions"><button class="btn-pick" id="gk-t1" onclick="selectGokPick('${matchId}','1')">${escHtml(t1n)}</button><button class="btn-pick" id="gk-t2" onclick="selectGokPick('${matchId}','2')">${escHtml(t2n)}</button></div></div><div class="modal-row"><button class="btn-cancel" onclick="closeModal()">Annuleren</button><button class="btn-save" onclick="confirmGokBet('${matchId}')">Gok plaatsen</button></div>`;
+  window._gokPick=null;
+}
+function selectGokPick(matchId,pick){window._gokPick=pick;document.getElementById('gk-t1').classList.toggle('selected',pick==='1');document.getElementById('gk-t2').classList.toggle('selected',pick==='2');}
+function confirmGokBet(matchId){
+  if(!window._gokPick){toast('Kies eerst een winnaar');return;}
+  quickBet(matchId,window._gokPick);
+  closeModal();
+}
 
 // ============================================================
 // ADMIN
 // ============================================================
-function renderAdmin() {
-  if (!adminActive) return;
-  document.getElementById('admin-lock-screen').style.display = 'none';
-  document.getElementById('admin-panel').style.display = 'block';
+function renderAdmin(){
+  if(!adminActive)return;
+  document.getElementById('admin-lock-screen').style.display='none';
+  document.getElementById('admin-panel').style.display='block';
   setAdminTab(adminTab);
 }
-
-function setAdminTab(tab) {
-  adminTab = tab;
-  document.getElementById('atab-wedstrijden').classList.toggle('active', tab==='wedstrijden');
-  document.getElementById('atab-deelnemers').classList.toggle('active', tab==='deelnemers');
-  document.getElementById('admin-tab-wedstrijden').style.display = tab==='wedstrijden' ? '' : 'none';
-  document.getElementById('admin-tab-deelnemers').style.display  = tab==='deelnemers'  ? '' : 'none';
-
-  if (tab === 'wedstrijden') renderAdminWedstrijden();
-  if (tab === 'deelnemers')  renderDeelnemers();
+function setAdminTab(tab){
+  adminTab=tab;
+  document.getElementById('atab-wedstrijden').classList.toggle('active',tab==='wedstrijden');
+  document.getElementById('atab-deelnemers').classList.toggle('active',tab==='deelnemers');
+  document.getElementById('admin-tab-wedstrijden').style.display=tab==='wedstrijden'?'':'none';
+  document.getElementById('admin-tab-deelnemers').style.display=tab==='deelnemers'?'':'none';
+  if(tab==='wedstrijden')renderAdminWedstrijden();
+  if(tab==='deelnemers')renderDeelnemers();
 }
-
-function renderAdminWedstrijden() {
-  const fEl = document.getElementById('admin-filter');
-  fEl.innerHTML = `<button class="af-btn ${adminFilterCat==='all'?'active':''}" onclick="setAdminFilter('all')">Alles</button>` +
-    Object.entries(CATS).map(([k,v]) =>
-      `<button class="af-btn ${adminFilterCat===k?'active':''}" onclick="setAdminFilter('${k}')">${v.short}</button>`
-    ).join('');
+function renderAdminWedstrijden(){
+  const fEl=document.getElementById('admin-filter');
+  fEl.innerHTML=`<button class="af-btn ${adminFilterCat==='all'?'active':''}" onclick="setAdminFilter('all')">Alles</button>`+Object.entries(CATS).map(([k,v])=>`<button class="af-btn ${adminFilterCat===k?'active':''}" onclick="setAdminFilter('${k}')">${v.short}</button>`).join('');
   renderAdminList();
 }
-
-function renderAdminList() {
-  const el = document.getElementById('admin-list');
-  if (!el) return;
-  let ms = [...S.matches];
-  if (adminFilterCat !== 'all') ms = ms.filter(m => m.cat === adminFilterCat);
-  ms.sort((a,b) => {
-    const dA = DAYS.findIndex(d=>d.key===a.day), dB = DAYS.findIndex(d=>d.key===b.day);
-    if (dA !== dB) return dA - dB;
-    return a.time < b.time ? -1 : a.time > b.time ? 1 : 0;
+function renderAdminList(){
+  const el=document.getElementById('admin-list');if(!el)return;
+  let ms=[...S.matches];if(adminFilterCat!=='all')ms=ms.filter(m=>m.cat===adminFilterCat);
+  ms.sort((a,b)=>{const dA=DAYS.findIndex(d=>d.key===a.day),dB=DAYS.findIndex(d=>d.key===b.day);return dA!==dB?dA-dB:a.time<b.time?-1:a.time>b.time?1:0;});
+  if(!ms.length){el.innerHTML='<div class="empty">Geen wedstrijden</div>';return;}
+  let html='',lastDay=null;
+  ms.forEach(m=>{
+    if(m.day!==lastDay){html+=`<div class="sec-title">${DAYS.find(d=>d.key===m.day)?.full||m.day}</div>`;lastDay=m.day;}
+    const cat=CATS[m.cat]||{};
+    const t1n=m.phase==='poule'?(teamName(m.cat,m.poule,m.t1)||'?'):(m.t1_desc||m.t1||'TBD');
+    const t2n=m.phase==='poule'?(teamName(m.cat,m.poule,m.t2)||'?'):(m.t2_desc||m.t2||'TBD');
+    const scoreStr=(m.locked&&m.s1!==null)?`${m.s1}-${m.s2}`:'-';
+    html+=`<div class="admin-match"><div class="am-info"><div class="am-title">${escHtml(t1n)} vs ${escHtml(t2n)}</div><div class="am-sub">${cat.short} &middot; ${m.phase==='poule'?'Poule '+m.poule:(m.label||m.phase)} &middot; ${m.time||'?'} &middot; V${m.court||'?'} &middot; ${scoreStr} ${m.locked?'🔒':'✏️'}</div></div><div class="am-btns"><button class="btn-edit" onclick="openEdit('${m.id}')">Bewerk</button>${m.locked?`<button class="btn-lock" style="background:var(--border);color:var(--white)" onclick="toggleLock('${m.id}')">🔓</button>`:`<button class="btn-lock" onclick="toggleLock('${m.id}')">🔒</button>`}</div></div>`;
   });
-  if (!ms.length) { el.innerHTML = '<div class="empty">Geen wedstrijden</div>'; return; }
-  let html = '', lastDay = null;
-  ms.forEach(m => {
-    if (m.day !== lastDay) {
-      html += `<div class="sec-title">${DAYS.find(d=>d.key===m.day)?.full||m.day}</div>`;
-      lastDay = m.day;
-    }
-    const cat = CATS[m.cat] || {};
-    const t1n = m.phase==='poule' ? (teamName(m.cat,m.poule,m.t1)||'?') : (m.t1_desc||m.t1||'TBD');
-    const t2n = m.phase==='poule' ? (teamName(m.cat,m.poule,m.t2)||'?') : (m.t2_desc||m.t2||'TBD');
-    const scoreStr = (m.locked && m.s1!==null) ? `${m.s1}-${m.s2}` : '-';
-    html += `<div class="admin-match">
-      <div class="am-info">
-        <div class="am-title">${t1n} vs ${t2n}</div>
-        <div class="am-sub">${cat.short} · ${m.phase==='poule'?'Poule '+m.poule:(m.label||m.phase)} · ${m.time||'?'} · V${m.court||'?'} · ${scoreStr} ${m.locked?'🔒':'✏️'}</div>
-      </div>
-      <div class="am-btns">
-        <button class="btn-edit" onclick="openEdit('${m.id}')">Bewerk</button>
-        ${m.locked
-          ? `<button class="btn-lock" style="background:var(--border);color:var(--white)" onclick="toggleLock('${m.id}')">🔓</button>`
-          : `<button class="btn-lock" onclick="toggleLock('${m.id}')">🔒</button>`}
-      </div>
-    </div>`;
-  });
-  el.innerHTML = html;
+  el.innerHTML=html;
 }
-
-function setAdminFilter(cat) { adminFilterCat = cat; renderAdminWedstrijden(); }
-
-function adminLogout() {
-  adminActive = false;
-  document.getElementById('admin-lock-screen').style.display = 'block';
-  document.getElementById('admin-panel').style.display = 'none';
-  pinBuffer = '';
-  updatePinDots();
-}
-
-function toggleLock(id) {
-  const m = S.matches.find(x => x.id===id);
-  if (!m) return;
-  m.locked = !m.locked;
-  save(); renderAdminList(); renderHome();
-}
-
-// ============================================================
-// DEELNEMERS
-// ============================================================
-function renderDeelnemers() {
-  const selEl = document.getElementById('deeln-cat-sel');
-  selEl.innerHTML = Object.entries(CATS).map(([key, cat]) =>
-    `<button class="cat-pill ${key===deelnCat?'active':''}" onclick="setDeelnCat('${key}')">${cat.short}</button>`
-  ).join('');
-
-  const content = document.getElementById('deeln-content');
-  const cat = CATS[deelnCat];
-  if (!cat) return;
-
-  let html = `<div class="sec-title">${cat.label} - Deelnemers</div>`;
-
-  cat.poules.forEach(poule => {
-    html += `<div class="deeln-block"><div class="deeln-poule-head">Poule ${poule}</div>`;
-    const slots = S.teams[deelnCat] && S.teams[deelnCat][poule] ? Object.keys(S.teams[deelnCat][poule]) : ['1','2','3','4'];
-    slots.forEach(slot => {
-      const name = (S.teams[deelnCat] && S.teams[deelnCat][poule] && S.teams[deelnCat][poule][slot]) || '';
-      const d = (S.deelnemers && S.deelnemers[deelnCat] && S.deelnemers[deelnCat][poule] && S.deelnemers[deelnCat][poule][slot]) || {};
-      const lid1 = d.lidnr1 || '';
-      const lid2 = d.lidnr2 || '';
-      html += `<div class="deeln-team">
-        <div class="deeln-team-title">Team ${poule}${slot}</div>
-        <div class="deeln-row">
-          <span class="deeln-lbl">Teamnaam</span>
-          <input class="deeln-inp" id="dn-${deelnCat}-${poule}-${slot}-name" value="${escHtml(name)}" placeholder="Teamnaam">
-        </div>
-        <div class="deeln-row">
-          <span class="deeln-lbl">Speler 1</span>
-          <input class="deeln-inp" id="dn-${deelnCat}-${poule}-${slot}-lid1" value="${escHtml(lid1)}" placeholder="Lidnummer PV">
-          <a class="deeln-search" href="https://www.tennisenpadelvlaanderen.be/ranglijst" target="_blank" title="Zoek op PV site">🔍</a>
-        </div>
-        <div class="deeln-row">
-          <span class="deeln-lbl">Speler 2</span>
-          <input class="deeln-inp" id="dn-${deelnCat}-${poule}-${slot}-lid2" value="${escHtml(lid2)}" placeholder="Lidnummer PV">
-          <a class="deeln-search" href="https://www.tennisenpadelvlaanderen.be/ranglijst" target="_blank" title="Zoek op PV site">🔍</a>
-        </div>
-        <button class="btn-deeln-save" onclick="saveDeelnemer('${deelnCat}','${poule}','${slot}')">Opslaan</button>
-      </div>`;
+function setAdminFilter(cat){adminFilterCat=cat;renderAdminWedstrijden();}
+function adminLogout(){adminActive=false;document.getElementById('admin-lock-screen').style.display='block';document.getElementById('admin-panel').style.display='none';pinBuffer='';updatePinDots();}
+function toggleLock(id){const m=S.matches.find(x=>x.id===id);if(!m)return;m.locked=!m.locked;save();resolveGokBets();renderAdminList();renderHome();}
+function renderDeelnemers(){
+  document.getElementById('deeln-cat-sel').innerHTML=Object.entries(CATS).map(([key,cat])=>`<button class="cat-pill ${key===deelnCat?'active':''}" onclick="setDeelnCat('${key}')">${cat.short}</button>`).join('');
+  const content=document.getElementById('deeln-content');const cat=CATS[deelnCat];if(!cat)return;
+  let html=`<div class="sec-title">${cat.label} - Deelnemers</div>`;
+  cat.poules.forEach(poule=>{
+    html+=`<div class="deeln-block"><div class="deeln-poule-head">Poule ${poule}</div>`;
+    const slots=S.teams[deelnCat]&&S.teams[deelnCat][poule]?Object.keys(S.teams[deelnCat][poule]):['1','2','3','4'];
+    slots.forEach(slot=>{
+      const name=(S.teams[deelnCat]&&S.teams[deelnCat][poule]&&S.teams[deelnCat][poule][slot])||'';
+      const d=(S.deelnemers&&S.deelnemers[deelnCat]&&S.deelnemers[deelnCat][poule]&&S.deelnemers[deelnCat][poule][slot])||{};
+      html+=`<div class="deeln-team"><div class="deeln-team-title">Team ${poule}${slot}</div><div class="deeln-row"><span class="deeln-lbl">Teamnaam</span><input class="deeln-inp" id="dn-${deelnCat}-${poule}-${slot}-name" value="${escHtml(name)}" placeholder="Teamnaam"></div><div class="deeln-row"><span class="deeln-lbl">Speler 1</span><input class="deeln-inp" id="dn-${deelnCat}-${poule}-${slot}-lid1" value="${escHtml(d.lidnr1||'')}" placeholder="Lidnummer PV"><a class="deeln-search" href="https://www.tennisenpadelvlaanderen.be/ranglijst" target="_blank">🔍</a></div><div class="deeln-row"><span class="deeln-lbl">Speler 2</span><input class="deeln-inp" id="dn-${deelnCat}-${poule}-${slot}-lid2" value="${escHtml(d.lidnr2||'')}" placeholder="Lidnummer PV"><a class="deeln-search" href="https://www.tennisenpadelvlaanderen.be/ranglijst" target="_blank">🔍</a></div><button class="btn-deeln-save" onclick="saveDeelnemer('${deelnCat}','${poule}','${slot}')">Opslaan</button></div>`;
     });
-    html += `</div>`;
+    html+=`</div>`;
   });
-
-  content.innerHTML = html;
+  content.innerHTML=html;
 }
-
-function setDeelnCat(cat) { deelnCat = cat; renderDeelnemers(); }
-
-function saveDeelnemer(cat, poule, slot) {
-  const name = document.getElementById(`dn-${cat}-${poule}-${slot}-name`).value.trim();
-  const lid1 = document.getElementById(`dn-${cat}-${poule}-${slot}-lid1`).value.trim();
-  const lid2 = document.getElementById(`dn-${cat}-${poule}-${slot}-lid2`).value.trim();
-
-  if (!S.teams[cat]) S.teams[cat] = {};
-  if (!S.teams[cat][poule]) S.teams[cat][poule] = {};
-  if (name) S.teams[cat][poule][slot] = name;
-
-  if (!S.deelnemers) S.deelnemers = {};
-  if (!S.deelnemers[cat]) S.deelnemers[cat] = {};
-  if (!S.deelnemers[cat][poule]) S.deelnemers[cat][poule] = {};
-  S.deelnemers[cat][poule][slot] = { lidnr1: lid1, lidnr2: lid2 };
-
-  save();
-  toast('Opgeslagen');
-}
-
-function escHtml(str) {
-  return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function setDeelnCat(cat){deelnCat=cat;renderDeelnemers();}
+function saveDeelnemer(cat,poule,slot){
+  const name=document.getElementById(`dn-${cat}-${poule}-${slot}-name`).value.trim();
+  const lid1=document.getElementById(`dn-${cat}-${poule}-${slot}-lid1`).value.trim();
+  const lid2=document.getElementById(`dn-${cat}-${poule}-${slot}-lid2`).value.trim();
+  if(!S.teams[cat])S.teams[cat]={};if(!S.teams[cat][poule])S.teams[cat][poule]={};if(name)S.teams[cat][poule][slot]=name;
+  if(!S.deelnemers)S.deelnemers={};if(!S.deelnemers[cat])S.deelnemers[cat]={};if(!S.deelnemers[cat][poule])S.deelnemers[cat][poule]={};
+  S.deelnemers[cat][poule][slot]={lidnr1:lid1,lidnr2:lid2};
+  save();toast('Opgeslagen');
 }
 
 // ============================================================
 // PIN
 // ============================================================
-function pinKey(d) {
-  if (pinBuffer.length >= 4) return;
-  pinBuffer += d;
-  updatePinDots();
-  if (pinBuffer.length === 4) {
-    setTimeout(() => {
-      if (pinBuffer === ADMIN_PIN) {
-        adminActive = true;
-        renderAdmin();
-      } else {
-        pinBuffer = '';
-        updatePinDots();
-        toast('Verkeerde PIN');
-      }
-    }, 200);
-  }
-}
-
-function pinDel() { pinBuffer = pinBuffer.slice(0,-1); updatePinDots(); }
-
-function updatePinDots() {
-  for (let i = 0; i < 4; i++) {
-    const el = document.getElementById('pd' + i);
-    if (el) el.classList.toggle('filled', i < pinBuffer.length);
-  }
-}
+function pinKey(d){if(pinBuffer.length>=4)return;pinBuffer+=d;updatePinDots();if(pinBuffer.length===4)setTimeout(()=>{if(pinBuffer===ADMIN_PIN){adminActive=true;renderAdmin();}else{pinBuffer='';updatePinDots();toast('Verkeerde PIN');}},200);}
+function pinDel(){pinBuffer=pinBuffer.slice(0,-1);updatePinDots();}
+function updatePinDots(){for(let i=0;i<4;i++){const el=document.getElementById('pd'+i);if(el)el.classList.toggle('filled',i<pinBuffer.length);}}
 
 // ============================================================
 // EDIT MODAL
 // ============================================================
-function openEdit(id) {
-  const m = S.matches.find(x => x.id===id);
-  if (!m) return;
-  editMatchId = id;
-  const cat = CATS[m.cat] || {};
-  const t1n = m.phase==='poule' ? (teamName(m.cat,m.poule,m.t1)||'') : (m.t1_desc||'');
-  const t2n = m.phase==='poule' ? (teamName(m.cat,m.poule,m.t2)||'') : (m.t2_desc||'');
-  const phaseLbl = m.phase==='poule' ? `Poule ${m.poule}` : (m.label||m.phase);
-  document.getElementById('modal-title').textContent = `${cat.short} - ${phaseLbl}`;
-  document.getElementById('modal-sub').textContent   = DAYS.find(d=>d.key===m.day)?.full||m.day;
-  document.getElementById('edit-time').value   = m.time||'';
-  document.getElementById('edit-court').value  = m.court||'';
-  document.getElementById('edit-t1name').value = t1n;
-  document.getElementById('edit-t2name').value = t2n;
-  document.getElementById('edit-t1lbl').textContent = t1n||'Team 1';
-  document.getElementById('edit-t2lbl').textContent = t2n||'Team 2';
-  document.getElementById('edit-s1').value = m.s1!==null ? m.s1 : '';
-  document.getElementById('edit-s2').value = m.s2!==null ? m.s2 : '';
-  document.getElementById('modal-bg').style.display = 'flex';
+function openEdit(id){
+  const m=S.matches.find(x=>x.id===id);if(!m)return;
+  editMatchId=id;
+  const cat=CATS[m.cat]||{};
+  const t1n=m.phase==='poule'?(teamName(m.cat,m.poule,m.t1)||''):(m.t1_desc||'');
+  const t2n=m.phase==='poule'?(teamName(m.cat,m.poule,m.t2)||''):(m.t2_desc||'');
+  const phaseLbl=m.phase==='poule'?`Poule ${m.poule}`:(m.label||m.phase);
+  // Reset modal content if it was replaced by gok modal
+  const modalEl=document.getElementById('modal-bg').querySelector('.modal');
+  modalEl.innerHTML=`<div class="modal-title" id="modal-title"></div><div class="modal-sub" id="modal-sub"></div><div class="form-grp"><label class="form-lbl">Tijd</label><input type="text" id="edit-time" placeholder="18:00"></div><div class="form-grp"><label class="form-lbl">Veld</label><input type="number" id="edit-court" min="1" max="8" placeholder="1-8"></div><div class="form-grp"><label class="form-lbl">Teamnamen</label><input type="text" id="edit-t1name" placeholder="Team 1" style="margin-bottom:6px"><input type="text" id="edit-t2name" placeholder="Team 2"></div><div class="form-grp"><label class="form-lbl">Score (sets)</label><div class="score-row"><div class="score-team-lbl" id="edit-t1lbl">Team 1</div><div class="score-vs-lbl">vs</div><div class="score-team-lbl" id="edit-t2lbl">Team 2</div></div><div class="score-row"><input type="number" class="score-input" id="edit-s1" min="0" max="3" placeholder="0"><div class="score-vs-lbl" style="font-size:20px;font-weight:800;color:var(--border)">-</div><input type="number" class="score-input" id="edit-s2" min="0" max="3" placeholder="0"></div></div><div class="modal-row"><button class="btn-cancel" onclick="closeModal()">Annuleren</button><button class="btn-save" onclick="saveEdit()">Opslaan</button></div>`;
+  document.getElementById('modal-title').textContent=`${cat.short} - ${phaseLbl}`;
+  document.getElementById('modal-sub').textContent=DAYS.find(d=>d.key===m.day)?.full||m.day;
+  document.getElementById('edit-time').value=m.time||'';
+  document.getElementById('edit-court').value=m.court||'';
+  document.getElementById('edit-t1name').value=t1n;
+  document.getElementById('edit-t2name').value=t2n;
+  document.getElementById('edit-t1lbl').textContent=t1n||'Team 1';
+  document.getElementById('edit-t2lbl').textContent=t2n||'Team 2';
+  document.getElementById('edit-s1').value=m.s1!==null?m.s1:'';
+  document.getElementById('edit-s2').value=m.s2!==null?m.s2:'';
+  document.getElementById('modal-bg').style.display='flex';
 }
-
-function closeModal() {
-  document.getElementById('modal-bg').style.display = 'none';
-  editMatchId = null;
-}
-
-function saveEdit() {
-  const m = S.matches.find(x => x.id===editMatchId);
-  if (!m) return;
-  const newTime  = document.getElementById('edit-time').value.trim();
-  const newCourt = parseInt(document.getElementById('edit-court').value);
-  const newT1n   = document.getElementById('edit-t1name').value.trim();
-  const newT2n   = document.getElementById('edit-t2name').value.trim();
-  const s1v      = document.getElementById('edit-s1').value;
-  const s2v      = document.getElementById('edit-s2').value;
-  if (newTime) m.time = newTime;
-  if (!isNaN(newCourt) && newCourt > 0) m.court = newCourt;
-  if (s1v !== '' && s2v !== '') { m.s1 = parseInt(s1v); m.s2 = parseInt(s2v); }
-  if (m.phase === 'poule') {
-    if (!S.teams[m.cat]) S.teams[m.cat] = {};
-    if (!S.teams[m.cat][m.poule]) S.teams[m.cat][m.poule] = {};
-    if (newT1n && m.t1) S.teams[m.cat][m.poule][m.t1] = newT1n;
-    if (newT2n && m.t2) S.teams[m.cat][m.poule][m.t2] = newT2n;
-  } else {
-    if (newT1n) m.t1_desc = newT1n;
-    if (newT2n) m.t2_desc = newT2n;
-  }
-  save(); closeModal(); renderAdminList(); renderHome();
-  toast('Opgeslagen');
+function closeModal(){document.getElementById('modal-bg').style.display='none';editMatchId=null;}
+function saveEdit(){
+  const m=S.matches.find(x=>x.id===editMatchId);if(!m)return;
+  const newTime=document.getElementById('edit-time').value.trim();
+  const newCourt=parseInt(document.getElementById('edit-court').value);
+  const newT1n=document.getElementById('edit-t1name').value.trim();
+  const newT2n=document.getElementById('edit-t2name').value.trim();
+  const s1v=document.getElementById('edit-s1').value;
+  const s2v=document.getElementById('edit-s2').value;
+  if(newTime)m.time=newTime;
+  if(!isNaN(newCourt)&&newCourt>0)m.court=newCourt;
+  if(s1v!==''&&s2v!==''){m.s1=parseInt(s1v);m.s2=parseInt(s2v);}
+  if(m.phase==='poule'){if(!S.teams[m.cat])S.teams[m.cat]={};if(!S.teams[m.cat][m.poule])S.teams[m.cat][m.poule]={};if(newT1n&&m.t1)S.teams[m.cat][m.poule][m.t1]=newT1n;if(newT2n&&m.t2)S.teams[m.cat][m.poule][m.t2]=newT2n;}else{if(newT1n)m.t1_desc=newT1n;if(newT2n)m.t2_desc=newT2n;}
+  save();closeModal();renderAdminList();renderHome();toast('Opgeslagen');
 }
 
 // ============================================================
 // TOAST
 // ============================================================
-let toastTimer = null;
-function toast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  if (toastTimer) clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
-}
+let toastTimer=null;
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');if(toastTimer)clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2500);}
 
 // ============================================================
 // INIT
 // ============================================================
-(function() {
-  const tabs = document.getElementById('day-tabs');
-  if (tabs) tabs.innerHTML = DAYS.map(d =>
-    `<button class="day-tab ${d.key==='ma'?'active':''}" onclick="setDay('${d.key}')">${d.label}</button>`
-  ).join('');
-})();
-
+initGokProfile();
+document.getElementById('day-tabs').innerHTML=DAYS.map(d=>`<button class="day-tab ${d.key==='ma'?'active':''}" onclick="setDay('${d.key}')">${d.label}</button>`).join('');
+renderCountdown();
 initFirebase();
 </script>
 </body>
