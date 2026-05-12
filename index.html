@@ -404,6 +404,7 @@
       <button class="atab active" id="atab-wedstrijden" onclick="setAdminTab('wedstrijden')">Wedstrijden</button>
       <button class="atab" id="atab-deelnemers" onclick="setAdminTab('deelnemers')">Deelnemers</button>
       <button class="atab" id="atab-deadlines" onclick="setAdminTab('deadlines')">Deadlines</button>
+      <button class="atab" id="atab-lucky" onclick="setAdminTab('lucky')">⭐ Lucky Legends</button>
     </div>
     <div id="admin-tab-wedstrijden">
       <div class="admin-filter" id="admin-filter"></div>
@@ -415,6 +416,9 @@
     </div>
     <div id="admin-tab-deadlines" style="display:none">
       <div id="admin-deadline-list"></div>
+    </div>
+    <div id="admin-tab-lucky" style="display:none">
+      <div id="admin-lucky-list"></div>
     </div>
   </div>
 </div>
@@ -1176,12 +1180,15 @@ function setAdminTab(tab){
   document.getElementById('atab-wedstrijden').classList.toggle('active',tab==='wedstrijden');
   document.getElementById('atab-deelnemers').classList.toggle('active',tab==='deelnemers');
   document.getElementById('atab-deadlines').classList.toggle('active',tab==='deadlines');
+  document.getElementById('atab-lucky').classList.toggle('active',tab==='lucky');
   document.getElementById('admin-tab-wedstrijden').style.display=tab==='wedstrijden'?'':'none';
   document.getElementById('admin-tab-deelnemers').style.display=tab==='deelnemers'?'':'none';
   document.getElementById('admin-tab-deadlines').style.display=tab==='deadlines'?'':'none';
+  document.getElementById('admin-tab-lucky').style.display=tab==='lucky'?'':'none';
   if(tab==='wedstrijden')renderAdminWedstrijden();
   if(tab==='deelnemers')renderDeelnemers();
   if(tab==='deadlines')renderAdminDeadlines();
+  if(tab==='lucky')renderAdminLucky();
 }
 function renderAdminDeadlines(){
   const el=document.getElementById('admin-deadline-list');if(!el)return;
@@ -1266,6 +1273,66 @@ function renderAdminList(){
   el.innerHTML=html;
 }
 function setAdminFilter(cat){adminFilterCat=cat;renderAdminWedstrijden();}
+function renderAdminLucky(){
+  const el=document.getElementById('admin-lucky-list');
+  el.innerHTML='<div class="empty">Laden...</div>';
+  if(!usersRef){el.innerHTML='<div class="empty">Firebase niet beschikbaar</div>';return;}
+  usersRef.orderByChild('credits').once('value',snap=>{
+    const players=[];
+    snap.forEach(c=>{
+      const v=c.val();
+      if(v&&v.nickname)players.push({id:c.key,nickname:v.nickname,credits:v.credits||0,lastSeen:v.lastSeen||0});
+    });
+    players.sort((a,b)=>b.credits-a.credits);
+    if(!players.length){el.innerHTML='<div class="empty">Nog geen spelers</div>';return;}
+    let html=`<div style="padding:10px 14px 4px;font-size:11px;color:var(--gray);font-weight:700;text-transform:uppercase;letter-spacing:.5px">${players.length} spelers</div>`;
+    players.forEach((p,i)=>{
+      const lastSeenStr=p.lastSeen?new Date(p.lastSeen).toLocaleString('nl-BE',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'—';
+      html+=`<div class="admin-match" style="flex-direction:column;align-items:stretch;gap:8px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-size:14px;font-weight:700">${i<3?'⭐ ':''}${escHtml(p.nickname)}</div>
+            <div style="font-size:10px;color:var(--gray);margin-top:2px">Laatste activiteit: ${lastSeenStr}</div>
+          </div>
+          <div style="font-size:20px;font-weight:800;color:var(--gold)">${p.credits} cr</div>
+        </div>
+        <div style="display:flex;gap:6px">
+          <button onclick="adminAdjustCredits('${p.id}','${escHtml(p.nickname)}',5)" style="flex:1;padding:7px;border-radius:8px;border:1px solid #2a2a2a;background:#1a1a1a;color:#4ade80;font-size:12px;font-weight:700;font-family:'Rubik',sans-serif;cursor:pointer">+5</button>
+          <button onclick="adminAdjustCredits('${p.id}','${escHtml(p.nickname)}',-5)" style="flex:1;padding:7px;border-radius:8px;border:1px solid #2a2a2a;background:#1a1a1a;color:#f87171;font-size:12px;font-weight:700;font-family:'Rubik',sans-serif;cursor:pointer">-5</button>
+          <button onclick="adminAdjustCredits('${p.id}','${escHtml(p.nickname)}',null)" style="flex:1;padding:7px;border-radius:8px;border:1px solid #2a2a2a;background:#1a1a1a;color:var(--gray);font-size:11px;font-weight:700;font-family:'Rubik',sans-serif;cursor:pointer">Reset</button>
+          <button onclick="adminViewAudit('${p.id}')" style="flex:1;padding:7px;border-radius:8px;border:1px solid #2a2a2a;background:#1a1a1a;color:var(--gray);font-size:11px;font-family:'Rubik',sans-serif;cursor:pointer">Log</button>
+        </div>
+      </div>`;
+    });
+    el.innerHTML=html;
+  });
+}
+function adminAdjustCredits(deviceId,nickname,delta){
+  if(!usersRef)return;
+  usersRef.child(deviceId+'/credits').once('value',snap=>{
+    const current=snap.val()||0;
+    const newVal=delta===null?INIT_CREDITS:Math.max(0,current+delta);
+    usersRef.child(deviceId).update({credits:newVal});
+    const actionType=delta===null?'admin_reset':(delta>0?'admin_add':'admin_subtract');
+    if(auditRef)auditRef.push({type:actionType,deviceId,nickname,delta:delta===null?INIT_CREDITS-current:delta,creditsAfter:newVal,byAdmin:true,ts:Date.now()});
+    toast(`${nickname}: ${current} → ${newVal} credits`);
+    renderAdminLucky();
+  });
+}
+function adminViewAudit(deviceId){
+  if(!auditRef){toast('Audit log niet beschikbaar');return;}
+  auditRef.orderByChild('deviceId').equalTo(deviceId).limitToLast(20).once('value',snap=>{
+    const entries=[];snap.forEach(c=>entries.push(c.val()));entries.reverse();
+    if(!entries.length){toast('Geen log voor deze speler');return;}
+    const lines=entries.map(e=>{
+      const d=new Date(e.ts);
+      const t=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+      const day=String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0');
+      return`${day} ${t} · ${e.type} · ${e.creditsAfter}cr`;
+    }).join('\n');
+    alert(`Audit log: ${entries[0].nickname||deviceId}\n\n${lines}`);
+  });
+}
 function adminLogout(){adminActive=false;document.getElementById('admin-lock-screen').style.display='block';document.getElementById('admin-panel').style.display='none';pinBuffer='';updatePinDots();}
 function toggleLock(id){const m=S.matches.find(x=>x.id===id);if(!m)return;m.locked=!m.locked;save();resolveGokBets();renderAdminList();renderHome();}
 function renderDeelnemers(){
