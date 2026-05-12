@@ -358,10 +358,7 @@
       </div>
       <h2>Admin Paneel</h2>
       <p>Voer de PIN in om scores in te geven.</p>
-      <div class="pin-dots" id="pin-dots">
-        <div class="pin-dot" id="pd0"></div><div class="pin-dot" id="pd1"></div>
-        <div class="pin-dot" id="pd2"></div><div class="pin-dot" id="pd3"></div>
-      </div>
+      <div class="pin-dots" id="pin-dots"></div>
       <div class="pin-pad">
         <button class="pin-key" onclick="pinKey('1')">1</button><button class="pin-key" onclick="pinKey('2')">2</button><button class="pin-key" onclick="pinKey('3')">3</button>
         <button class="pin-key" onclick="pinKey('4')">4</button><button class="pin-key" onclick="pinKey('5')">5</button><button class="pin-key" onclick="pinKey('6')">6</button>
@@ -522,7 +519,7 @@ const DAYS=[
 ];
 const FIREBASE_CONFIG={apiKey:"AIzaSyDrlCpuO2a5yzSUB1JoZ96KSaYjCQniu48",authDomain:"mgpc-2026.firebaseapp.com",databaseURL:"https://mgpc-2026-default-rtdb.europe-west1.firebasedatabase.app",projectId:"mgpc-2026",storageBucket:"mgpc-2026.firebasestorage.app",messagingSenderId:"78506921375",appId:"1:78506921375:web:3a4b325a3981a9195901aa"};
 const FB_PATH='summer2026c';
-const ADMIN_PIN='2606';
+const ADMIN_PIN='32472418789';
 const INIT_CREDITS=10;
 
 // ============================================================
@@ -979,9 +976,9 @@ function saveDeelnemer(cat,poule,slot){
 // ============================================================
 // PIN
 // ============================================================
-function pinKey(d){if(pinBuffer.length>=4)return;pinBuffer+=d;updatePinDots();if(pinBuffer.length===4)setTimeout(()=>{if(pinBuffer===ADMIN_PIN){adminActive=true;renderAdmin();}else{pinBuffer='';updatePinDots();toast('Verkeerde PIN');}},200);}
+function pinKey(d){if(pinBuffer.length>=ADMIN_PIN.length)return;pinBuffer+=d;updatePinDots();if(pinBuffer.length===ADMIN_PIN.length)setTimeout(()=>{if(pinBuffer===ADMIN_PIN){adminActive=true;renderAdmin();}else{pinBuffer='';updatePinDots();toast('Verkeerde PIN');}},200);}
 function pinDel(){pinBuffer=pinBuffer.slice(0,-1);updatePinDots();}
-function updatePinDots(){for(let i=0;i<4;i++){const el=document.getElementById('pd'+i);if(el)el.classList.toggle('filled',i<pinBuffer.length);}}
+function updatePinDots(){for(let i=0;i<ADMIN_PIN.length;i++){const el=document.getElementById('pd'+i);if(el)el.classList.toggle('filled',i<pinBuffer.length);}}
 
 // ============================================================
 // EDIT MODAL
@@ -1034,6 +1031,7 @@ function toast(msg){const el=document.getElementById('toast');el.textContent=msg
 // INIT
 // ============================================================
 initGokProfile();
+document.getElementById('pin-dots').innerHTML=Array.from({length:ADMIN_PIN.length},(_,i)=>`<div class="pin-dot" id="pd${i}"></div>`).join('');
 document.getElementById('day-tabs').innerHTML=DAYS.map(d=>`<button class="day-tab ${d.key==='ma'?'active':''}" onclick="setDay('${d.key}')">${d.label}</button>`).join('');
 renderCountdown();
 initFirebase();
