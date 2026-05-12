@@ -70,26 +70,24 @@
     .day-tab{flex-shrink:0;padding:8px 14px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--gray);font-size:12px;font-weight:600;font-family:'Rubik',sans-serif;cursor:pointer;transition:all .15s;}
     .day-tab.active{background:var(--gold);color:var(--black);border-color:var(--gold);}
 
-    /* CALENDAR DAG VIEW */
+    /* CALENDAR DAG VIEW - horizontaal (tijd op X, velden op Y) */
     .cal-outer{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:16px;}
     .cal-wrap{display:flex;flex-direction:column;min-width:max-content;}
-    .cal-header{display:flex;position:sticky;top:0;z-index:10;background:#0a0a0a;border-bottom:2px solid var(--gold);}
-    .cal-th-spacer{width:52px;flex-shrink:0;border-right:1px solid var(--border);}
-    .cal-th{width:130px;flex-shrink:0;padding:9px 6px;text-align:center;font-size:11px;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;border-right:1px solid var(--border);}
-    .cal-body{display:flex;position:relative;}
-    .cal-times{width:52px;flex-shrink:0;position:sticky;left:0;z-index:5;background:#0a0a0a;border-right:1px solid var(--border);}
-    .cal-tlbl{position:absolute;right:6px;font-size:10px;color:var(--gray);transform:translateY(-50%);white-space:nowrap;font-weight:600;}
-    .cal-cols{display:flex;position:relative;flex:1;}
-    .cal-col{width:130px;flex-shrink:0;position:relative;border-right:1px solid var(--border);}
-    .cal-hline{position:absolute;left:0;right:0;border-top:1px solid var(--border);pointer-events:none;}
-    .cal-hline.half{border-top-color:#1a1a1a;border-top-style:dashed;}
-    .cal-block{position:absolute;left:3px;right:3px;border-radius:7px;padding:5px 7px;cursor:pointer;overflow:hidden;transition:filter .1s;}
+    .cal-time-header{display:flex;position:sticky;top:0;z-index:10;background:#0a0a0a;border-bottom:2px solid var(--gold);}
+    .cal-corner{width:62px;flex-shrink:0;border-right:1px solid var(--border);}
+    .cal-time-ruler{position:relative;height:30px;flex-shrink:0;}
+    .cal-tlbl{position:absolute;top:50%;transform:translate(-50%,-50%);font-size:10px;color:var(--gray);font-weight:700;white-space:nowrap;}
+    .cal-court-row{display:flex;border-bottom:1px solid var(--border);}
+    .cal-court-lbl{width:62px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--gold);position:sticky;left:0;z-index:5;background:#0a0a0a;border-right:1px solid var(--border);text-transform:uppercase;letter-spacing:.5px;}
+    .cal-court-body{position:relative;height:60px;flex-shrink:0;}
+    .cal-vline{position:absolute;top:0;bottom:0;border-left:1px solid var(--border);pointer-events:none;}
+    .cal-vline.half{border-left-color:#1a1a1a;border-left-style:dashed;}
+    .cal-block{position:absolute;top:4px;bottom:4px;border-radius:7px;padding:4px 7px;cursor:pointer;overflow:hidden;transition:filter .1s;}
     .cal-block:active{filter:brightness(1.3);}
-    .cal-bcat{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-    .cal-bteam{font-size:10px;color:rgba(255,255,255,.85);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .cal-bcat{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .cal-bteams{font-size:9px;color:rgba(255,255,255,.8);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;}
     .cal-bteam.won{color:var(--gold);font-weight:700;}
-    .cal-bvs{color:rgba(255,255,255,.35);margin:0 3px;font-size:9px;}
-    .cal-bscore{font-size:11px;font-weight:800;color:var(--gold);margin-top:3px;}
+    .cal-bscore{font-size:10px;font-weight:800;color:var(--gold);}
     .gc-badge{font-size:9px;font-weight:700;padding:2px 5px;border-radius:4px;display:inline-block;margin-bottom:5px;}
     .gc-team{font-size:11px;font-weight:500;line-height:1.35;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:114px;}
     .gc-team.won{color:var(--gold);font-weight:700;}
@@ -660,9 +658,9 @@ function renderDag(){
   const day=DAYS.find(d=>d.key===currentDay);
   const ms=S.matches.filter(m=>m.day===currentDay);
   const courts=[1,2,3,4,5,6,7,8];
-  const PX=2; // pixels per minute
+  const PX=2; // pixels per minuut (horizontale as)
 
-  // Time bounds: round to full hours, add padding
+  // Tijdsgrenzen op volle uren
   let sM=t2m(currentDay==='za'||currentDay==='zo'?'09:00':'17:45');
   let eM=t2m(currentDay==='za'||currentDay==='zo'?'19:30':'23:00');
   if(ms.length){
@@ -671,22 +669,28 @@ function renderDag(){
   }
   sM=Math.floor(sM/60)*60;
   eM=Math.ceil(eM/60)*60;
-  const totalH=(eM-sM)*PX;
+  const totalW=(eM-sM)*PX;
 
-  // Time labels & hour lines
-  let tlbls='',hlines='';
+  // Tijd-ruler (header)
+  let tlbls='';
   for(let m=sM;m<=eM;m+=60){
-    const y=(m-sM)*PX;
-    tlbls+=`<div class="cal-tlbl" style="top:${y}px">${String(Math.floor(m/60)).padStart(2,'0')}:00</div>`;
-    hlines+=`<div class="cal-hline" style="top:${y}px"></div>`;
+    const x=(m-sM)*PX;
+    tlbls+=`<div class="cal-tlbl" style="left:${x}px">${String(Math.floor(m/60)).padStart(2,'0')}:00</div>`;
+  }
+
+  // Verticale lijnen (gedeeld door alle rijen)
+  let vlines='';
+  for(let m=sM;m<=eM;m+=60){
+    const x=(m-sM)*PX;
+    vlines+=`<div class="cal-vline" style="left:${x}px"></div>`;
   }
   for(let m=sM+30;m<eM;m+=60){
-    const y=(m-sM)*PX;
-    hlines+=`<div class="cal-hline half" style="top:${y}px"></div>`;
+    const x=(m-sM)*PX;
+    vlines+=`<div class="cal-vline half" style="left:${x}px"></div>`;
   }
 
-  // Court columns
-  const colsHtml=courts.map(court=>{
+  // Baan-rijen
+  const rowsHtml=courts.map(court=>{
     const cms=ms.filter(m=>m.court===court);
     const blocks=cms.map(m=>{
       const cat=CATS[m.cat]||{};
@@ -696,15 +700,14 @@ function renderDag(){
       const played=m.locked&&m.s1!==null&&m.s2!==null;
       const t1won=played&&+m.s1>+m.s2,t2won=played&&+m.s2>+m.s1;
       const badge=isEdr?(m.label||cat.short):`${cat.short} ${m.poule}`;
-      const top=(t2m(m.time)-sM)*PX;
-      const h=matchDurMin(m)*PX-3;
-      return`<div class="cal-block" style="top:${top}px;height:${h}px;background:${cat.color}20;border-left:3px solid ${cat.color}" onclick="openDetail('${m.id}')"><div class="cal-bcat" style="color:${cat.color}">${escHtml(badge)}</div><div class="cal-bteam${t1won?' won':''}">${escHtml(t1n)}</div><div class="cal-bteam" style="font-size:9px;color:rgba(255,255,255,.3)">vs</div><div class="cal-bteam${t2won?' won':''}">${escHtml(t2n)}</div>${played?`<div class="cal-bscore">${m.s1}-${m.s2}</div>`:''}</div>`;
+      const left=(t2m(m.time)-sM)*PX;
+      const w=matchDurMin(m)*PX-3;
+      return`<div class="cal-block" style="left:${left}px;width:${w}px;background:${cat.color}22;border-top:3px solid ${cat.color}" onclick="openDetail('${m.id}')"><div class="cal-bcat" style="color:${cat.color}">${escHtml(badge)}</div><div class="cal-bteams">${played?`<span class="${t1won?'cal-bteam won':''}">${escHtml(t1n)}</span> <span style="opacity:.4">vs</span> <span class="${t2won?'cal-bteam won':''}">${escHtml(t2n)}</span> <span class="cal-bscore">${m.s1}-${m.s2}</span>`:`${escHtml(t1n)} vs ${escHtml(t2n)}`}</div></div>`;
     }).join('');
-    return`<div class="cal-col" style="height:${totalH}px">${hlines}${blocks}</div>`;
+    return`<div class="cal-court-row"><div class="cal-court-lbl">B${court}</div><div class="cal-court-body" style="width:${totalW}px">${vlines}${blocks}</div></div>`;
   }).join('');
 
-  const hdrs=courts.map(c=>`<div class="cal-th">Baan ${c}</div>`).join('');
-  content.innerHTML=`<div class="day-full-lbl">${day.full}</div><div class="cal-outer"><div class="cal-wrap"><div class="cal-header"><div class="cal-th-spacer"></div>${hdrs}</div><div class="cal-body"><div class="cal-times" style="height:${totalH}px">${tlbls}</div><div class="cal-cols">${colsHtml}</div></div></div></div>`;
+  content.innerHTML=`<div class="day-full-lbl">${day.full}</div><div class="cal-outer"><div class="cal-wrap"><div class="cal-time-header"><div class="cal-corner"></div><div class="cal-time-ruler" style="width:${totalW}px">${tlbls}</div></div>${rowsHtml}</div></div>`;
 }
 function setDay(d){currentDay=d;renderDag();}
 
