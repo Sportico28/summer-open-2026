@@ -1353,18 +1353,17 @@ function toast(msg){const el=document.getElementById('toast');el.textContent=msg
 // INIT
 // ============================================================
 initGokProfile();
-// Desktop blocker: app enkel op mobiel, admin wel op laptop/tablet
+// Desktop blocker: app enkel op telefoon (UA-check), admin toegankelijk op alle apparaten
 (function(){
-  const isAdmin=window.location.hash==='#admin';
-  const isMobile=window.innerWidth<=900||('ontouchstart' in window&&window.innerWidth<=1024);
-  if(!isAdmin&&!isMobile){
-    document.getElementById('desktop-block').style.display='flex';
-  }
-  // ook bij hashchange: als admin hash wegvalt op desktop, blokkeer terug
+  const ua=navigator.userAgent;
+  // iPhone, Android phone (niet tablet), Windows Phone
+  const isPhone=/Android.*Mobile|iPhone|iPod|Windows Phone/i.test(ua);
+  // iPad, Android tablet (geen "Mobile" in UA)
+  // isTablet en isDesktop krijgen beiden de blocker tenzij #admin
+  function shouldBlock(){return!isPhone&&window.location.hash!=='#admin';}
+  if(shouldBlock())document.getElementById('desktop-block').style.display='flex';
   window.addEventListener('hashchange',()=>{
-    const adminNow=window.location.hash==='#admin';
-    const mob=window.innerWidth<=900||('ontouchstart' in window&&window.innerWidth<=1024);
-    document.getElementById('desktop-block').style.display=(!adminNow&&!mob)?'flex':'none';
+    document.getElementById('desktop-block').style.display=shouldBlock()?'flex':'none';
   });
 })();
 document.getElementById('pin-dots').innerHTML=Array.from({length:ADMIN_PIN.length},(_,i)=>`<div class="pin-dot" id="pd${i}"></div>`).join('');
