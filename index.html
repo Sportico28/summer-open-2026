@@ -70,17 +70,26 @@
     .day-tab{flex-shrink:0;padding:8px 14px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--gray);font-size:12px;font-weight:600;font-family:'Rubik',sans-serif;cursor:pointer;transition:all .15s;}
     .day-tab.active{background:var(--gold);color:var(--black);border-color:var(--gold);}
 
-    .court-grid-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:16px;}
-    .court-grid{display:inline-block;min-width:100%;}
-    .cg-header-row{display:flex;}
-    .cg-time-hdr{width:52px;flex-shrink:0;background:var(--black);position:sticky;left:0;z-index:2;border-right:1px solid var(--border);}
-    .cg-court-hdr{width:130px;flex-shrink:0;padding:10px 6px;text-align:center;font-size:12px;font-weight:800;color:var(--gold);background:var(--card2);border-bottom:2px solid var(--gold);border-right:1px solid var(--border);}
-    .cg-row{display:flex;border-bottom:1px solid var(--border);}
-    .cg-time{width:52px;flex-shrink:0;padding:8px 4px;font-size:11px;color:var(--gray);font-weight:700;display:flex;align-items:center;justify-content:center;border-right:1px solid var(--border);background:var(--black);position:sticky;left:0;z-index:1;}
-    .cg-cell{width:130px;flex-shrink:0;padding:7px 8px;border-right:1px solid var(--border);min-height:90px;background:var(--card);cursor:pointer;transition:background .1s;}
-    .cg-cell:active{background:var(--card2);}
-    .cg-cell.empty{background:#080808;display:flex;align-items:center;justify-content:center;cursor:default;}
-    .cg-empty-dot{width:6px;height:6px;border-radius:50%;background:var(--border);}
+    /* CALENDAR DAG VIEW */
+    .cal-outer{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:16px;}
+    .cal-wrap{display:flex;flex-direction:column;min-width:max-content;}
+    .cal-header{display:flex;position:sticky;top:0;z-index:10;background:#0a0a0a;border-bottom:2px solid var(--gold);}
+    .cal-th-spacer{width:52px;flex-shrink:0;border-right:1px solid var(--border);}
+    .cal-th{width:130px;flex-shrink:0;padding:9px 6px;text-align:center;font-size:11px;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;border-right:1px solid var(--border);}
+    .cal-body{display:flex;position:relative;}
+    .cal-times{width:52px;flex-shrink:0;position:sticky;left:0;z-index:5;background:#0a0a0a;border-right:1px solid var(--border);}
+    .cal-tlbl{position:absolute;right:6px;font-size:10px;color:var(--gray);transform:translateY(-50%);white-space:nowrap;font-weight:600;}
+    .cal-cols{display:flex;position:relative;flex:1;}
+    .cal-col{width:130px;flex-shrink:0;position:relative;border-right:1px solid var(--border);}
+    .cal-hline{position:absolute;left:0;right:0;border-top:1px solid var(--border);pointer-events:none;}
+    .cal-hline.half{border-top-color:#1a1a1a;border-top-style:dashed;}
+    .cal-block{position:absolute;left:3px;right:3px;border-radius:7px;padding:5px 7px;cursor:pointer;overflow:hidden;transition:filter .1s;}
+    .cal-block:active{filter:brightness(1.3);}
+    .cal-bcat{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .cal-bteam{font-size:10px;color:rgba(255,255,255,.85);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .cal-bteam.won{color:var(--gold);font-weight:700;}
+    .cal-bvs{color:rgba(255,255,255,.35);margin:0 3px;font-size:9px;}
+    .cal-bscore{font-size:11px;font-weight:800;color:var(--gold);margin-top:3px;}
     .gc-badge{font-size:9px;font-weight:700;padding:2px 5px;border-radius:4px;display:inline-block;margin-bottom:5px;}
     .gc-team{font-size:11px;font-weight:500;line-height:1.35;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:114px;}
     .gc-team.won{color:var(--gold);font-weight:700;}
@@ -640,43 +649,67 @@ function renderHome(){
 }
 
 // ============================================================
-// DAG - GRID
+// DAG - KALENDER VIEW
 // ============================================================
+function t2m(t){const[h,mi]=(t||'00:00').split(':').map(Number);return h*60+mi;}
+function matchDurMin(m){
+  if(m.phase==='QF')return 60;
+  if(m.phase==='SF'||m.phase==='F')return 90;
+  return m.cat==='h_p700'?75:45;
+}
 function renderDag(){
   document.getElementById('day-tabs').innerHTML=DAYS.map(d=>`<button class="day-tab ${d.key===currentDay?'active':''}" onclick="setDay('${d.key}')">${d.label}</button>`).join('');
   const content=document.getElementById('dag-content');
   const day=DAYS.find(d=>d.key===currentDay);
   const ms=S.matches.filter(m=>m.day===currentDay);
-  if(!ms.length){content.innerHTML=`<div class="empty">Geen wedstrijden op ${day.full}</div>`;return;}
-  const times=[...new Set(ms.map(m=>m.time||'00:00'))].sort();
-  const courts=[...new Set([...ms.map(m=>m.court).filter(Boolean),3,8])].sort((a,b)=>a-b);
-  let html=`<div class="day-full-lbl">${day.full}</div><div class="court-grid-wrap"><div class="court-grid">`;
-  // Header
-  html+=`<div class="cg-header-row"><div class="cg-time-hdr"></div>${courts.map(c=>`<div class="cg-court-hdr">V${c}</div>`).join('')}</div>`;
-  // Rows
-  times.forEach(time=>{
-    html+=`<div class="cg-row"><div class="cg-time">${time}</div>`;
-    courts.forEach(court=>{
-      const m=ms.find(x=>(x.time||'00:00')===time&&x.court===court);
-      if(m){html+=`<div class="cg-cell has-match" onclick="openDetail('${m.id}')">${renderGridCell(m)}</div>`;}
-      else{html+=`<div class="cg-cell empty"><div class="cg-empty-dot"></div></div>`;}
-    });
-    html+=`</div>`;
-  });
-  html+=`</div></div>`;
-  content.innerHTML=html;
+  const courts=[1,2,3,4,5,6,7,8];
+  const PX=2; // pixels per minute
+
+  // Time bounds: round to full hours, add padding
+  let sM=t2m(currentDay==='za'||currentDay==='zo'?'09:00':'17:45');
+  let eM=t2m(currentDay==='za'||currentDay==='zo'?'19:30':'23:00');
+  if(ms.length){
+    sM=Math.min(sM,...ms.map(m=>t2m(m.time)-15));
+    eM=Math.max(eM,...ms.map(m=>t2m(m.time)+matchDurMin(m)+15));
+  }
+  sM=Math.floor(sM/60)*60;
+  eM=Math.ceil(eM/60)*60;
+  const totalH=(eM-sM)*PX;
+
+  // Time labels & hour lines
+  let tlbls='',hlines='';
+  for(let m=sM;m<=eM;m+=60){
+    const y=(m-sM)*PX;
+    tlbls+=`<div class="cal-tlbl" style="top:${y}px">${String(Math.floor(m/60)).padStart(2,'0')}:00</div>`;
+    hlines+=`<div class="cal-hline" style="top:${y}px"></div>`;
+  }
+  for(let m=sM+30;m<eM;m+=60){
+    const y=(m-sM)*PX;
+    hlines+=`<div class="cal-hline half" style="top:${y}px"></div>`;
+  }
+
+  // Court columns
+  const colsHtml=courts.map(court=>{
+    const cms=ms.filter(m=>m.court===court);
+    const blocks=cms.map(m=>{
+      const cat=CATS[m.cat]||{};
+      const isEdr=m.phase!=='poule';
+      const t1n=isEdr?(m.t1?teamName(m.cat,null,m.t1):(m.t1_desc||'TBD')):(teamName(m.cat,m.poule,m.t1)||'?');
+      const t2n=isEdr?(m.t2?teamName(m.cat,null,m.t2):(m.t2_desc||'TBD')):(teamName(m.cat,m.poule,m.t2)||'?');
+      const played=m.locked&&m.s1!==null&&m.s2!==null;
+      const t1won=played&&+m.s1>+m.s2,t2won=played&&+m.s2>+m.s1;
+      const badge=isEdr?(m.label||cat.short):`${cat.short} ${m.poule}`;
+      const top=(t2m(m.time)-sM)*PX;
+      const h=matchDurMin(m)*PX-3;
+      return`<div class="cal-block" style="top:${top}px;height:${h}px;background:${cat.color}20;border-left:3px solid ${cat.color}" onclick="openDetail('${m.id}')"><div class="cal-bcat" style="color:${cat.color}">${escHtml(badge)}</div><div class="cal-bteam${t1won?' won':''}">${escHtml(t1n)}</div><div class="cal-bteam" style="font-size:9px;color:rgba(255,255,255,.3)">vs</div><div class="cal-bteam${t2won?' won':''}">${escHtml(t2n)}</div>${played?`<div class="cal-bscore">${m.s1}-${m.s2}</div>`:''}</div>`;
+    }).join('');
+    return`<div class="cal-col" style="height:${totalH}px">${hlines}${blocks}</div>`;
+  }).join('');
+
+  const hdrs=courts.map(c=>`<div class="cal-th">Baan ${c}</div>`).join('');
+  content.innerHTML=`<div class="day-full-lbl">${day.full}</div><div class="cal-outer"><div class="cal-wrap"><div class="cal-header"><div class="cal-th-spacer"></div>${hdrs}</div><div class="cal-body"><div class="cal-times" style="height:${totalH}px">${tlbls}</div><div class="cal-cols">${colsHtml}</div></div></div></div>`;
 }
 function setDay(d){currentDay=d;renderDag();}
-function renderGridCell(m){
-  const cat=CATS[m.cat]||{};
-  const isEdr=m.phase!=='poule';
-  const t1n=isEdr?(m.t1?teamName(m.cat,null,m.t1):(m.t1_desc||'TBD')):(teamName(m.cat,m.poule,m.t1)||'?');
-  const t2n=isEdr?(m.t2?teamName(m.cat,null,m.t2):(m.t2_desc||'TBD')):(teamName(m.cat,m.poule,m.t2)||'?');
-  const played=m.locked&&m.s1!==null&&m.s2!==null;
-  const badge=isEdr?(m.label||cat.short):`${cat.short} ${m.poule}`;
-  const t1won=played&&+m.s1>+m.s2,t2won=played&&+m.s2>+m.s1;
-  return`<div class="gc-badge" style="background:${cat.color}22;color:${cat.color}">${badge}</div><div class="gc-team ${t1won?'won':''}">${escHtml(t1n)}</div><div class="gc-vs">vs</div><div class="gc-team ${t2won?'won':''}">${escHtml(t2n)}</div>${played?`<div class="gc-score">${m.s1}-${m.s2}</div>`:''}`;
-}
 
 // ============================================================
 // MATCH DETAIL MODAL
