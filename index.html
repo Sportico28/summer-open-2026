@@ -628,7 +628,7 @@ function makeSeed(){
 // ============================================================
 let S={teams:{},deelnemers:{},matches:[]};
 let fbRef=null,usersRef=null,deadlineRef=null,matchPicksRef=null;
-let deadlineOverrides={};
+let deadlineOverrides={},allPicksCache={};
 let adminActive=false,currentDay='ma',currentCat='h_p100',adminFilterCat='all',adminTab='wedstrijden',deelnCat='h_p100',editMatchId=null,detailMatchId=null,pinBuffer='';
 let GokState={deviceId:'',nickname:'',credits:INIT_CREDITS,bets:{}};
 
@@ -643,6 +643,7 @@ function initFirebase(){
     deadlineRef=firebase.database().ref(FB_PATH+'/deadlineOverrides');
     matchPicksRef=firebase.database().ref(FB_PATH+'/picks');
     deadlineRef.on('value',snap=>{deadlineOverrides=snap.val()||{};});
+    matchPicksRef.on('value',snap=>{allPicksCache=snap.val()||{};});
     fbRef.child('data').on('value',snap=>{
       const d=snap.val();
       if(d&&d.matches&&d.matches.length){S.matches=d.matches.map(m=>({...m,s1:m.s1??null,s2:m.s2??null,locked:!!m.locked,t1:m.t1??null,t2:m.t2??null}));S.teams=d.teams||{};S.deelnemers=d.deelnemers||{};}
@@ -893,9 +894,12 @@ function resolveGokBets(){
       won=(bet.pick==='1'&&t1won)||(bet.pick==='2'&&t2won);
       payout=won?bet.amount*2:0;
     }
-    // underdog bonus: +1 als je op de underdog gok en wint
-    if(won&&bet.underdog)payout+=1;
-    GokState.bets[mid]={...bet,resolved:true,won,payout};
+    // underdog bonus: bepaal op basis van definitieve stemverdeling op het moment van resolutie
+    let underdog=false;
+    const fp=allPicksCache[mid]||{t1:0,t2:0};const ftotal=(fp.t1||0)+(fp.t2||0);
+    if(ftotal>0&&bet.pick){const mc=bet.pick==='1'?(fp.t1||0):(fp.t2||0);underdog=Math.round(100*mc/ftotal)<40;}
+    if(won&&underdog)payout+=1;
+    GokState.bets[mid]={...bet,resolved:true,won,payout,underdog};
     GokState.credits+=payout;
     changed=true;
   });
@@ -936,7 +940,9 @@ function renderGokken(){
       else gokLbl=`Winnaar: ${pick==='1'?escHtml(t1n):escHtml(t2n)}`;
       if(underdog)gokLbl+=' <span class="underdog-tag">underdog</span>';
       let res='';
+      const canWithdraw=!resolved&&canBetOnMatch(match);
       if(resolved){const p=payout||0;res=`<span class="gok-bet-result ${p>0?'win':'loss'}">${p>0?'+'+p+' credits':'Verloren'}</span>`;}
+      else if(canWithdraw)res=`<button onclick="withdrawBet('${matchId}')" style="padding:4px 10px;border-radius:7px;border:1px solid #555;background:none;color:#888;font-size:11px;font-family:'Rubik',sans-serif;cursor:pointer">Trek in</button>`;
       else res=`<span class="gok-bet-result pending">Wacht...</span>`;
       html+=`<div class="leaderboard-row" style="flex-direction:column;align-items:flex-start;gap:4px"><div style="display:flex;width:100%;justify-content:space-between;align-items:center"><span style="font-size:11px;color:${cat.color};font-weight:700">${cat.short} &middot; ${match.time||'?'}</span>${res}</div><div style="font-size:13px">${escHtml(t1n)} vs ${escHtml(t2n)}</div><div style="font-size:11px;color:var(--gray)">${gokLbl} &middot; inzet ${amount}</div></div>`;
     });
@@ -977,6 +983,20 @@ function startGokken(){
   localStorage.setItem('sum26_nick',nick);saveGokLocal();renderGokken();
 }
 function resetGok(){if(confirm('Naam wijzigen? Je credits blijven bewaard.')){const n=prompt('Nieuwe bijnaam:','');if(n&&n.trim()){GokState.nickname=n.trim();localStorage.setItem('sum26_nick',GokState.nickname);saveGokLocal();renderGokken();}}}
+function withdrawBet(matchId){
+  const bet=GokState.bets[matchId];if(!bet||bet.resolved)return;
+  const m=S.matches.find(x=>x.id===matchId);if(!m||!canBetOnMatch(m)){toast('Deadline voorbij, intrekken niet meer mogelijk');return;}
+  GokState.credits+=bet.amount;
+  delete GokState.bets[matchId];
+  saveGokLocal();
+  // verwijder stem uit Firebase picks
+  if(matchPicksRef&&bet.pick){
+    const field=bet.pick==='1'?'t1':'t2';
+    matchPicksRef.child(matchId+'/'+field).transaction(v=>Math.max(0,(v||0)-1));
+  }
+  toast(`Gok ingetrokken. +${bet.amount} credit${bet.amount!==1?'s':''} terug`);
+  renderGokken();
+}
 function openGokModal(matchId){
   closeDetail();
   const m=S.matches.find(x=>x.id===matchId);if(!m)return;
@@ -1049,16 +1069,7 @@ function confirmGokBet(){
   const inzet=g.type==='winner'?2:g.amount;
   if(GokState.credits<inzet){toast('Niet genoeg credits');return;}
   const m=S.matches.find(x=>x.id===g.matchId);if(!m||!canBetOnMatch(m)){toast('Inzetten gesloten');closeModal();return;}
-  // underdog check
-  const picks=window._gokPicks||{t1:0,t2:0};
-  const totalPicks=(picks.t1||0)+(picks.t2||0);
-  let underdog=false;
-  if(totalPicks>0&&g.pick){
-    const myCount=g.pick==='1'?(picks.t1||0):(picks.t2||0);
-    const myPct=Math.round(100*myCount/totalPicks);
-    underdog=myPct<40;
-  }
-  const bet={type:g.type,pick:g.pick||null,predictedS1:g.type==='score'?g.s1:null,predictedS2:g.type==='score'?g.s2:null,amount:inzet,underdog,resolved:false,won:null,payout:null,ts:Date.now()};
+  const bet={type:g.type,pick:g.pick||null,predictedS1:g.type==='score'?g.s1:null,predictedS2:g.type==='score'?g.s2:null,amount:inzet,resolved:false,won:null,payout:null,ts:Date.now()};
   GokState.bets[g.matchId]=bet;
   GokState.credits-=inzet;
   saveGokLocal();
