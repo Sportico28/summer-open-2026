@@ -767,7 +767,10 @@ function renderDag(){
       const badge=isEdr?(m.label||cat.short):`${cat.short} ${m.poule}`;
       const left=(t2m(m.time)-sM)*PX;
       const w=matchDurMin(m)*PX-3;
-      return`<div class="cal-block" style="left:${left}px;width:${w}px;background:${cat.color}22;border-top:3px solid ${cat.color}" onclick="openDetail('${m.id}')"><div class="cal-bcat" style="color:${cat.color}">${escHtml(badge)}</div><div class="cal-bteams">${played?`<span class="${t1won?'cal-bteam won':''}">${escHtml(t1n)}</span> <span style="opacity:.4">vs</span> <span class="${t2won?'cal-bteam won':''}">${escHtml(t2n)}</span> <span class="cal-bscore">${m.s1}-${m.s2}</span>`:`${escHtml(t1n)} vs ${escHtml(t2n)}`}</div></div>`;
+      // underdog indicator
+      let ud1='',ud2='';
+      if(!played){const cp=allPicksCache[m.id]||{};const ct=(cp.t1||0)+(cp.t2||0);if(ct>0){if(Math.round(100*(cp.t1||0)/ct)<40)ud1='<span style="color:#4ade80;font-size:7px;margin-right:1px">●</span>';if(Math.round(100*(cp.t2||0)/ct)<40)ud2='<span style="color:#4ade80;font-size:7px;margin-right:1px">●</span>';}}
+      return`<div class="cal-block" style="left:${left}px;width:${w}px;background:${cat.color}22;border-top:3px solid ${cat.color}" onclick="openDetail('${m.id}')"><div class="cal-bcat" style="color:${cat.color}">${escHtml(badge)}</div><div class="cal-bteams">${played?`<span class="${t1won?'cal-bteam won':''}">${escHtml(t1n)}</span> <span style="opacity:.4">vs</span> <span class="${t2won?'cal-bteam won':''}">${escHtml(t2n)}</span> <span class="cal-bscore">${m.s1}-${m.s2}</span>`:`${ud1}${escHtml(t1n)} vs ${ud2}${escHtml(t2n)}`}</div></div>`;
     }).join('');
     return`<div class="cal-court-row"><div class="cal-court-lbl">B${court}</div><div class="cal-court-body" style="width:${totalW}px">${vlines}${blocks}</div></div>`;
   }).join('');
