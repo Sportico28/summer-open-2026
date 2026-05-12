@@ -952,7 +952,7 @@ function renderGokken(){
   <div class="sr-divider"></div>
   <div class="sr-row"><div class="sr-icon">⚡</div><div class="sr-body"><div class="sr-label">Gaat naar tiebreak?</div><div class="sr-val">Inzet <strong>1-10 credits</strong>. Tiebreak = eindstand 8-9 of 9-8. Raad juist = <strong>4x</strong> terug.</div></div></div>
   <div class="sr-divider"></div>
-  <div class="sr-row"><div class="sr-icon sr-green">🐶</div><div class="sr-body"><div class="sr-label">Underdog bonus</div><div class="sr-val">Gok je op de minderheid (minder dan 50% stemmen) en win je, dan krijg je <strong>+1 credit extra</strong>.</div></div></div>
+  <div class="sr-row"><div class="sr-icon sr-green">🐶</div><div class="sr-body"><div class="sr-label">Underdog bonus</div><div class="sr-val">Gok je op de underdog (minder dan 40% van de stemmen) en win je, dan krijg je <strong>+1 credit extra</strong>.</div></div></div>
   <div class="sr-divider"></div>
   <div class="sr-row"><div class="sr-icon">⏱</div><div class="sr-body"><div class="sr-label">Deadline</div><div class="sr-val">Gokken sluit <strong>15 min voor start</strong> van de poule. De wedstrijdleider kan de deadline aanpassen.</div></div></div>
 </div>`;
@@ -1001,12 +1001,11 @@ function _renderGokModal(){
   const totalPicks=(picks.t1||0)+(picks.t2||0);
   const pct1=totalPicks>0?Math.round(100*(picks.t1||0)/totalPicks):50;
   const pct2=100-pct1;
-  const isFav1=pct1>=pct2;
   // vote bar
   const voteBarHtml=totalPicks>0?`<div class="vote-lbl"><span>${escHtml(g.t1n)} ${pct1}%</span><span>${pct2}% ${escHtml(g.t2n)}</span></div><div class="vote-bar"><div class="vote-bar-fill" style="width:${pct1}%"></div></div>`:'';
-  // pick row
-  const underdogTag1=totalPicks>0&&!isFav1?'<span class="underdog-tag">underdog</span>':'';
-  const underdogTag2=totalPicks>0&&isFav1?'<span class="underdog-tag">underdog</span>':'';
+  // pick row — underdog = minder dan 40% van de stemmen
+  const underdogTag1=totalPicks>0&&pct1<40?'<span class="underdog-tag">underdog</span>':'';
+  const underdogTag2=totalPicks>0&&pct2<40?'<span class="underdog-tag">underdog</span>':'';
   const pickRow=`<div class="gok-actions" style="margin:10px 0"><button class="btn-pick ${g.pick==='1'?'selected':''}" onclick="gokSetPick('1')">${escHtml(g.t1n)}${underdogTag1}</button><button class="btn-pick ${g.pick==='2'?'selected':''}" onclick="gokSetPick('2')">${escHtml(g.t2n)}${underdogTag2}</button></div>`;
   // amount row (max min(10, credits))
   const maxAmt=Math.min(10,GokState.credits);
@@ -1056,8 +1055,8 @@ function confirmGokBet(){
   let underdog=false;
   if(totalPicks>0&&g.pick){
     const myCount=g.pick==='1'?(picks.t1||0):(picks.t2||0);
-    const otherCount=g.pick==='1'?(picks.t2||0):(picks.t1||0);
-    underdog=myCount<otherCount;
+    const myPct=Math.round(100*myCount/totalPicks);
+    underdog=myPct<40;
   }
   const bet={type:g.type,pick:g.pick||null,predictedS1:g.type==='score'?g.s1:null,predictedS2:g.type==='score'?g.s2:null,amount:inzet,underdog,resolved:false,won:null,payout:null,ts:Date.now()};
   GokState.bets[g.matchId]=bet;
