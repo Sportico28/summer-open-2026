@@ -450,25 +450,57 @@ const CATS={
   h_p700:{label:'Heren P700',short:'H P700',type:'indoor',color:'#ffa94d',poules:['A','B'],bracket:'SF',days_poule:['ma','wo'],day_final:'zo'},
   d_p100:{label:'Dames P100',short:'D P100',type:'outdoor',color:'#f783ac',poules:['A','B','C','D'],bracket:'QF',days_poule:['di','wo','vr'],day_final:'zo'},
   d_p300:{label:'Dames P300',short:'D P300',type:'outdoor',color:'#a9e34b',poules:['A','B','C','D'],bracket:'QF',days_poule:['di','wo','vr'],day_final:'zo'},
-  d_p500:{label:'Dames P500',short:'D P500',type:'indoor',color:'#69db7c',poules:['A','B','C','D'],bracket:'QF',days_poule:['di','do','vr'],day_final:'zo'},
+  d_p500:{label:'Dames P500',short:'D P500',type:'indoor',color:'#69db7c',poules:['A','B','C'],bracket:'QF',days_poule:['di','do','vr'],day_final:'zo'},
 };
 const POULE_SCHED={
-  h_p100:{A:{day:'ma',c1:4,c2:5,t:'18:00'},B:{day:'ma',c1:4,c2:5,t:'19:30'},C:{day:'do',c1:4,c2:5,t:'18:00'},D:{day:'do',c1:4,c2:5,t:'19:30'}},
-  h_p300:{A:{day:'ma',c1:1,c2:2,t:'18:00'},B:{day:'ma',c1:1,c2:2,t:'19:30'},C:{day:'do',c1:1,c2:2,t:'18:00'},D:{day:'do',c1:1,c2:2,t:'19:30'}},
-  h_p500:{A:{day:'di',c1:1,c2:2,t:'18:00'},B:{day:'di',c1:1,c2:2,t:'19:30'},C:{day:'wo',c1:1,c2:2,t:'18:00'},D:{day:'wo',c1:1,c2:2,t:'19:30'}},
-  h_p700:{A:{day:'ma',c1:6,c2:7,t:'19:00'},B:{day:'wo',c1:6,c2:7,t:'19:00'}},
-  d_p100:{A:{day:'di',c1:4,c2:5,t:'18:00'},B:{day:'wo',c1:4,c2:5,t:'18:45'},C:{day:'vr',c1:1,c2:2,t:'18:00'},D:{day:'vr',c1:4,c2:5,t:'18:45'}},
-  d_p300:{A:{day:'di',c1:4,c2:5,t:'18:45'},B:{day:'wo',c1:4,c2:5,t:'18:00'},C:{day:'vr',c1:4,c2:5,t:'18:00'},D:{day:'vr',c1:1,c2:2,t:'18:45'}},
-  d_p500:{A:{day:'di',c1:6,c2:7,t:'18:00'},B:{day:'di',c1:6,c2:7,t:'19:30'},C:{day:'do',c1:6,c2:7,t:'18:00'},D:{day:'do',c1:6,c2:7,t:'19:30'}},
+  h_p100:{
+    A:{day:'ma',c1:4,c2:5,rounds:['18:00','18:45','19:30']},
+    B:{day:'ma',c1:4,c2:5,rounds:['20:30','21:15','22:00']},
+    C:{day:'do',c1:4,c2:5,rounds:['18:00','18:45','19:30']},
+    D:{day:'do',c1:4,c2:5,rounds:['20:30','21:15','22:00']}
+  },
+  h_p300:{
+    A:{day:'ma',c1:1,c2:2,rounds:['18:00','18:45','19:30']},
+    B:{day:'ma',c1:1,c2:2,rounds:['20:30','21:15','22:00']},
+    C:{day:'do',c1:1,c2:2,rounds:['18:00','18:45','19:30']},
+    D:{day:'do',c1:1,c2:2,rounds:['20:30','21:15','22:00']}
+  },
+  h_p500:{
+    A:{day:'di',c1:1,c2:2,rounds:['18:00','18:45','19:30']},
+    B:{day:'di',c1:1,c2:2,rounds:['20:30','21:15','22:00']},
+    C:{day:'wo',c1:1,c2:2,rounds:['18:00','18:45','19:30']},
+    D:{day:'wo',c1:1,c2:2,rounds:['20:30','21:15','22:00']}
+  },
+  h_p700:{
+    A:{day:'ma',c1:6,c2:7,rounds:['18:30','19:45','21:00']},
+    B:{day:'wo',c1:6,c2:7,rounds:['18:30','19:45','21:00']}
+  },
+  d_p100:{
+    A:{day:'di',c1:4,c2:5,rounds:['18:00','18:45','19:30']},
+    B:{day:'wo',c1:4,c2:5,rounds:['20:30','21:15','22:00']},
+    C:{day:'vr',c1:1,c2:2,rounds:['18:00','18:45','19:30']},
+    D:{day:'vr',c1:4,c2:5,rounds:['20:30','21:15','22:00']}
+  },
+  d_p300:{
+    A:{day:'di',c1:4,c2:5,rounds:['20:30','21:15','22:00']},
+    B:{day:'wo',c1:4,c2:5,rounds:['18:00','18:45','19:30']},
+    C:{day:'vr',c1:4,c2:5,rounds:['18:00','18:45','19:30']},
+    D:{day:'vr',c1:1,c2:2,rounds:['20:30','21:15','22:00']}
+  },
+  d_p500:{
+    A:{day:'di',c1:6,c2:7,rounds:['18:30','19:15','20:00']},
+    B:{day:'do',c1:6,c2:7,rounds:['18:30','19:15','20:00']},
+    C:{day:'vr',c1:6,c2:7,rounds:['18:30','19:15','20:00']}
+  },
 };
 const EINDRONDE_SCHED={
-  h_p500:{QF:{t:'10:00',courts:[1,2,4,5]},SF:{t:'11:00',courts:[1,2]},F:{t:'12:00',courts:[1]}},
-  h_p100:{QF:{t:'12:00',courts:[2,3,4,5]},SF:{t:'13:30',courts:[4,5]},F:{t:'15:00',courts:[5]}},
-  h_p300:{QF:{t:'15:30',courts:[1,2,3,4]},SF:{t:'16:30',courts:[1,2]},F:{t:'17:30',courts:[1]}},
-  d_p300:{QF:{t:'10:00',courts:[1,2,3,4]},SF:{t:'11:00',courts:[1,2]},F:{t:'12:00',courts:[1]}},
-  d_p500:{QF:{t:'11:00',courts:[6,7]},SF:{t:'12:00',courts:[6,7]},F:{t:'13:00',courts:[6]}},
-  d_p100:{QF:{t:'13:30',courts:[2,3,4,5]},SF:{t:'14:30',courts:[1,2]},F:{t:'16:00',courts:[1]}},
-  h_p700:{SF:{t:'14:30',courts:[7,8]},F:{t:'16:00',courts:[7]}},
+  h_p500:{QF:{t:'09:30',courts:[1,2,4,5]},SF:{t:'10:30',courts:[1,2]},F:{t:'12:00',courts:[1]}},
+  h_p100:{QF:{t:'12:30',courts:[2,3,4,5]},SF:{t:'13:30',courts:[4,5]},F:{t:'15:00',courts:[5]}},
+  h_p300:{QF:{t:'15:30',courts:[1,2,3,4]},SF:{t:'16:30',courts:[1,2]},F:{t:'18:00',courts:[1]}},
+  d_p300:{QF:{t:'09:30',courts:[1,2,4,5]},SF:{t:'10:30',courts:[1,2]},F:{t:'12:00',courts:[1]}},
+  d_p500:{QF:{t:'10:30',courts:[6,7]},SF:{t:'12:00',courts:[6,7]},F:{t:'13:30',courts:[6]}},
+  d_p100:{QF:{t:'14:00',courts:[2,3,4,5]},SF:{t:'15:00',courts:[1,2]},F:{t:'16:30',courts:[1]}},
+  h_p700:{SF:{t:'15:30',courts:[6,7]},F:{t:'16:45',courts:[6]}},
 };
 const DAYS=[
   {key:'ma',label:'MA',full:'Maandag 15/06',date:'2026-06-15'},
@@ -480,7 +512,7 @@ const DAYS=[
   {key:'zo',label:'ZO',full:'Zondag 21/06',date:'2026-06-21'},
 ];
 const FIREBASE_CONFIG={apiKey:"AIzaSyDrlCpuO2a5yzSUB1JoZ96KSaYjCQniu48",authDomain:"mgpc-2026.firebaseapp.com",databaseURL:"https://mgpc-2026-default-rtdb.europe-west1.firebasedatabase.app",projectId:"mgpc-2026",storageBucket:"mgpc-2026.firebasestorage.app",messagingSenderId:"78506921375",appId:"1:78506921375:web:3a4b325a3981a9195901aa"};
-const FB_PATH='summer2026b';
+const FB_PATH='summer2026c';
 const ADMIN_PIN='2606';
 const INIT_CREDITS=10;
 
@@ -507,7 +539,7 @@ function makeSeed(){
       deelnemers[cat][poule]={'1':{lidnr1:'',lidnr2:''},'2':{lidnr1:'',lidnr2:''},'3':{lidnr1:'',lidnr2:''},'4':{lidnr1:'',lidnr2:''}};
       const ps=POULE_SCHED[cat][poule];
       RR.forEach((ronde,ri)=>ronde.forEach((pair,pi)=>{
-        matches.push({id:`${cat}-${poule}-r${ri+1}m${pi+1}`,cat,poule,phase:'poule',t1:pair[0],t2:pair[1],s1:null,s2:null,day:ps.day,time:addMins(ps.t,ri*45),court:pi===0?ps.c1:ps.c2,locked:false});
+        matches.push({id:`${cat}-${poule}-r${ri+1}m${pi+1}`,cat,poule,phase:'poule',t1:pair[0],t2:pair[1],s1:null,s2:null,day:ps.day,time:ps.rounds[ri],court:pi===0?ps.c1:ps.c2,locked:false});
       }));
     });
     const es=EINDRONDE_SCHED[cat]||{},fd=CATS[cat].day_final,br=CATS[cat].bracket;
