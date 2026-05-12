@@ -475,6 +475,17 @@
 
 <div class="toast" id="toast"></div>
 
+<!-- DAILY BONUS OVERLAY -->
+<div id="daily-bonus-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:300;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
+  <div style="background:#111;border:1px solid var(--border);border-radius:20px;padding:32px 24px;max-width:320px;width:90%;text-align:center;">
+    <div style="font-size:48px;margin-bottom:12px">⭐</div>
+    <div style="font-size:20px;font-weight:800;font-style:italic;color:var(--gold);text-transform:uppercase;margin-bottom:8px">Welkom terug!</div>
+    <div id="daily-bonus-txt" style="font-size:13px;color:var(--gray);line-height:1.6;margin-bottom:24px"></div>
+    <button id="daily-bonus-btn" onclick="claimDailyBonus()" style="width:100%;padding:14px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--black);border:none;border-radius:12px;font-size:15px;font-weight:800;font-family:'Rubik',sans-serif;cursor:pointer;margin-bottom:10px"></button>
+    <button onclick="closeDailyBonus()" style="width:100%;padding:10px;background:none;color:#555;border:none;font-size:12px;font-family:'Rubik',sans-serif;cursor:pointer">Misschien later</button>
+  </div>
+</div>
+
 <script>
 // ============================================================
 // CONSTANTEN
@@ -551,6 +562,7 @@ const FIREBASE_CONFIG={apiKey:"AIzaSyDrlCpuO2a5yzSUB1JoZ96KSaYjCQniu48",authDoma
 const FB_PATH='summer2026c';
 const ADMIN_PIN='32472418789';
 const INIT_CREDITS=10;
+const DAILY_CREDITS=5;
 
 // ============================================================
 // HELPERS
@@ -627,7 +639,7 @@ function makeSeed(){
 // STATE
 // ============================================================
 let S={teams:{},deelnemers:{},matches:[]};
-let fbRef=null,usersRef=null,deadlineRef=null,matchPicksRef=null;
+let fbRef=null,usersRef=null,deadlineRef=null,matchPicksRef=null,auditRef=null;
 let deadlineOverrides={},allPicksCache={};
 let adminActive=false,currentDay='ma',currentCat='h_p100',adminFilterCat='all',adminTab='wedstrijden',deelnCat='h_p100',editMatchId=null,detailMatchId=null,pinBuffer='';
 let GokState={deviceId:'',nickname:'',credits:INIT_CREDITS,bets:{}};
@@ -642,6 +654,7 @@ function initFirebase(){
     usersRef=firebase.database().ref(FB_PATH+'/users');
     deadlineRef=firebase.database().ref(FB_PATH+'/deadlineOverrides');
     matchPicksRef=firebase.database().ref(FB_PATH+'/picks');
+    auditRef=firebase.database().ref(FB_PATH+'/auditLog');
     deadlineRef.on('value',snap=>{deadlineOverrides=snap.val()||{};});
     matchPicksRef.on('value',snap=>{allPicksCache=snap.val()||{};});
     fbRef.child('data').on('value',snap=>{
@@ -651,6 +664,7 @@ function initFirebase(){
       document.getElementById('fb-loading').style.display='none';
       resolveGokBets();
       renderAll();
+      setTimeout(()=>checkDailyBonus(),800);
     },err=>{console.error(err);document.getElementById('fb-loading').style.display='none';S=makeSeed();renderAll();});
   }catch(e){console.error(e);document.getElementById('fb-loading').style.display='none';S=makeSeed();renderAll();}
 }
@@ -874,7 +888,52 @@ function initGokProfile(){
 function saveGokLocal(){
   localStorage.setItem('sum26_credits',GokState.credits);
   localStorage.setItem('sum26_bets',JSON.stringify(GokState.bets));
-  if(usersRef&&GokState.nickname)usersRef.child(GokState.deviceId).set({nickname:GokState.nickname,credits:GokState.credits,ts:Date.now()});
+  if(usersRef&&GokState.nickname)usersRef.child(GokState.deviceId).set({nickname:GokState.nickname,credits:GokState.credits,lastSeen:Date.now()});
+}
+function auditLog(type,meta={}){
+  if(!auditRef||!GokState.deviceId)return;
+  auditRef.push({type,deviceId:GokState.deviceId,nickname:GokState.nickname||'',credits:GokState.credits,ts:Date.now(),...meta});
+}
+function todayStr(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function checkDailyBonus(){
+  if(!GokState.nickname)return;
+  const key='sum26_claimed_'+todayStr();
+  if(localStorage.getItem(key))return;
+  // controleer ook in Firebase of deze dag al geclaimd werd
+  if(usersRef){
+    usersRef.child(GokState.deviceId+'/dailyClaims/'+todayStr()).once('value',snap=>{
+      if(snap.val())return; // al geclaimd in Firebase
+      showDailyBonus();
+    });
+  } else {
+    showDailyBonus();
+  }
+}
+function showDailyBonus(){
+  const key='sum26_claimed_'+todayStr();
+  if(localStorage.getItem(key))return;
+  const overlay=document.getElementById('daily-bonus-overlay');
+  if(!overlay)return;
+  document.getElementById('daily-bonus-txt').innerHTML=`Claim je <strong style="color:var(--white)">${DAILY_CREDITS} Lucky Credits</strong> voor vandaag en blijf mee strijden voor de Lucky Legend titel.`;
+  document.getElementById('daily-bonus-btn').textContent=`+${DAILY_CREDITS} Credits claimen`;
+  overlay.style.display='flex';
+}
+function claimDailyBonus(){
+  const key='sum26_claimed_'+todayStr();
+  if(localStorage.getItem(key)){closeDailyBonus();return;}
+  localStorage.setItem(key,'1');
+  // sla claim op in Firebase zodat dubbele claim via ander device geblokkeerd wordt
+  if(usersRef)usersRef.child(GokState.deviceId+'/dailyClaims/'+todayStr()).set(Date.now());
+  GokState.credits+=DAILY_CREDITS;
+  saveGokLocal();
+  auditLog('daily_bonus',{amount:DAILY_CREDITS,day:todayStr()});
+  closeDailyBonus();
+  toast(`+${DAILY_CREDITS} Lucky Credits geclaimed!`);
+  renderGokken();
+}
+function closeDailyBonus(){
+  const overlay=document.getElementById('daily-bonus-overlay');
+  if(overlay)overlay.style.display='none';
 }
 function resolveGokBets(){
   let changed=false;
@@ -906,7 +965,10 @@ function resolveGokBets(){
     GokState.credits+=payout;
     changed=true;
   });
-  if(changed)saveGokLocal();
+  if(changed){
+    saveGokLocal();
+    Object.entries(GokState.bets).forEach(([mid,b])=>{if(b.resolved&&!b._audited){auditLog('bet_resolved',{matchId:mid,betType:b.type,pick:b.pick,won:b.won,payout:b.payout,underdog:!!b.underdog,creditsAfter:GokState.credits});b._audited=true;}});
+  }
 }
 function renderGokken(){
   resolveGokBets();
@@ -992,6 +1054,7 @@ function withdrawBet(matchId){
   GokState.credits+=bet.amount;
   delete GokState.bets[matchId];
   saveGokLocal();
+  auditLog('bet_withdrawn',{matchId,betType:bet.type,amount:bet.amount,creditsAfter:GokState.credits});
   // verwijder stem uit Firebase picks
   if(matchPicksRef&&bet.pick){
     const field=bet.pick==='1'?'t1':'t2';
@@ -1081,6 +1144,7 @@ function confirmGokBet(){
     const field=g.pick==='1'?'t1':'t2';
     matchPicksRef.child(g.matchId+'/'+field).transaction(v=>(v||0)+1);
   }
+  auditLog('bet_placed',{matchId:g.matchId,betType:g.type,pick:g.pick||null,amount:inzet,creditsAfter:GokState.credits});
   closeModal();
   toast(`Gok geplaatst! -${inzet} credit${inzet!==1?'s':''}`);
   renderGokken();
