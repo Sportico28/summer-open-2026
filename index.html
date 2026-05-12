@@ -475,6 +475,14 @@
 
 <div class="toast" id="toast"></div>
 
+<!-- DESKTOP BLOCKER (niet voor admin) -->
+<div id="desktop-block" style="display:none;position:fixed;inset:0;background:#000;z-index:9999;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:40px;">
+  <div style="font-size:48px;margin-bottom:20px">📱</div>
+  <div style="font-size:24px;font-weight:800;font-style:italic;color:#E9B745;text-transform:uppercase;margin-bottom:12px">Open op je smartphone</div>
+  <div style="font-size:14px;color:#888;line-height:1.7;max-width:340px">De Pachanga Summer Open app is ontworpen voor mobiel gebruik.<br><br>Open deze pagina op je telefoon voor de volledige ervaring.</div>
+  <div style="margin-top:32px;font-size:11px;color:#444">sportico28.github.io/summer-open-2026</div>
+</div>
+
 <!-- DAILY BONUS OVERLAY -->
 <div id="daily-bonus-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:300;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
   <div style="background:#111;border:1px solid var(--border);border-radius:20px;padding:32px 24px;max-width:320px;width:90%;text-align:center;">
@@ -641,6 +649,7 @@ function makeSeed(){
 let S={teams:{},deelnemers:{},matches:[]};
 let fbRef=null,usersRef=null,deadlineRef=null,matchPicksRef=null,auditRef=null;
 let deadlineOverrides={},allPicksCache={};
+let serverTimeOffset=0; // Firebase server-client offset in ms
 let adminActive=false,currentDay='ma',currentCat='h_p100',adminFilterCat='all',adminTab='wedstrijden',deelnCat='h_p100',editMatchId=null,detailMatchId=null,pinBuffer='';
 let GokState={deviceId:'',nickname:'',credits:INIT_CREDITS,bets:{}};
 
@@ -655,6 +664,8 @@ function initFirebase(){
     deadlineRef=firebase.database().ref(FB_PATH+'/deadlineOverrides');
     matchPicksRef=firebase.database().ref(FB_PATH+'/picks');
     auditRef=firebase.database().ref(FB_PATH+'/auditLog');
+    // server-tijd offset ophalen: voorkomt dat klokmanipulatie dagbonus omzeilt
+    firebase.database().ref('.info/serverTimeOffset').on('value',snap=>{serverTimeOffset=snap.val()||0;});
     deadlineRef.on('value',snap=>{deadlineOverrides=snap.val()||{};});
     matchPicksRef.on('value',snap=>{allPicksCache=snap.val()||{};});
     fbRef.child('data').on('value',snap=>{
@@ -894,7 +905,8 @@ function auditLog(type,meta={}){
   if(!auditRef||!GokState.deviceId)return;
   auditRef.push({type,deviceId:GokState.deviceId,nickname:GokState.nickname||'',credits:GokState.credits,ts:Date.now(),...meta});
 }
-function todayStr(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function serverNow(){return Date.now()+serverTimeOffset;}
+function todayStr(){const d=new Date(serverNow());return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 function checkDailyBonus(){
   if(!GokState.nickname)return;
   const key='sum26_claimed_'+todayStr();
@@ -1341,6 +1353,20 @@ function toast(msg){const el=document.getElementById('toast');el.textContent=msg
 // INIT
 // ============================================================
 initGokProfile();
+// Desktop blocker: app enkel op mobiel, admin wel op laptop/tablet
+(function(){
+  const isAdmin=window.location.hash==='#admin';
+  const isMobile=window.innerWidth<=900||('ontouchstart' in window&&window.innerWidth<=1024);
+  if(!isAdmin&&!isMobile){
+    document.getElementById('desktop-block').style.display='flex';
+  }
+  // ook bij hashchange: als admin hash wegvalt op desktop, blokkeer terug
+  window.addEventListener('hashchange',()=>{
+    const adminNow=window.location.hash==='#admin';
+    const mob=window.innerWidth<=900||('ontouchstart' in window&&window.innerWidth<=1024);
+    document.getElementById('desktop-block').style.display=(!adminNow&&!mob)?'flex':'none';
+  });
+})();
 document.getElementById('pin-dots').innerHTML=Array.from({length:ADMIN_PIN.length},(_,i)=>`<div class="pin-dot" id="pd${i}"></div>`).join('');
 document.getElementById('day-tabs').innerHTML=DAYS.map(d=>`<button class="day-tab ${d.key==='ma'?'active':''}" onclick="setDay('${d.key}')">${d.label}</button>`).join('');
 renderCountdown();
