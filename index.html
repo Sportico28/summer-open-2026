@@ -253,13 +253,21 @@
     .amt-btn.active{background:var(--gold);color:var(--black);border-color:var(--gold);}
     .deadline-badge{font-size:10px;color:var(--gray);margin-top:3px;}
     .deadline-badge.closed{color:#f87171;}
-    .sp-row{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px 0;}
-    .sp-side{display:flex;flex-direction:column;align-items:center;gap:4px;}
+    /* SCORE DRUM PICKER */
+    .sp-row{display:flex;align-items:center;justify-content:center;gap:8px;margin:10px 0;}
+    .sp-side{display:flex;flex-direction:column;align-items:center;gap:6px;}
     .sp-name{font-size:10px;color:var(--gray);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;}
-    .sp-ctrl{display:flex;align-items:center;gap:6px;}
-    .sp-btn{width:30px;height:30px;border-radius:7px;border:1px solid var(--border);background:var(--card2);color:var(--white);font-size:18px;font-weight:700;cursor:pointer;font-family:'Rubik',sans-serif;display:flex;align-items:center;justify-content:center;}
-    .sp-num{font-size:26px;font-weight:800;color:var(--white);min-width:28px;text-align:center;}
-    .sp-vs-lbl{font-size:14px;color:var(--border);font-weight:700;}
+    .sp-vs-lbl{font-size:14px;color:var(--border);font-weight:700;margin-top:28px;}
+    .drum-wrap{position:relative;height:129px;width:72px;overflow:hidden;border-radius:12px;background:var(--card2);border:1px solid var(--border);}
+    .drum-wrap::before,.drum-wrap::after{content:'';position:absolute;left:0;right:0;height:43px;z-index:2;pointer-events:none;}
+    .drum-wrap::before{top:0;background:linear-gradient(to bottom,var(--card2) 0%,rgba(26,26,26,0) 100%);}
+    .drum-wrap::after{bottom:0;background:linear-gradient(to top,var(--card2) 0%,rgba(26,26,26,0) 100%);}
+    .drum-wrap::before{border-bottom:1px solid var(--border);}
+    .drum-wrap::after{border-top:1px solid var(--border);}
+    .drum-scroll{height:100%;overflow-y:scroll;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+    .drum-scroll::-webkit-scrollbar{display:none;}
+    .drum-pad{height:43px;flex-shrink:0;}
+    .drum-item{height:43px;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:var(--white);scroll-snap-align:center;cursor:default;}
     .vote-bar{height:6px;border-radius:3px;background:var(--border);margin:8px 0;overflow:hidden;display:flex;}
     .vote-bar-fill{height:100%;border-radius:3px;background:var(--gold);transition:width .3s;}
     .vote-lbl{display:flex;justify-content:space-between;font-size:10px;color:var(--gray);margin-bottom:2px;}
@@ -609,7 +617,8 @@ function deadlineStr(m){
   const d=new Date(dl);
   return'Tot '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
 }
-function phaseLabel(ph){return{poule:'Pouleduel',QF:'Kwartfinale',SF:'Halve Finale',F:'Finale'}[ph]||ph;}
+function phaseLabel(ph){return{poule:'Pouleduel',QF:'1/4 Finale',SF:'1/2 Finale',F:'Finale'}[ph]||ph;}
+function shortPhaseLabel(ph){return{QF:'1/4F',SF:'1/2F',F:'Finale'}[ph]||ph;}
 function courtLbl(c){if(!c)return'?';return`V${c}`;}
 
 // ============================================================
@@ -793,7 +802,7 @@ function renderDag(){
       const t2n=isEdr?(m.t2?teamName(m.cat,null,m.t2):(m.t2_desc||'TBD')):(teamName(m.cat,m.poule,m.t2)||'?');
       const played=m.locked&&m.s1!==null&&m.s2!==null;
       const t1won=played&&+m.s1>+m.s2,t2won=played&&+m.s2>+m.s1;
-      const badge=isEdr?(m.label||cat.short):`${cat.short} ${m.poule}`;
+      const badge=isEdr?`${cat.short} · ${shortPhaseLabel(m.phase)}`:`${cat.short} ${m.poule}`;
       const left=(t2m(m.time)-sM)*PX;
       const w=matchDurMin(m)*PX-3;
       // underdog indicator
@@ -1090,7 +1099,7 @@ function openGokModal(matchId){
   const maxS=is2set?6:9;
   const t1n=m.phase==='poule'?(teamName(m.cat,m.poule,m.t1)||'?'):(m.t1_desc||m.t1||'TBD');
   const t2n=m.phase==='poule'?(teamName(m.cat,m.poule,m.t2)||'?'):(m.t2_desc||m.t2||'TBD');
-  window._gok={matchId,type:'winner',pick:null,s1:maxS,s2:Math.max(0,maxS-2),amount:2,maxS,t1n,t2n,cat:m.cat,phase:m.phase};
+  window._gok={matchId,type:'winner',pick:null,s1:0,s2:0,amount:2,maxS,t1n,t2n,cat:m.cat,phase:m.phase};
   document.getElementById('modal-bg').style.display='flex';
   _renderGokModal();
   // laad stemtelling voor underdog indicator
@@ -1111,17 +1120,27 @@ function _renderGokModal(){
   const pickRow=`<div class="gok-actions" style="margin:10px 0"><button class="btn-pick ${g.pick==='1'?'selected':''}" onclick="gokSetPick('1')">${escHtml(g.t1n)}${underdogTag1}</button><button class="btn-pick ${g.pick==='2'?'selected':''}" onclick="gokSetPick('2')">${escHtml(g.t2n)}${underdogTag2}</button></div>`;
   // amount row (max min(10, credits))
   const maxAmt=Math.min(10,GokState.credits);
-  const amtBtns=[1,2,5,10].filter(a=>a<=maxAmt).map(a=>`<button class="amt-btn ${g.amount===a?'active':''}" onclick="gokSetAmt(${a})">${a}</button>`).join('');
-  const amtRow=`<div style="font-size:11px;color:var(--gray);margin-top:10px;margin-bottom:4px">Inzet (max 10)</div><div class="amount-row">${amtBtns}</div>`;
+  // +/- inzet knoppen
+  const amtRow=`<div style="font-size:11px;color:var(--gray);margin-top:12px;margin-bottom:6px;text-align:center">Inzet (max ${maxAmt} credits)</div>
+<div style="display:flex;align-items:center;justify-content:center;gap:16px">
+  <button onclick="gokSetAmt(Math.max(1,window._gok.amount-1))" style="width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:var(--card2);color:var(--white);font-size:22px;font-weight:700;font-family:'Rubik',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center">-</button>
+  <div style="font-size:28px;font-weight:800;color:var(--gold);min-width:36px;text-align:center">${g.amount}</div>
+  <button onclick="gokSetAmt(Math.min(${maxAmt},window._gok.amount+1))" style="width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:var(--card2);color:var(--white);font-size:22px;font-weight:700;font-family:'Rubik',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center">+</button>
+</div>`;
+  // drum picker voor score (scroll-snap)
+  function drumHtml(field,maxVal,label){
+    const items=Array.from({length:maxVal+1},(_,i)=>`<div class="drum-item">${i}</div>`).join('');
+    return`<div class="sp-side"><div class="sp-name">${escHtml(label)}</div><div class="drum-wrap"><div class="drum-scroll" id="drum-${field}"><div class="drum-pad"></div>${items}<div class="drum-pad"></div></div></div></div>`;
+  }
   // content per type
   let body='';
   if(g.type==='winner'){
     body=pickRow+`<div style="text-align:center;font-size:11px;color:var(--gray);margin-top:4px">Vaste inzet: <strong style="color:var(--gold)">2 credits</strong> &nbsp;&middot;&nbsp; Win: <strong style="color:#4ade80">4 terug (netto +2)</strong></div>`;
   }else if(g.type==='score'){
-    const scoreRow=`<div style="font-size:11px;color:var(--gray);text-align:center;margin-bottom:6px">Voorspel de exacte eindstand</div><div class="sp-row"><div class="sp-side"><div class="sp-name">${escHtml(g.t1n)}</div><div class="sp-ctrl"><button class="sp-btn" onclick="gokScoreAdj('s1',-1)">-</button><div class="sp-num">${g.s1}</div><button class="sp-btn" onclick="gokScoreAdj('s1',1)">+</button></div></div><div class="sp-vs-lbl">-</div><div class="sp-side"><div class="sp-name">${escHtml(g.t2n)}</div><div class="sp-ctrl"><button class="sp-btn" onclick="gokScoreAdj('s2',-1)">-</button><div class="sp-num">${g.s2}</div><button class="sp-btn" onclick="gokScoreAdj('s2',1)">+</button></div></div></div>`;
-    body=pickRow+scoreRow+amtRow+`<div style="font-size:10px;color:var(--gray);margin-top:6px;text-align:center">Exact juist: <strong style="color:#4ade80">4x terug</strong> &nbsp;&middot;&nbsp; Winnaar juist: <strong style="color:#facc15">2 credits terug</strong></div>`;
+    const scoreRow=`<div style="font-size:11px;color:var(--gray);text-align:center;margin-bottom:8px">Voorspel de exacte eindstand</div><div class="sp-row">${drumHtml('s1',g.maxS,g.t1n)}<div class="sp-vs-lbl">-</div>${drumHtml('s2',g.maxS,g.t2n)}</div>`;
+    body=pickRow+scoreRow+amtRow+`<div style="font-size:10px;color:var(--gray);margin-top:8px;text-align:center">Exact juist: <strong style="color:#4ade80">4x terug</strong> &nbsp;&middot;&nbsp; Winnaar juist: <strong style="color:#facc15">2 credits terug</strong></div>`;
   }else if(g.type==='tiebreak'){
-    body=`<div style="text-align:center;padding:10px 0"><div style="font-size:14px;font-weight:700;margin-bottom:6px">Gaat naar tiebreak?</div><div style="font-size:11px;color:var(--gray);line-height:1.5">Enkel bij 8-8 &rarr; eindstand 9-8 of 8-9</div></div>`+amtRow+`<div style="font-size:10px;color:var(--gray);margin-top:6px;text-align:center">Win: <strong style="color:#4ade80">4x terug</strong></div>`;
+    body=`<div style="text-align:center;padding:10px 0"><div style="font-size:14px;font-weight:700;margin-bottom:6px">Gaat naar tiebreak?</div><div style="font-size:11px;color:var(--gray);line-height:1.5">Enkel bij 8-8 &rarr; eindstand 9-8 of 8-9</div></div>`+amtRow+`<div style="font-size:10px;color:var(--gray);margin-top:8px;text-align:center">Win: <strong style="color:#4ade80">4x terug</strong></div>`;
   }
   // underdog bonus info
   const udInfo=totalPicks>0?`<div style="font-size:10px;color:#4ade80;text-align:center;margin-top:6px">+1 bonus credit als je op de underdog gokt en wint</div>`:'';
@@ -1136,6 +1155,25 @@ function _renderGokModal(){
   const phase=m.phase==='poule'?`Poule ${m.poule}`:(m.label||m.phase);
   const content=`<div class="modal-title" style="font-size:15px">${escHtml(catObj.short||g.cat)} ${phase} &middot; ${m.time||'?'}</div>${dlBadge}<div class="bet-type-row"><button class="bet-type-btn ${g.type==='winner'?'active':''}" onclick="gokSetType('winner')">Winnaar<br><span style="font-weight:400;opacity:.7">2 credits</span></button><button class="bet-type-btn ${g.type==='score'?'active':''}" onclick="gokSetType('score')">Uitslag<br><span style="font-weight:400;opacity:.7">4x</span></button><button class="bet-type-btn ${g.type==='tiebreak'?'active':''}" onclick="gokSetType('tiebreak')">Tiebreak<br><span style="font-weight:400;opacity:.7">4x</span></button></div>${voteBarHtml}${body}${udInfo}<div class="modal-row" style="margin-top:14px"><button class="btn-cancel" onclick="closeModal()">Annuleren</button><button class="btn-save" onclick="confirmGokBet()">${escHtml(submitLbl)}</button></div>`;
   document.getElementById('modal-bg').querySelector('.modal').innerHTML=content;
+  if(window._gok.type==='score')initScrollDrums();
+}
+function initScrollDrums(){
+  const g=window._gok;if(!g)return;
+  const itemH=43;
+  ['s1','s2'].forEach(field=>{
+    const drum=document.getElementById('drum-'+field);
+    if(!drum)return;
+    // scroll to current value (no animation on init)
+    drum.scrollTop=(g[field]||0)*itemH;
+    let t;
+    drum.addEventListener('scroll',()=>{
+      clearTimeout(t);
+      t=setTimeout(()=>{
+        const idx=Math.round(drum.scrollTop/itemH);
+        g[field]=Math.max(0,Math.min(g.maxS,idx));
+      },60);
+    },{passive:true});
+  });
 }
 function gokSetType(t){window._gok.type=t;if(t==='winner')window._gok.amount=2;_renderGokModal();}
 function gokSetPick(p){window._gok.pick=p;_renderGokModal();}
