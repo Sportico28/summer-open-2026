@@ -752,8 +752,9 @@ function renderHome(){
 function t2m(t){const[h,mi]=(t||'00:00').split(':').map(Number);return h*60+mi;}
 function matchDurMin(m){
   if(m.phase==='QF')return 60;
+  if(m.cat==='h_p700')return 75;
   if(m.phase==='SF'||m.phase==='F')return 90;
-  return m.cat==='h_p700'?75:45;
+  return 45;
 }
 function renderDag(){
   document.getElementById('day-tabs').innerHTML=DAYS.map(d=>`<button class="day-tab ${d.key===currentDay?'active':''}" onclick="setDay('${d.key}')">${d.label}</button>`).join('');
