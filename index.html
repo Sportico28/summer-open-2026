@@ -684,7 +684,16 @@ function initFirebase(){
       if(user){
         GokState.deviceId=user.uid;
         localStorage.setItem('sum26_id',user.uid);
-        setTimeout(()=>checkDailyBonus(),1200);
+        // Firebase is de enige bron van waarheid voor credits — overschrijf localStorage
+        usersRef.child(user.uid).once('value',snap=>{
+          const d=snap.val();
+          if(d&&typeof d.credits==='number'){
+            GokState.credits=d.credits;
+            localStorage.setItem('sum26_credits',d.credits);
+            if(GokState.nickname)renderGokken();
+          }
+          setTimeout(()=>checkDailyBonus(),400);
+        });
       }
     });
     firebase.auth().signInAnonymously().catch(e=>console.warn('Anonymous auth failed:',e));
