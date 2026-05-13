@@ -704,11 +704,16 @@ function initFirebase(){
             localStorage.setItem('sum26_nick',d.nickname);
             localStorage.setItem('sum26_credits',GokState.credits);
             renderGokken();
+          } else if(!d){
+            // Geen Firebase record: account verwijderd of nieuw — wis lokale staat
+            GokState.nickname='';GokState.credits=INIT_CREDITS;GokState.bets={};
+            localStorage.removeItem('sum26_nick');localStorage.removeItem('sum26_credits');localStorage.removeItem('sum26_bets');
+            if(GokState.isGoogleUser&&user.displayName)GokState.googleSuggestedName=user.displayName;
+            renderGokken();
           } else if(GokState.isGoogleUser&&user.displayName){
-            // Nieuwe Google gebruiker: pre-fill naam uit Google account
             GokState.googleSuggestedName=user.displayName;
             renderGokken();
-          } else if(d&&typeof d.credits==='number'){
+          } else if(typeof d.credits==='number'){
             GokState.credits=d.credits;
             localStorage.setItem('sum26_credits',d.credits);
             if(GokState.nickname)renderGokken();
@@ -1061,7 +1066,7 @@ function renderGokken(){
   }
   const initial=GokState.nickname.charAt(0).toUpperCase();
   const googleBadge=GokState.isGoogleUser?`<span class="gok-google-badge"><svg width="10" height="10" viewBox="0 0 48 48"><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.67 14.62 48 24 48z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.33 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/></svg>Google</span>`:'';
-  let html=`<div class="gok-profile"><div class="gok-avatar">${initial}</div><div><div class="gok-name">${escHtml(GokState.nickname)}${googleBadge}</div><div class="gok-credits"><svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12" style="vertical-align:middle;margin-right:3px"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>${GokState.credits} Lucky Credits</div></div></div>`;
+  let html=`<div class="gok-profile"><div class="gok-avatar">${initial}</div><div style="flex:1"><div class="gok-name">${escHtml(GokState.nickname)}${googleBadge}</div><div class="gok-credits"><svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12" style="vertical-align:middle;margin-right:3px"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>${GokState.credits} Lucky Credits</div></div><button onclick="logoutGok()" style="padding:6px 10px;border-radius:8px;border:1px solid #333;background:none;color:#555;font-size:11px;font-family:'Rubik',sans-serif;cursor:pointer;flex-shrink:0">Uitloggen</button></div>`;
   const open=S.matches.filter(m=>canBetOnMatch(m)&&!GokState.bets[m.id]&&(m.t1||m.t1_desc)&&(m.t2||m.t2_desc));
   const mybets=Object.entries(GokState.bets).filter(([,b])=>b).map(([id,bet])=>({...bet,matchId:id,match:S.matches.find(x=>x.id===id)})).filter(x=>x.match);
   if(open.length){
@@ -1139,6 +1144,16 @@ function startGokken(){
   localStorage.setItem('sum26_nick',nick);saveGokLocal();renderGokken();
 }
 function resetGok(){if(confirm('Naam wijzigen? Je credits blijven bewaard.')){const n=prompt('Nieuwe bijnaam:','');if(n&&n.trim()){GokState.nickname=n.trim();localStorage.setItem('sum26_nick',GokState.nickname);saveGokLocal();renderGokken();}}}
+function logoutGok(){
+  if(!confirm('Uitloggen? Je account blijft bewaard in Firebase.'))return;
+  GokState.nickname='';GokState.credits=INIT_CREDITS;GokState.bets={};GokState.isGoogleUser=false;GokState.googleSuggestedName='';
+  localStorage.removeItem('sum26_nick');localStorage.removeItem('sum26_credits');localStorage.removeItem('sum26_bets');
+  // Google uitloggen zodat het login scherm opnieuw getoond wordt
+  if(firebase&&firebase.auth&&firebase.auth().currentUser){
+    firebase.auth().signOut().then(()=>{firebase.auth().signInAnonymously().catch(()=>{});});
+  }
+  renderGokken();
+}
 function withdrawBet(matchId){
   const bet=GokState.bets[matchId];if(!bet||bet.resolved)return;
   const m=S.matches.find(x=>x.id===matchId);if(!m||!canBetOnMatch(m)){toast('Deadline voorbij, intrekken niet meer mogelijk');return;}
