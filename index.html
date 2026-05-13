@@ -705,10 +705,18 @@ function initFirebase(){
             localStorage.setItem('sum26_credits',GokState.credits);
             renderGokken();
           } else if(!d){
-            // Geen Firebase record: account verwijderd of nieuw — wis lokale staat
-            GokState.nickname='';GokState.credits=INIT_CREDITS;GokState.bets={};
-            localStorage.removeItem('sum26_nick');localStorage.removeItem('sum26_credits');localStorage.removeItem('sum26_bets');
-            if(GokState.isGoogleUser&&user.displayName)GokState.googleSuggestedName=user.displayName;
+            if(GokState.isGoogleUser&&user.displayName){
+              // Nieuwe Google gebruiker: automatisch aanmaken met Google naam
+              GokState.nickname=user.displayName;
+              GokState.credits=INIT_CREDITS;GokState.bets={};
+              localStorage.setItem('sum26_nick',GokState.nickname);
+              localStorage.setItem('sum26_credits',INIT_CREDITS);
+              saveGokLocal();
+            } else {
+              // Geen record + geen Google: account verwijderd — wis lokale staat
+              GokState.nickname='';GokState.credits=INIT_CREDITS;GokState.bets={};
+              localStorage.removeItem('sum26_nick');localStorage.removeItem('sum26_credits');localStorage.removeItem('sum26_bets');
+            }
             renderGokken();
           } else if(GokState.isGoogleUser&&user.displayName){
             GokState.googleSuggestedName=user.displayName;
