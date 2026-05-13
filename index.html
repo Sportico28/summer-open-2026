@@ -275,12 +275,14 @@
     .underdog-tag{font-size:10px;color:#4ade80;font-weight:700;margin-left:4px;}
     /* ADMIN DEADLINE */
     .dl-block{background:var(--card);border-radius:10px;padding:11px 13px;margin:3px 12px 0;}
-    .dl-head{font-size:12px;font-weight:700;color:var(--gold);margin-bottom:6px;}
+    .dl-head{font-size:12px;font-weight:700;color:var(--gold);margin-bottom:6px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
     .dl-info{font-size:11px;color:var(--gray);margin-bottom:8px;line-height:1.5;}
+    .dl-rounds{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
+    .dl-round{font-size:11px;color:var(--gray);background:var(--card2);padding:3px 7px;border-radius:6px;white-space:nowrap;}
     .dl-btns{display:flex;gap:8px;align-items:center;}
     .dl-time{font-size:13px;font-weight:800;color:var(--white);flex:1;}
     .dl-adj{padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--card2);color:var(--white);font-size:12px;font-weight:700;font-family:'Rubik',sans-serif;cursor:pointer;}
-    .dl-reset{padding:8px 10px;border-radius:8px;border:none;background:none;color:#555;font-size:11px;font-family:'Rubik',sans-serif;cursor:pointer;}
+    .dl-reset{padding:6px 10px;border-radius:8px;border:1px solid #333;background:none;color:#555;font-size:11px;font-family:'Rubik',sans-serif;cursor:pointer;margin-left:auto;}
 
     /* SPELREGELS */
     .spelregels-card{background:var(--card);border-radius:12px;margin:4px 12px 12px;overflow:hidden;border:1px solid var(--border);}
@@ -596,31 +598,19 @@ function isTiebreak(s1,s2){return Math.min(s1,s2)===8&&Math.max(s1,s2)===9;}
 function getPouleKey(cat,poule){return cat+'_'+poule;}
 function getEindrKey(cat,phase){return cat+'_'+phase;}
 // Effectieve starttijd van een match, rekening houdend met admin deadline-aanpassingen.
-// Deadline = matchStart - 15 min, dus matchStart = deadline + 15 min.
+// deadlineOverrides[key] = delta in MINUTEN (positief = later, negatief = vroeger).
+// Alle rondes van dezelfde poule schuiven mee met dezelfde delta.
 function effectiveTime(m){
   const key=m.phase==='poule'?getPouleKey(m.cat,m.poule):getEindrKey(m.cat,m.phase);
-  if(deadlineOverrides[key]!==undefined){
-    const d=new Date(deadlineOverrides[key]+15*60*1000);
-    return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
-  }
+  const delta=deadlineOverrides[key];
+  if(delta!==undefined&&delta!==0)return addMins(m.time,delta);
   return m.time;
 }
-function getDefaultDeadlineMs(cat,poule){
-  const ps=POULE_SCHED[cat]?.[poule];if(!ps)return null;
-  const dayObj=DAYS.find(d=>d.key===ps.day);if(!dayObj)return null;
-  return new Date(dayObj.date+'T'+ps.rounds[0]+':00').getTime()-15*60*1000;
-}
 function getMatchDeadlineMs(m){
-  if(m.phase==='poule'){
-    const key=getPouleKey(m.cat,m.poule);
-    if(deadlineOverrides[key]!==undefined)return deadlineOverrides[key];
-    return getDefaultDeadlineMs(m.cat,m.poule);
-  }else{
-    const key=getEindrKey(m.cat,m.phase);
-    if(deadlineOverrides[key]!==undefined)return deadlineOverrides[key];
-    const dayObj=DAYS.find(d=>d.key===m.day);if(!dayObj||!m.time)return null;
-    return new Date(dayObj.date+'T'+m.time+':00').getTime()-15*60*1000;
-  }
+  const dayObj=DAYS.find(d=>d.key===m.day);if(!dayObj||!m.time)return null;
+  const key=m.phase==='poule'?getPouleKey(m.cat,m.poule):getEindrKey(m.cat,m.phase);
+  const delta=deadlineOverrides[key]||0;
+  return new Date(dayObj.date+'T'+m.time+':00').getTime()+delta*60*1000-15*60*1000;
 }
 function canBetOnMatch(m){if(m.locked)return false;const dl=getMatchDeadlineMs(m);if(dl===null)return false;return Date.now()<dl;}
 function deadlineStr(m){
@@ -1265,62 +1255,69 @@ function setAdminTab(tab){
 function renderAdminDeadlines(){
   const el=document.getElementById('admin-deadline-list');if(!el)return;
   let html='';
-  // Poule deadlines per dag
+  // Poule deadlines per dag — elke poule apart, alle rondes zichtbaar
   DAYS.slice(0,5).forEach(dayObj=>{
     const poulesForDay=[];
-    Object.entries(POULE_SCHED).forEach(([cat,poules])=>{
-      Object.entries(poules).forEach(([poule,ps])=>{
+    Object.entries(POULE_SCHED).forEach(([cat,catPoules])=>{
+      Object.entries(catPoules).forEach(([poule,ps])=>{
         if(ps.day===dayObj.key)poulesForDay.push({cat,poule,ps});
       });
     });
-    // groepeer per unieke starttijd+courts combo (= per speelblok)
-    const blocks={};
-    poulesForDay.forEach(({cat,poule,ps})=>{
-      const key=ps.rounds[0];
-      if(!blocks[key])blocks[key]=[];
-      blocks[key].push({cat,poule,ps});
-    });
-    if(!Object.keys(blocks).length)return;
+    if(!poulesForDay.length)return;
+    // sorteer op eerste ronde starttijd
+    poulesForDay.sort((a,b)=>a.ps.rounds[0]<b.ps.rounds[0]?-1:1);
     html+=`<div class="sec-title">${dayObj.full}</div>`;
-    Object.entries(blocks).sort(([a],[b])=>a<b?-1:1).forEach(([startTime,group])=>{
-      const defaultDl=getDefaultDeadlineMs(group[0].cat,group[0].poule);
-      const key=getPouleKey(group[0].cat,group[0].poule);
-      const effectiveDl=deadlineOverrides[key]!==undefined?deadlineOverrides[key]:defaultDl;
-      const dlDate=new Date(effectiveDl);
-      const dlStr=String(dlDate.getHours()).padStart(2,'0')+':'+String(dlDate.getMinutes()).padStart(2,'0');
-      const overridden=deadlineOverrides[key]!==undefined;
-      const groupLabels=group.map(({cat,poule})=>(CATS[cat]?.short||cat)+' '+poule).join(', ');
-      // alle groepen in dit blok hebben dezelfde deadline → gebruik eerste key
-      html+=`<div class="dl-block"><div class="dl-head">${groupLabels}</div><div class="dl-info">Start: ${startTime} &nbsp;&middot;&nbsp; Default deadline: ${addMins(startTime,-15)}${overridden?' &nbsp;&middot;&nbsp; <strong style="color:var(--gold)">Aangepast</strong>':''}</div><div class="dl-btns"><div class="dl-time">⏱ ${dlStr}</div><button class="dl-adj" onclick="adjustDeadline('${group.map(g=>getPouleKey(g.cat,g.poule)).join(',')}',${effectiveDl},-5)">-5 min</button><button class="dl-adj" onclick="adjustDeadline('${group.map(g=>getPouleKey(g.cat,g.poule)).join(',')}',${effectiveDl},+5)">+5 min</button>${overridden?`<button class="dl-reset" onclick="resetDeadline('${group.map(g=>getPouleKey(g.cat,g.poule)).join(',')}')">reset</button>`:''}</div></div>`;
+    poulesForDay.forEach(({cat,poule,ps})=>{
+      const key=getPouleKey(cat,poule);
+      const delta=deadlineOverrides[key]||0;
+      const overridden=delta!==0;
+      const catLabel=(CATS[cat]?.short||cat)+' Poule '+poule;
+      const roundsHtml=ps.rounds.map((t,i)=>{
+        const eff=delta?addMins(t,delta):t;
+        const diffHtml=delta?` <span style="color:${delta>0?'#f87171':'#4ade80'};font-weight:700">${delta>0?'+':''}${delta}m</span>`:'';
+        return `<span class="dl-round">R${i+1}: ${eff}${diffHtml}</span>`;
+      }).join('');
+      html+=`<div class="dl-block">
+<div class="dl-head">${catLabel}${overridden?` <span style="color:var(--gold);font-size:11px">${delta>0?'+':''}${delta} min</span>`:''}</div>
+<div class="dl-rounds">${roundsHtml}</div>
+<div class="dl-btns"><button class="dl-adj" onclick="adjustDeadline('${key}',-5)">−5 min</button><button class="dl-adj" onclick="adjustDeadline('${key}',5)">+5 min</button>${overridden?`<button class="dl-reset" onclick="resetDeadline('${key}')">reset</button>`:''}</div>
+</div>`;
     });
   });
   // Eindronde deadlines
   ['za','zo'].forEach(dayKey=>{
     const dayObj=DAYS.find(d=>d.key===dayKey);
+    const eindMatches=S.matches.filter(m=>m.day===dayKey&&m.phase!=='poule');
+    if(!eindMatches.length)return;
     html+=`<div class="sec-title">${dayObj.full} - Eindronde</div>`;
-    S.matches.filter(m=>m.day===dayKey&&m.phase!=='poule').forEach(m=>{
+    eindMatches.forEach(m=>{
       const key=getEindrKey(m.cat,m.phase);
-      const defaultDl=new Date(dayObj.date+'T'+m.time+':00').getTime()-15*60*1000;
-      const effectiveDl=deadlineOverrides[key]!==undefined?deadlineOverrides[key]:defaultDl;
-      const dlDate=new Date(effectiveDl);
-      const dlStr=String(dlDate.getHours()).padStart(2,'0')+':'+String(dlDate.getMinutes()).padStart(2,'0');
-      const overridden=deadlineOverrides[key]!==undefined;
+      const delta=deadlineOverrides[key]||0;
+      const overridden=delta!==0;
+      const eff=delta?addMins(m.time,delta):m.time;
       const cat=CATS[m.cat]||{};const phase=m.label||m.phase;
-      html+=`<div class="dl-block"><div class="dl-head">${cat.short} ${phase}</div><div class="dl-info">Start: ${m.time||'?'}${overridden?' &nbsp;&middot;&nbsp; <strong style="color:var(--gold)">Aangepast</strong>':''}</div><div class="dl-btns"><div class="dl-time">⏱ ${dlStr}</div><button class="dl-adj" onclick="adjustDeadline('${key}',${effectiveDl},-5)">-5 min</button><button class="dl-adj" onclick="adjustDeadline('${key}',${effectiveDl},+5)">+5 min</button>${overridden?`<button class="dl-reset" onclick="resetDeadline('${key}')">reset</button>`:''}</div></div>`;
+      html+=`<div class="dl-block">
+<div class="dl-head">${cat.short} ${phase}${overridden?` <span style="color:var(--gold);font-size:11px">${delta>0?'+':''}${delta} min</span>`:''}</div>
+<div class="dl-info">Start: <strong>${eff}</strong>${overridden?` <span style="color:${delta>0?'#f87171':'#4ade80'};font-weight:700">(${delta>0?'+':''}${delta}m)</span>`:''}</div>
+<div class="dl-btns"><button class="dl-adj" onclick="adjustDeadline('${key}',-5)">−5 min</button><button class="dl-adj" onclick="adjustDeadline('${key}',5)">+5 min</button>${overridden?`<button class="dl-reset" onclick="resetDeadline('${key}')">reset</button>`:''}</div>
+</div>`;
     });
   });
   if(!html)html='<div class="empty">Geen data</div>';
   el.innerHTML=html;
 }
-function adjustDeadline(keysStr,currentMs,deltaMin){
+// adjustDeadline: delta in minuten (cumulatief). Alle rondes van de poule schuiven mee.
+function adjustDeadline(key,deltaMin){
   if(!deadlineRef)return;
-  const newMs=currentMs+(deltaMin*60*1000);
-  keysStr.split(',').forEach(k=>{deadlineRef.child(k).set(newMs);});
+  const current=deadlineOverrides[key]||0;
+  const newVal=current+deltaMin;
+  if(newVal===0)deadlineRef.child(key).remove();
+  else deadlineRef.child(key).set(newVal);
   setTimeout(renderAdminDeadlines,300);
 }
-function resetDeadline(keysStr){
+function resetDeadline(key){
   if(!deadlineRef)return;
-  keysStr.split(',').forEach(k=>{deadlineRef.child(k).remove();});
+  deadlineRef.child(key).remove();
   setTimeout(renderAdminDeadlines,300);
 }
 function renderAdminWedstrijden(){
@@ -1426,20 +1423,43 @@ function renderDeelnemers(){
     slots.forEach(slot=>{
       const name=(S.teams[deelnCat]&&S.teams[deelnCat][poule]&&S.teams[deelnCat][poule][slot])||'';
       const d=(S.deelnemers&&S.deelnemers[deelnCat]&&S.deelnemers[deelnCat][poule]&&S.deelnemers[deelnCat][poule][slot])||{};
-      html+=`<div class="deeln-team"><div class="deeln-team-title">Team ${poule}${slot}</div><div class="deeln-row"><span class="deeln-lbl">Teamnaam</span><input class="deeln-inp" id="dn-${deelnCat}-${poule}-${slot}-name" value="${escHtml(name)}" placeholder="Teamnaam"></div><div class="deeln-row"><span class="deeln-lbl">Speler 1</span><input class="deeln-inp" id="dn-${deelnCat}-${poule}-${slot}-lid1" value="${escHtml(d.lidnr1||'')}" placeholder="Lidnummer PV"><a class="deeln-search" href="https://www.tennisenpadelvlaanderen.be/ranglijst" target="_blank">🔍</a></div><div class="deeln-row"><span class="deeln-lbl">Speler 2</span><input class="deeln-inp" id="dn-${deelnCat}-${poule}-${slot}-lid2" value="${escHtml(d.lidnr2||'')}" placeholder="Lidnummer PV"><a class="deeln-search" href="https://www.tennisenpadelvlaanderen.be/ranglijst" target="_blank">🔍</a></div><button class="btn-deeln-save" onclick="saveDeelnemer('${deelnCat}','${poule}','${slot}')">Opslaan</button></div>`;
+      html+=`<div class="deeln-team"><div class="deeln-team-title">Team ${poule}${slot}</div>
+<div class="deeln-row"><span class="deeln-lbl">Speler 1</span><input class="deeln-inp" id="dn-${deelnCat}-${poule}-${slot}-naam1" value="${escHtml(d.naam1||'')}" placeholder="Voornaam Achternaam" oninput="autoTeamName('${deelnCat}','${poule}','${slot}')"><input class="deeln-inp" style="max-width:130px;margin-left:6px" id="dn-${deelnCat}-${poule}-${slot}-lid1" value="${escHtml(d.lidnr1||'')}" placeholder="Lidnr PV"><a class="deeln-search" href="https://www.tennispadelvlaanderen.be/spelers" target="_blank" title="Zoek op PV-site">🔍</a></div>
+<div class="deeln-row"><span class="deeln-lbl">Speler 2</span><input class="deeln-inp" id="dn-${deelnCat}-${poule}-${slot}-naam2" value="${escHtml(d.naam2||'')}" placeholder="Voornaam Achternaam" oninput="autoTeamName('${deelnCat}','${poule}','${slot}')"><input class="deeln-inp" style="max-width:130px;margin-left:6px" id="dn-${deelnCat}-${poule}-${slot}-lid2" value="${escHtml(d.lidnr2||'')}" placeholder="Lidnr PV"><a class="deeln-search" href="https://www.tennispadelvlaanderen.be/spelers" target="_blank" title="Zoek op PV-site">🔍</a></div>
+<div class="deeln-row"><span class="deeln-lbl">Teamnaam</span><input class="deeln-inp" id="dn-${deelnCat}-${poule}-${slot}-name" value="${escHtml(name)}" placeholder="Auto-gegenereerd"></div>
+<button class="btn-deeln-save" onclick="saveDeelnemer('${deelnCat}','${poule}','${slot}')">Opslaan</button></div>`;
     });
     html+=`</div>`;
   });
   content.innerHTML=html;
 }
 function setDeelnCat(cat){deelnCat=cat;renderDeelnemers();}
+function formatTeamName(naam1,naam2){
+  function abbrev(n){
+    const parts=n.trim().split(/\s+/);
+    if(parts.length<2)return n.trim();
+    return parts[0].charAt(0).toUpperCase()+'. '+parts.slice(1).join(' ');
+  }
+  const a=naam1?abbrev(naam1):'';
+  const b=naam2?abbrev(naam2):'';
+  if(a&&b)return a+' & '+b;
+  return a||b;
+}
+function autoTeamName(cat,poule,slot){
+  const naam1=(document.getElementById(`dn-${cat}-${poule}-${slot}-naam1`)||{}).value||'';
+  const naam2=(document.getElementById(`dn-${cat}-${poule}-${slot}-naam2`)||{}).value||'';
+  const nameEl=document.getElementById(`dn-${cat}-${poule}-${slot}-name`);
+  if(nameEl)nameEl.value=formatTeamName(naam1,naam2);
+}
 function saveDeelnemer(cat,poule,slot){
-  const name=document.getElementById(`dn-${cat}-${poule}-${slot}-name`).value.trim();
+  const naam1=(document.getElementById(`dn-${cat}-${poule}-${slot}-naam1`)?.value||'').trim();
+  const naam2=(document.getElementById(`dn-${cat}-${poule}-${slot}-naam2`)?.value||'').trim();
+  const name=document.getElementById(`dn-${cat}-${poule}-${slot}-name`).value.trim()||formatTeamName(naam1,naam2);
   const lid1=document.getElementById(`dn-${cat}-${poule}-${slot}-lid1`).value.trim();
   const lid2=document.getElementById(`dn-${cat}-${poule}-${slot}-lid2`).value.trim();
   if(!S.teams[cat])S.teams[cat]={};if(!S.teams[cat][poule])S.teams[cat][poule]={};if(name)S.teams[cat][poule][slot]=name;
   if(!S.deelnemers)S.deelnemers={};if(!S.deelnemers[cat])S.deelnemers[cat]={};if(!S.deelnemers[cat][poule])S.deelnemers[cat][poule]={};
-  S.deelnemers[cat][poule][slot]={lidnr1:lid1,lidnr2:lid2};
+  S.deelnemers[cat][poule][slot]={lidnr1:lid1,lidnr2:lid2,naam1,naam2};
   save();toast('Opgeslagen');
 }
 
