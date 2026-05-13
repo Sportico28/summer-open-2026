@@ -9,6 +9,7 @@
   <style>
     :root{--gold:#E9B745;--gold2:#c9972a;--black:#000;--card:#111;--card2:#1a1a1a;--border:#2a2a2a;--gray:#888;--white:#fff;--nav-h:62px;}
     *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+    button{touch-action:manipulation;}
     html{height:100%;}
     body{min-height:100%;background:var(--black);color:var(--white);font-family:'Rubik',sans-serif;padding-bottom:calc(var(--nav-h)+20px);overflow-y:auto;}
 
@@ -307,6 +308,7 @@
   </style>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 </head>
 <body>
 
@@ -687,6 +689,15 @@ function initFirebase(){
     deadlineRef=firebase.database().ref(FB_PATH+'/deadlineOverrides');
     matchPicksRef=firebase.database().ref(FB_PATH+'/picks');
     auditRef=firebase.database().ref(FB_PATH+'/auditLog');
+    // Anonymous Auth: stabielere UID dan random string
+    firebase.auth().onAuthStateChanged(user=>{
+      if(user){
+        GokState.deviceId=user.uid;
+        localStorage.setItem('sum26_id',user.uid);
+        setTimeout(()=>checkDailyBonus(),1200);
+      }
+    });
+    firebase.auth().signInAnonymously().catch(e=>console.warn('Anonymous auth failed:',e));
     // server-tijd offset ophalen: voorkomt dat klokmanipulatie dagbonus omzeilt
     firebase.database().ref('.info/serverTimeOffset').on('value',snap=>{serverTimeOffset=snap.val()||0;});
     deadlineRef.on('value',snap=>{deadlineOverrides=snap.val()||{};});
@@ -698,7 +709,6 @@ function initFirebase(){
       document.getElementById('fb-loading').style.display='none';
       resolveGokBets();
       renderAll();
-      setTimeout(()=>checkDailyBonus(),800);
     },err=>{console.error(err);document.getElementById('fb-loading').style.display='none';S=makeSeed();renderAll();});
   }catch(e){console.error(e);document.getElementById('fb-loading').style.display='none';S=makeSeed();renderAll();}
 }
@@ -1054,7 +1064,7 @@ function renderGokken(){
   html+=`<div class="sec-title">Lucky Legend Klassement</div><div id="leaderboard-list"><div class="empty">Laden...</div></div>`;
   html+=`<div class="sec-title">Spelregels</div>
 <div class="spelregels-card">
-  <div class="sr-row"><div class="sr-icon">⭐</div><div class="sr-body"><div class="sr-label">Start</div><div class="sr-val">Iedereen start met <strong>10 Lucky Credits</strong>.</div></div></div>
+  <div class="sr-row"><div class="sr-icon">⭐</div><div class="sr-body"><div class="sr-label">Start</div><div class="sr-val">Iedereen start met <strong>10 Lucky Credits</strong>. Elke dag van het toernooi (di 16/6 t.e.m. zo 21/6) kan je bij aanmelden <strong>+5 credits</strong> claimen.</div></div></div>
   <div class="sr-divider"></div>
   <div class="sr-row"><div class="sr-icon">🏆</div><div class="sr-body"><div class="sr-label">Winnaar kiezen</div><div class="sr-val">Inzet <strong>2 credits</strong>, altijd vast. Win = <strong>4 credits</strong> terug (netto +2).</div></div></div>
   <div class="sr-divider"></div>
