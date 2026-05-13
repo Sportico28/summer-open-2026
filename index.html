@@ -593,6 +593,16 @@ function teamName(cat,poule,key){if(!key)return null;return(S.teams&&S.teams[cat
 function isTiebreak(s1,s2){return Math.min(s1,s2)===8&&Math.max(s1,s2)===9;}
 function getPouleKey(cat,poule){return cat+'_'+poule;}
 function getEindrKey(cat,phase){return cat+'_'+phase;}
+// Effectieve starttijd van een match, rekening houdend met admin deadline-aanpassingen.
+// Deadline = matchStart - 15 min, dus matchStart = deadline + 15 min.
+function effectiveTime(m){
+  const key=m.phase==='poule'?getPouleKey(m.cat,m.poule):getEindrKey(m.cat,m.phase);
+  if(deadlineOverrides[key]!==undefined){
+    const d=new Date(deadlineOverrides[key]+15*60*1000);
+    return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+  }
+  return m.time;
+}
 function getDefaultDeadlineMs(cat,poule){
   const ps=POULE_SCHED[cat]?.[poule];if(!ps)return null;
   const dayObj=DAYS.find(d=>d.key===ps.day);if(!dayObj)return null;
@@ -768,8 +778,8 @@ function renderDag(){
   let sM=t2m(currentDay==='za'||currentDay==='zo'?'09:00':'17:45');
   let eM=t2m(currentDay==='za'||currentDay==='zo'?'19:30':'23:00');
   if(ms.length){
-    sM=Math.min(sM,...ms.map(m=>t2m(m.time)-15));
-    eM=Math.max(eM,...ms.map(m=>t2m(m.time)+matchDurMin(m)+15));
+    sM=Math.min(sM,...ms.map(m=>t2m(effectiveTime(m))-15));
+    eM=Math.max(eM,...ms.map(m=>t2m(effectiveTime(m))+matchDurMin(m)+15));
   }
   sM=Math.floor(sM/60)*60;
   eM=Math.ceil(eM/60)*60;
@@ -804,7 +814,7 @@ function renderDag(){
       const played=m.locked&&m.s1!==null&&m.s2!==null;
       const t1won=played&&+m.s1>+m.s2,t2won=played&&+m.s2>+m.s1;
       const badge=isEdr?`${cat.short} · ${shortPhaseLabel(m.phase)}`:`${cat.short} ${m.poule}`;
-      const left=(t2m(m.time)-sM)*PX;
+      const left=(t2m(effectiveTime(m))-sM)*PX;
       const w=matchDurMin(m)*PX-3;
       // underdog indicator
       let ud1='',ud2='';
@@ -833,7 +843,7 @@ function openDetail(id){
   const badge=isEdr?(m.label||cat.short):`${cat.short} - Poule ${m.poule}`;
   const myBet=GokState.bets[id];
   const canBet=!m.locked&&GokState.nickname&&!myBet;
-  let html=`<div class="modal-title">${escHtml(badge)}</div><div class="modal-sub">${DAYS.find(d=>d.key===m.day)?.full||m.day} &middot; Veld ${m.court||'?'} &middot; ${m.time||'?'}</div>`;
+  let html=`<div class="modal-title">${escHtml(badge)}</div><div class="modal-sub">${DAYS.find(d=>d.key===m.day)?.full||m.day} &middot; Veld ${m.court||'?'} &middot; ${effectiveTime(m)||'?'}</div>`;
   html+=`<div class="detail-team-row"><div class="detail-team ${t1won?'won':''}">${escHtml(t1n)}</div><div class="detail-score-big">${played?`${m.s1}-${m.s2}`:'vs'}</div><div class="detail-team right ${t2won?'won':''}">${escHtml(t2n)}</div></div>`;
   if(myBet){
     const winnerName=myBet.pick==='1'?t1n:t2n;
