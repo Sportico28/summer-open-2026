@@ -128,43 +128,6 @@
     .bm-vs{font-size:10px;color:var(--border);}
     .bm-badge{font-size:9px;color:var(--gray);margin-left:6px;}
 
-    /* GOKKEN */
-    .gok-profile{display:flex;align-items:center;gap:12px;padding:16px;background:var(--card);border-bottom:1px solid var(--border);}
-    .gok-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:var(--black);flex-shrink:0;}
-    .gok-name{font-size:14px;font-weight:700;}
-    .gok-credits{font-size:12px;color:var(--gold);margin-top:2px;}
-    .gok-setup{padding:40px 24px;text-align:center;}
-    .gok-setup h2{font-size:22px;font-weight:800;font-style:italic;color:var(--gold);text-transform:uppercase;margin-bottom:8px;}
-    .gok-setup p{font-size:13px;color:var(--gray);margin-bottom:24px;line-height:1.5;}
-    .gok-input{width:100%;padding:14px;background:var(--card2);border:1px solid var(--border);border-radius:12px;color:var(--white);font-size:16px;font-family:'Rubik',sans-serif;text-align:center;margin-bottom:16px;}
-    .gok-input:focus{outline:none;border-color:var(--gold);}
-    .btn-gok-start{width:100%;padding:14px;background:var(--gold);color:var(--black);border:none;border-radius:12px;font-size:15px;font-weight:800;font-family:'Rubik',sans-serif;cursor:pointer;}
-    .btn-google{width:100%;padding:14px;background:#fff;color:#222;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:'Rubik',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:12px;}
-    .btn-google svg{flex-shrink:0;}
-    .gok-divider{display:flex;align-items:center;gap:10px;margin:16px 0;color:#444;font-size:12px;}
-    .gok-divider::before,.gok-divider::after{content:'';flex:1;height:1px;background:#2a2a2a;}
-    .gok-google-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#4ade80;background:rgba(74,222,128,.1);padding:3px 8px;border-radius:20px;margin-left:6px;}
-    .gok-bet-card{background:var(--card);border-radius:12px;margin:4px 12px;padding:14px;}
-    .gok-bet-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
-    .gok-bet-cat{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;}
-    .gok-bet-time{font-size:11px;color:var(--gray);}
-    .gok-teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;margin-bottom:12px;}
-    .gok-team-name{font-size:13px;font-weight:600;line-height:1.3;}
-    .gok-team-name.right{text-align:right;}
-    .gok-vs-txt{font-size:11px;color:var(--gray);text-align:center;}
-    .gok-actions{display:flex;gap:8px;}
-    .btn-pick{flex:1;padding:9px;border-radius:8px;border:1px solid var(--border);background:var(--card2);color:var(--white);font-size:12px;font-weight:700;font-family:'Rubik',sans-serif;cursor:pointer;transition:all .15s;}
-    .btn-pick.selected{background:var(--gold);color:var(--black);border-color:var(--gold);}
-    .gok-my-bet{display:flex;align-items:center;justify-content:space-between;padding:6px 0;font-size:12px;}
-    .gok-bet-result.win{color:#4ade80;font-weight:700;}
-    .gok-bet-result.loss{color:#f87171;font-weight:700;}
-    .gok-bet-result.pending{color:var(--gray);}
-    .leaderboard-row{display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--card);border-radius:10px;margin:3px 12px;}
-    .lb-pos{font-size:14px;font-weight:800;color:var(--gray);width:24px;flex-shrink:0;}
-    .lb-pos.top3{color:var(--gold);}
-    .lb-name{flex:1;font-size:13px;font-weight:600;}
-    .lb-credits{font-size:13px;font-weight:800;color:var(--gold);}
-
     /* ADMIN */
     .admin-lock{padding:50px 24px;text-align:center;}
     .admin-lock h2{font-size:24px;font-weight:800;font-style:italic;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
@@ -249,46 +212,6 @@
     .detail-meta-row{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);}
     .detail-meta-item{font-size:12px;color:var(--gray);}
     .detail-meta-item span{color:var(--white);font-weight:600;display:block;margin-top:2px;}
-    .btn-gok-match{width:100%;padding:13px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--black);border:none;border-radius:10px;font-size:14px;font-weight:800;font-family:'Rubik',sans-serif;cursor:pointer;margin-top:16px;}
-    /* BETTING MODAL */
-    .bet-type-row{display:flex;gap:6px;margin-bottom:14px;}
-    .bet-type-btn{flex:1;padding:9px 4px;border-radius:9px;border:1px solid var(--border);background:var(--card2);color:var(--gray);font-size:10px;font-weight:700;font-family:'Rubik',sans-serif;cursor:pointer;text-align:center;line-height:1.4;}
-    .bet-type-btn.active{border-color:var(--gold);color:var(--gold);background:#E9B74511;}
-    .amount-row{display:flex;gap:6px;margin:10px 0;}
-    .amt-btn{flex:1;padding:9px 0;border-radius:8px;border:1px solid var(--border);background:var(--card2);color:var(--white);font-size:13px;font-weight:700;font-family:'Rubik',sans-serif;cursor:pointer;}
-    .amt-btn.active{background:var(--gold);color:var(--black);border-color:var(--gold);}
-    .deadline-badge{font-size:10px;color:var(--gray);margin-top:3px;}
-    .deadline-badge.closed{color:#f87171;}
-    /* SCORE DRUM PICKER */
-    .sp-row{display:flex;align-items:center;justify-content:center;gap:8px;margin:10px 0;}
-    .sp-side{display:flex;flex-direction:column;align-items:center;gap:6px;}
-    .sp-name{font-size:10px;color:var(--gray);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;}
-    .sp-vs-lbl{font-size:14px;color:var(--border);font-weight:700;margin-top:28px;}
-    .drum-wrap{position:relative;height:129px;width:72px;overflow:hidden;border-radius:12px;background:var(--card2);border:1px solid var(--border);}
-    .drum-wrap::before,.drum-wrap::after{content:'';position:absolute;left:0;right:0;height:43px;z-index:2;pointer-events:none;}
-    .drum-wrap::before{top:0;background:linear-gradient(to bottom,var(--card2) 0%,rgba(26,26,26,0) 100%);}
-    .drum-wrap::after{bottom:0;background:linear-gradient(to top,var(--card2) 0%,rgba(26,26,26,0) 100%);}
-    .drum-wrap::before{border-bottom:1px solid var(--border);}
-    .drum-wrap::after{border-top:1px solid var(--border);}
-    .drum-scroll{height:100%;overflow-y:scroll;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
-    .drum-scroll::-webkit-scrollbar{display:none;}
-    .drum-pad{height:43px;flex-shrink:0;}
-    .drum-item{height:43px;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:var(--white);scroll-snap-align:center;cursor:default;}
-    .vote-bar{height:6px;border-radius:3px;background:var(--border);margin:8px 0;overflow:hidden;display:flex;}
-    .vote-bar-fill{height:100%;border-radius:3px;background:var(--gold);transition:width .3s;}
-    .vote-lbl{display:flex;justify-content:space-between;font-size:10px;color:var(--gray);margin-bottom:2px;}
-    .underdog-tag{font-size:10px;color:#4ade80;font-weight:700;margin-left:4px;}
-    /* ADMIN DEADLINE */
-    .dl-block{background:var(--card);border-radius:10px;padding:11px 13px;margin:3px 12px 0;}
-    .dl-head{font-size:12px;font-weight:700;color:var(--gold);margin-bottom:6px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
-    .dl-info{font-size:11px;color:var(--gray);margin-bottom:8px;line-height:1.5;}
-    .dl-rounds{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
-    .dl-round{font-size:11px;color:var(--gray);background:var(--card2);padding:3px 7px;border-radius:6px;white-space:nowrap;}
-    .dl-btns{display:flex;gap:8px;align-items:center;}
-    .dl-time{font-size:13px;font-weight:800;color:var(--white);flex:1;}
-    .dl-adj{padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--card2);color:var(--white);font-size:12px;font-weight:700;font-family:'Rubik',sans-serif;cursor:pointer;}
-    .dl-reset{padding:6px 10px;border-radius:8px;border:1px solid #333;background:none;color:#555;font-size:11px;font-family:'Rubik',sans-serif;cursor:pointer;margin-left:auto;}
-
     /* SPELREGELS */
     .spelregels-card{background:var(--card);border-radius:12px;margin:4px 12px 12px;overflow:hidden;border:1px solid var(--border);}
     .sr-row{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;}
@@ -315,7 +238,6 @@
   </style>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 </head>
 <body>
 
@@ -345,10 +267,6 @@
 
   <div class="sec-title">Randactiviteiten</div>
   <div class="activities-scroll">
-    <div class="act-card" onclick="goPage('gokken')">
-      <div class="act-img"><img src="assets/Lucky_legends_app_icon.png" alt="Lucky Legend"></div>
-      <div class="act-body"><div class="act-title">Lucky Legend</div><div class="act-desc">Gok op matches en vergroot je kans om Lucky Legend te worden.</div></div>
-    </div>
     <div class="act-card" onclick="window.open('#','_blank')">
       <div class="act-img"><img src="assets/Steak_app_icon.png" alt="WDP Steak"></div>
       <div class="act-body"><div class="act-title">WDP Steak</div><div class="act-desc">Inschrijven voor een steak na je match</div><div class="act-days">MA · DI · WO</div></div>
@@ -389,11 +307,6 @@
   <div class="app-footer">Niet officieel &middot; tennisenpadelvlaanderen.be</div>
 </div>
 
-<!-- GOKKEN -->
-<div class="page" id="page-gokken">
-  <div id="gokken-content"></div>
-</div>
-
 <!-- ADMIN -->
 <div class="page" id="page-admin">
   <div id="admin-lock-screen">
@@ -420,8 +333,6 @@
     <div class="admin-tabs">
       <button class="atab active" id="atab-wedstrijden" onclick="setAdminTab('wedstrijden')">Wedstrijden</button>
       <button class="atab" id="atab-deelnemers" onclick="setAdminTab('deelnemers')">Deelnemers</button>
-      <button class="atab" id="atab-deadlines" onclick="setAdminTab('deadlines')">Deadlines</button>
-      <button class="atab" id="atab-lucky" onclick="setAdminTab('lucky')">⭐ Lucky Legends</button>
     </div>
     <div id="admin-tab-wedstrijden">
       <div class="admin-filter" id="admin-filter"></div>
@@ -430,12 +341,6 @@
     <div id="admin-tab-deelnemers" style="display:none">
       <div class="cat-selector" id="deeln-cat-sel"></div>
       <div id="deeln-content"></div>
-    </div>
-    <div id="admin-tab-deadlines" style="display:none">
-      <div id="admin-deadline-list"></div>
-    </div>
-    <div id="admin-tab-lucky" style="display:none">
-      <div id="admin-lucky-list"></div>
     </div>
   </div>
 </div>
@@ -450,9 +355,6 @@
   </button>
   <button class="nav-btn" id="nav-standen" onclick="goPage('standen')">
     <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C18.08 12.63 20 10.55 20 8V7c0-1.1-.9-2-1-2zM7 8V7h2v2.82C7.86 9.59 7 8.82 7 8zm10 0c0 .82-.86 1.59-2 1.82V7h2v1z"/></svg>Standen
-  </button>
-  <button class="nav-btn" id="nav-gokken" onclick="goPage('gokken')">
-    <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>Gokken
   </button>
   <div id="nav-admin" style="display:none"></div>
 </nav>
@@ -502,17 +404,6 @@
   <div style="font-size:24px;font-weight:800;font-style:italic;color:#E9B745;text-transform:uppercase;margin-bottom:12px">Open op je smartphone</div>
   <div style="font-size:14px;color:#888;line-height:1.7;max-width:340px">De Pachanga Summer Open app is ontworpen voor mobiel gebruik.<br><br>Open deze pagina op je telefoon voor de volledige ervaring.</div>
   <div style="margin-top:32px;font-size:11px;color:#444">sportico28.github.io/summer-open-2026</div>
-</div>
-
-<!-- DAILY BONUS OVERLAY -->
-<div id="daily-bonus-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:300;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
-  <div style="background:#111;border:1px solid var(--border);border-radius:20px;padding:32px 24px;max-width:320px;width:90%;text-align:center;">
-    <div style="font-size:48px;margin-bottom:12px">⭐</div>
-    <div style="font-size:20px;font-weight:800;font-style:italic;color:var(--gold);text-transform:uppercase;margin-bottom:8px">Welkom terug!</div>
-    <div id="daily-bonus-txt" style="font-size:13px;color:var(--gray);line-height:1.6;margin-bottom:24px"></div>
-    <button id="daily-bonus-btn" onclick="claimDailyBonus()" style="width:100%;padding:14px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--black);border:none;border-radius:12px;font-size:15px;font-weight:800;font-family:'Rubik',sans-serif;cursor:pointer;margin-bottom:10px"></button>
-    <button onclick="closeDailyBonus()" style="width:100%;padding:10px;background:none;color:#555;border:none;font-size:12px;font-family:'Rubik',sans-serif;cursor:pointer">Misschien later</button>
-  </div>
 </div>
 
 <script>
@@ -590,40 +481,14 @@ const DAYS=[
 const FIREBASE_CONFIG={apiKey:"AIzaSyDrlCpuO2a5yzSUB1JoZ96KSaYjCQniu48",authDomain:"mgpc-2026.firebaseapp.com",databaseURL:"https://mgpc-2026-default-rtdb.europe-west1.firebasedatabase.app",projectId:"mgpc-2026",storageBucket:"mgpc-2026.firebasestorage.app",messagingSenderId:"78506921375",appId:"1:78506921375:web:3a4b325a3981a9195901aa"};
 const FB_PATH='summer2026c';
 const ADMIN_PIN='32472418789';
-const INIT_CREDITS=10;
-const DAILY_CREDITS=5;
-
 // ============================================================
 // HELPERS
 // ============================================================
 function addMins(t,m){const[h,mi]=t.split(':').map(Number),tot=h*60+mi+m;return`${String(Math.floor(tot/60)).padStart(2,'0')}:${String(tot%60).padStart(2,'0')}`;}
 function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function teamName(cat,poule,key){if(!key)return null;return(S.teams&&S.teams[cat]&&poule&&S.teams[cat][poule]&&S.teams[cat][poule][key])||key;}
-function isTiebreak(s1,s2){return Math.min(s1,s2)===8&&Math.max(s1,s2)===9;}
 function getPouleKey(cat,poule){return cat+'_'+poule;}
 function getEindrKey(cat,phase){return cat+'_'+phase;}
-// Effectieve starttijd van een match, rekening houdend met admin deadline-aanpassingen.
-// deadlineOverrides[key] = delta in MINUTEN (positief = later, negatief = vroeger).
-// Alle rondes van dezelfde poule schuiven mee met dezelfde delta.
-function effectiveTime(m){
-  const key=m.phase==='poule'?getPouleKey(m.cat,m.poule):getEindrKey(m.cat,m.phase);
-  const delta=deadlineOverrides[key];
-  if(delta!==undefined&&delta!==0)return addMins(m.time,delta);
-  return m.time;
-}
-function getMatchDeadlineMs(m){
-  const dayObj=DAYS.find(d=>d.key===m.day);if(!dayObj||!m.time)return null;
-  const key=m.phase==='poule'?getPouleKey(m.cat,m.poule):getEindrKey(m.cat,m.phase);
-  const delta=deadlineOverrides[key]||0;
-  return new Date(dayObj.date+'T'+m.time+':00').getTime()+delta*60*1000-15*60*1000;
-}
-function canBetOnMatch(m){if(m.locked)return false;const dl=getMatchDeadlineMs(m);if(dl===null)return false;return Date.now()<dl;}
-function deadlineStr(m){
-  const dl=getMatchDeadlineMs(m);if(!dl)return'';
-  if(Date.now()>dl)return'Gesloten';
-  const d=new Date(dl);
-  return'Tot '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
-}
 function phaseLabel(ph){return{poule:'Pouleduel',QF:'1/4 Finale',SF:'1/2 Finale',F:'Finale'}[ph]||ph;}
 function shortPhaseLabel(ph){return{QF:'1/4F',SF:'1/2F',F:'Finale'}[ph]||ph;}
 function courtLbl(c){if(!c)return'?';return`V${c}`;}
@@ -667,11 +532,8 @@ function makeSeed(){
 // STATE
 // ============================================================
 let S={teams:{},deelnemers:{},matches:[]};
-let fbRef=null,usersRef=null,deadlineRef=null,matchPicksRef=null,auditRef=null;
-let deadlineOverrides={},allPicksCache={};
-let serverTimeOffset=0; // Firebase server-client offset in ms
+let fbRef=null;
 let adminActive=false,currentDay='ma',currentCat='h_p100',adminFilterCat='all',adminTab='wedstrijden',deelnCat='h_p100',editMatchId=null,detailMatchId=null,pinBuffer='';
-let GokState={deviceId:'',nickname:'',credits:INIT_CREDITS,bets:{}};
 
 // ============================================================
 // FIREBASE
@@ -680,68 +542,11 @@ function initFirebase(){
   try{
     firebase.initializeApp(FIREBASE_CONFIG);
     fbRef=firebase.database().ref(FB_PATH);
-    usersRef=firebase.database().ref(FB_PATH+'/users');
-    deadlineRef=firebase.database().ref(FB_PATH+'/deadlineOverrides');
-    matchPicksRef=firebase.database().ref(FB_PATH+'/picks');
-    auditRef=firebase.database().ref(FB_PATH+'/auditLog');
-    // Google redirect result afhandelen (terugkeer na Google login)
-    firebase.auth().getRedirectResult().then(result=>{
-      if(result&&result.user)console.log('Google redirect OK:',result.user.email);
-    }).catch(e=>{console.warn('Google redirect error:',e);toast('Google aanmelding mislukt');});
-    // Auth state: zowel anonymous als Google
-    firebase.auth().onAuthStateChanged(user=>{
-      if(user){
-        GokState.deviceId=user.uid;
-        GokState.isGoogleUser=!!(user.providerData&&user.providerData.some(p=>p.providerId==='google.com'));
-        localStorage.setItem('sum26_id',user.uid);
-        // Firebase is de enige bron van waarheid — laad nickname + credits
-        usersRef.child(user.uid).once('value',snap=>{
-          const d=snap.val();
-          if(d&&d.nickname){
-            // Terugkerende gebruiker: herstel alles uit Firebase
-            GokState.nickname=d.nickname;
-            GokState.credits=typeof d.credits==='number'?d.credits:INIT_CREDITS;
-            localStorage.setItem('sum26_nick',d.nickname);
-            localStorage.setItem('sum26_credits',GokState.credits);
-            renderGokken();
-          } else if(!d){
-            if(GokState.isGoogleUser&&user.displayName){
-              // Nieuwe Google gebruiker: automatisch aanmaken met Google naam
-              GokState.nickname=user.displayName;
-              GokState.credits=INIT_CREDITS;GokState.bets={};
-              localStorage.setItem('sum26_nick',GokState.nickname);
-              localStorage.setItem('sum26_credits',INIT_CREDITS);
-              saveGokLocal();
-            } else {
-              // Geen record + geen Google: account verwijderd — wis lokale staat
-              GokState.nickname='';GokState.credits=INIT_CREDITS;GokState.bets={};
-              localStorage.removeItem('sum26_nick');localStorage.removeItem('sum26_credits');localStorage.removeItem('sum26_bets');
-            }
-            renderGokken();
-          } else if(GokState.isGoogleUser&&user.displayName){
-            GokState.googleSuggestedName=user.displayName;
-            renderGokken();
-          } else if(typeof d.credits==='number'){
-            GokState.credits=d.credits;
-            localStorage.setItem('sum26_credits',d.credits);
-            if(GokState.nickname)renderGokken();
-          }
-          setTimeout(()=>checkDailyBonus(),400);
-        });
-      }
-    });
-    // Probeer anonymous auth als fallback (Google heeft voorrang)
-    firebase.auth().currentUser||firebase.auth().signInAnonymously().catch(e=>console.warn('Anonymous auth failed:',e));
-    // server-tijd offset ophalen: voorkomt dat klokmanipulatie dagbonus omzeilt
-    firebase.database().ref('.info/serverTimeOffset').on('value',snap=>{serverTimeOffset=snap.val()||0;});
-    deadlineRef.on('value',snap=>{deadlineOverrides=snap.val()||{};});
-    matchPicksRef.on('value',snap=>{allPicksCache=snap.val()||{};});
     fbRef.child('data').on('value',snap=>{
       const d=snap.val();
       if(d&&d.matches&&d.matches.length){S.matches=d.matches.map(m=>({...m,s1:m.s1??null,s2:m.s2??null,locked:!!m.locked,t1:m.t1??null,t2:m.t2??null}));S.teams=d.teams||{};S.deelnemers=d.deelnemers||{};}
       else{S=makeSeed();fbRef.child('data').set(S);}
       document.getElementById('fb-loading').style.display='none';
-      resolveGokBets();
       renderAll();
     },err=>{console.error(err);document.getElementById('fb-loading').style.display='none';S=makeSeed();renderAll();});
   }catch(e){console.error(e);document.getElementById('fb-loading').style.display='none';S=makeSeed();renderAll();}
@@ -759,10 +564,9 @@ function goPage(page){
   if(page==='dag')renderDag();
   if(page==='standen')renderStanden();
   if(page==='admin')renderAdmin();
-  if(page==='gokken')renderGokken();
   if(page==='admin')window.location.hash='admin'; else if(window.location.hash==='#admin')history.replaceState(null,'',window.location.pathname);
 }
-function renderAll(){renderHome();const a=document.querySelector('.page.active');if(a){const id=a.id.replace('page-','');if(id==='dag')renderDag();if(id==='standen')renderStanden();if(id==='gokken')renderGokken();if(id==='admin'&&adminActive)renderAdmin();}}
+function renderAll(){renderHome();const a=document.querySelector('.page.active');if(a){const id=a.id.replace('page-','');if(id==='dag')renderDag();if(id==='standen')renderStanden();if(id==='admin'&&adminActive)renderAdmin();}}
 function goCat(cat){currentCat=cat;goPage('standen');}
 
 // ============================================================
@@ -822,8 +626,8 @@ function renderDag(){
   let sM=t2m(currentDay==='za'||currentDay==='zo'?'09:00':'17:45');
   let eM=t2m(currentDay==='za'||currentDay==='zo'?'19:30':'23:00');
   if(ms.length){
-    sM=Math.min(sM,...ms.map(m=>t2m(effectiveTime(m))-15));
-    eM=Math.max(eM,...ms.map(m=>t2m(effectiveTime(m))+matchDurMin(m)+15));
+    sM=Math.min(sM,...ms.map(m=>t2m(m.time)-15));
+    eM=Math.max(eM,...ms.map(m=>t2m(m.time)+matchDurMin(m)+15));
   }
   sM=Math.floor(sM/60)*60;
   eM=Math.ceil(eM/60)*60;
@@ -858,12 +662,9 @@ function renderDag(){
       const played=m.locked&&m.s1!==null&&m.s2!==null;
       const t1won=played&&+m.s1>+m.s2,t2won=played&&+m.s2>+m.s1;
       const badge=isEdr?`${cat.short} · ${shortPhaseLabel(m.phase)}`:`${cat.short} ${m.poule}`;
-      const left=(t2m(effectiveTime(m))-sM)*PX;
+      const left=(t2m(m.time)-sM)*PX;
       const w=matchDurMin(m)*PX-3;
-      // underdog indicator
-      let ud1='',ud2='';
-      if(!played){const cp=allPicksCache[m.id]||{};const ct=(cp.t1||0)+(cp.t2||0);if(ct>0){if(Math.round(100*(cp.t1||0)/ct)<40)ud1='<span style="color:#4ade80;font-size:7px;margin-right:1px">●</span>';if(Math.round(100*(cp.t2||0)/ct)<40)ud2='<span style="color:#4ade80;font-size:7px;margin-right:1px">●</span>';}}
-      return`<div class="cal-block" style="left:${left}px;width:${w}px;background:${cat.color}22;border-top:3px solid ${cat.color}" onclick="openDetail('${m.id}')"><div class="cal-bcat" style="color:${cat.color}">${escHtml(badge)}</div><div class="cal-bteams">${played?`<span class="${t1won?'cal-bteam won':''}">${escHtml(t1n)}</span> <span style="opacity:.4">vs</span> <span class="${t2won?'cal-bteam won':''}">${escHtml(t2n)}</span> <span class="cal-bscore">${m.s1}-${m.s2}</span>`:`${ud1}${escHtml(t1n)} vs ${ud2}${escHtml(t2n)}`}</div></div>`;
+      return`<div class="cal-block" style="left:${left}px;width:${w}px;background:${cat.color}22;border-top:3px solid ${cat.color}" onclick="openDetail('${m.id}')"><div class="cal-bcat" style="color:${cat.color}">${escHtml(badge)}</div><div class="cal-bteams">${played?`<span class="${t1won?'cal-bteam won':''}">${escHtml(t1n)}</span> <span style="opacity:.4">vs</span> <span class="${t2won?'cal-bteam won':''}">${escHtml(t2n)}</span> <span class="cal-bscore">${m.s1}-${m.s2}</span>`:`${escHtml(t1n)} vs ${escHtml(t2n)}`}</div></div>`;
     }).join('');
     return`<div class="cal-court-row"><div class="cal-court-lbl">B${court}</div><div class="cal-court-body" style="width:${totalW}px">${vlines}${blocks}</div></div>`;
   }).join('');
@@ -885,17 +686,8 @@ function openDetail(id){
   const played=m.locked&&m.s1!==null&&m.s2!==null;
   const t1won=played&&+m.s1>+m.s2,t2won=played&&+m.s2>+m.s1;
   const badge=isEdr?(m.label||cat.short):`${cat.short} - Poule ${m.poule}`;
-  const myBet=GokState.bets[id];
-  const canBet=!m.locked&&GokState.nickname&&!myBet;
-  let html=`<div class="modal-title">${escHtml(badge)}</div><div class="modal-sub">${DAYS.find(d=>d.key===m.day)?.full||m.day} &middot; Veld ${m.court||'?'} &middot; ${effectiveTime(m)||'?'}</div>`;
+  let html=`<div class="modal-title">${escHtml(badge)}</div><div class="modal-sub">${DAYS.find(d=>d.key===m.day)?.full||m.day} &middot; Veld ${m.court||'?'} &middot; ${m.time||'?'}</div>`;
   html+=`<div class="detail-team-row"><div class="detail-team ${t1won?'won':''}">${escHtml(t1n)}</div><div class="detail-score-big">${played?`${m.s1}-${m.s2}`:'vs'}</div><div class="detail-team right ${t2won?'won':''}">${escHtml(t2n)}</div></div>`;
-  if(myBet){
-    const winnerName=myBet.pick==='1'?t1n:t2n;
-    const resolved=played;
-    const won=resolved&&((myBet.pick==='1'&&t1won)||(myBet.pick==='2'&&t2won));
-    html+=`<div style="padding:12px 0;border-bottom:1px solid var(--border)"><div style="font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Mijn gok</div><div class="gok-my-bet"><span style="font-size:13px">${escHtml(winnerName)} &middot; ${myBet.amount} credits</span><span class="gok-bet-result ${resolved?(won?'win':'loss'):'pending'}">${resolved?(won?'+'+myBet.amount+' gewonnen':'verloren'):'Wacht op uitslag'}</span></div></div>`;
-  }
-  if(canBet){html+=`<button class="btn-gok-match" onclick="openGokMatch('${id}')">Gok op deze match</button>`;}
   if(adminActive){html+=`<button class="btn-sm" style="width:100%;margin-top:12px;text-align:center" onclick="closeDetail();openEdit('${id}')">Score ingeven (admin)</button>`;}
   html+=`<div class="modal-row"><button class="btn-cancel" onclick="closeDetail()">Sluiten</button></div>`;
   document.getElementById('detail-modal').innerHTML=html;
@@ -955,355 +747,6 @@ function renderMatchCard(m){
 }
 
 // ============================================================
-// GOKKEN
-// ============================================================
-function initGokProfile(){
-  GokState.deviceId=localStorage.getItem('sum26_id')||'';
-  if(!GokState.deviceId){GokState.deviceId='dev_'+Math.random().toString(36).substr(2,9)+Date.now().toString(36);localStorage.setItem('sum26_id',GokState.deviceId);}
-  GokState.nickname=localStorage.getItem('sum26_nick')||'';
-  GokState.credits=parseInt(localStorage.getItem('sum26_credits')||INIT_CREDITS);
-  try{GokState.bets=JSON.parse(localStorage.getItem('sum26_bets')||'{}');}catch(e){GokState.bets={};}
-}
-function saveGokLocal(){
-  localStorage.setItem('sum26_credits',GokState.credits);
-  localStorage.setItem('sum26_bets',JSON.stringify(GokState.bets));
-  if(usersRef&&GokState.nickname)usersRef.child(GokState.deviceId).set({nickname:GokState.nickname,credits:GokState.credits,lastSeen:Date.now()});
-}
-function auditLog(type,meta={}){
-  if(!auditRef||!GokState.deviceId)return;
-  auditRef.push({type,deviceId:GokState.deviceId,nickname:GokState.nickname||'',credits:GokState.credits,ts:Date.now(),...meta});
-}
-function serverNow(){return Date.now()+serverTimeOffset;}
-function todayStr(){const d=new Date(serverNow());return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
-function checkDailyBonus(){
-  if(!GokState.nickname)return;
-  // Dagbonus enkel tijdens het toernooi: di 16/6 t.e.m. zo 21/6
-  const today=todayStr();
-  if(today<'2026-06-16'||today>'2026-06-21')return;
-  const key='sum26_claimed_'+today;
-  if(localStorage.getItem(key))return;
-  // controleer ook in Firebase of deze dag al geclaimd werd
-  if(usersRef){
-    usersRef.child(GokState.deviceId+'/dailyClaims/'+todayStr()).once('value',snap=>{
-      if(snap.val())return; // al geclaimd in Firebase
-      showDailyBonus();
-    });
-  } else {
-    showDailyBonus();
-  }
-}
-function showDailyBonus(){
-  const key='sum26_claimed_'+todayStr();
-  if(localStorage.getItem(key))return;
-  const overlay=document.getElementById('daily-bonus-overlay');
-  if(!overlay)return;
-  document.getElementById('daily-bonus-txt').innerHTML=`Claim je <strong style="color:var(--white)">${DAILY_CREDITS} Lucky Credits</strong> voor vandaag en blijf mee strijden voor de Lucky Legend titel.`;
-  document.getElementById('daily-bonus-btn').textContent=`+${DAILY_CREDITS} Credits claimen`;
-  overlay.style.display='flex';
-}
-function claimDailyBonus(){
-  const key='sum26_claimed_'+todayStr();
-  if(localStorage.getItem(key)){closeDailyBonus();return;}
-  localStorage.setItem(key,'1');
-  // sla claim op in Firebase zodat dubbele claim via ander device geblokkeerd wordt
-  if(usersRef)usersRef.child(GokState.deviceId+'/dailyClaims/'+todayStr()).set(Date.now());
-  GokState.credits+=DAILY_CREDITS;
-  saveGokLocal();
-  auditLog('daily_bonus',{amount:DAILY_CREDITS,day:todayStr()});
-  closeDailyBonus();
-  toast(`+${DAILY_CREDITS} Lucky Credits geclaimed!`);
-  renderGokken();
-}
-function closeDailyBonus(){
-  const overlay=document.getElementById('daily-bonus-overlay');
-  if(overlay)overlay.style.display='none';
-}
-function resolveGokBets(){
-  let changed=false;
-  Object.entries(GokState.bets).forEach(([mid,bet])=>{
-    if(bet.resolved)return;
-    const m=S.matches.find(x=>x.id===mid);
-    if(!m||!m.locked||m.s1===null)return;
-    const s1=+m.s1,s2=+m.s2;
-    const t1won=s1>s2,t2won=s2>s1;
-    let payout=0,won=false;
-    if(bet.type==='score'){
-      const exactRight=s1===bet.predictedS1&&s2===bet.predictedS2;
-      const winnerRight=(bet.pick==='1'&&t1won)||(bet.pick==='2'&&t2won);
-      if(exactRight){payout=bet.amount*4;won=true;}
-      else if(winnerRight){payout=2;won=false;}
-      else{payout=0;won=false;}
-    }else if(bet.type==='tiebreak'){
-      won=isTiebreak(s1,s2);payout=won?bet.amount*4:0;
-    }else{
-      won=(bet.pick==='1'&&t1won)||(bet.pick==='2'&&t2won);
-      payout=won?bet.amount*2:0;
-    }
-    // underdog bonus: bepaal op basis van definitieve stemverdeling op het moment van resolutie
-    let underdog=false;
-    const fp=allPicksCache[mid]||{t1:0,t2:0};const ftotal=(fp.t1||0)+(fp.t2||0);
-    if(ftotal>0&&bet.pick){const mc=bet.pick==='1'?(fp.t1||0):(fp.t2||0);underdog=Math.round(100*mc/ftotal)<40;}
-    if(won&&underdog)payout+=1;
-    GokState.bets[mid]={...bet,resolved:true,won,payout,underdog};
-    GokState.credits+=payout;
-    changed=true;
-  });
-  if(changed){
-    saveGokLocal();
-    Object.entries(GokState.bets).forEach(([mid,b])=>{if(b.resolved&&!b._audited){auditLog('bet_resolved',{matchId:mid,betType:b.type,pick:b.pick,won:b.won,payout:b.payout,underdog:!!b.underdog,creditsAfter:GokState.credits});b._audited=true;}});
-  }
-}
-function renderGokken(){
-  resolveGokBets();
-  const el=document.getElementById('gokken-content');
-  if(!GokState.nickname){
-    const googleSvg=`<svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.33 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.67 14.62 48 24 48z"/></svg>`;
-    const suggestedName=GokState.googleSuggestedName||'';
-    el.innerHTML=`<div class="gok-setup">
-<div style="font-size:48px;margin-bottom:16px"><svg viewBox="0 0 24 24" fill="#E9B745" width="56" height="56"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
-<h2>Lucky Legend</h2>
-<p>Gok op wedstrijden en verdien Lucky Credits. Wie de meeste credits verzamelt wint.</p>
-<p style="margin-bottom:24px">Je start met <strong style="color:var(--gold)">${INIT_CREDITS} credits</strong> en verdient elke dag extra.</p>
-<button class="btn-google" onclick="signInWithGoogle()">${googleSvg}Aanmelden met Google</button>
-<div class="gok-divider">of kies een bijnaam</div>
-<input class="gok-input" id="gok-nick-inp" placeholder="Bijnaam..." maxlength="20" value="${escHtml(suggestedName)}">
-<button class="btn-gok-start" onclick="startGokken()">Start zonder Google</button>
-<p style="margin-top:12px;font-size:11px;color:#555">Met Google blijft je account bewaard op elk toestel en elke browser.</p>
-</div>`;
-    return;
-  }
-  const initial=GokState.nickname.charAt(0).toUpperCase();
-  const googleBadge=GokState.isGoogleUser?`<span class="gok-google-badge"><svg width="10" height="10" viewBox="0 0 48 48"><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.67 14.62 48 24 48z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.33 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/></svg>Google</span>`:'';
-  let html=`<div class="gok-profile"><div class="gok-avatar">${initial}</div><div style="flex:1"><div class="gok-name">${escHtml(GokState.nickname)}${googleBadge}</div><div class="gok-credits"><svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12" style="vertical-align:middle;margin-right:3px"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>${GokState.credits} Lucky Credits</div></div><button onclick="logoutGok()" style="padding:6px 10px;border-radius:8px;border:1px solid #333;background:none;color:#555;font-size:11px;font-family:'Rubik',sans-serif;cursor:pointer;flex-shrink:0">Uitloggen</button></div>`;
-  const open=S.matches.filter(m=>canBetOnMatch(m)&&!GokState.bets[m.id]&&(m.t1||m.t1_desc)&&(m.t2||m.t2_desc));
-  const mybets=Object.entries(GokState.bets).filter(([,b])=>b).map(([id,bet])=>({...bet,matchId:id,match:S.matches.find(x=>x.id===id)})).filter(x=>x.match);
-  if(open.length){
-    html+=`<div class="sec-title">Gok op een match</div>`;
-    open.slice(0,10).forEach(m=>{
-      const cat=CATS[m.cat]||{};
-      const t1n=m.phase==='poule'?(teamName(m.cat,m.poule,m.t1)||'?'):(m.t1_desc||m.t1||'TBD');
-      const t2n=m.phase==='poule'?(teamName(m.cat,m.poule,m.t2)||'?'):(m.t2_desc||m.t2||'TBD');
-      const dl=deadlineStr(m);
-      const phase=m.phase==='poule'?`Poule ${m.poule}`:(m.label||m.phase);
-      html+=`<div class="gok-bet-card" onclick="openGokModal('${m.id}')"><div class="gok-bet-top"><span class="gok-bet-cat" style="background:${cat.color}22;color:${cat.color}">${cat.short} ${phase}</span><span class="gok-bet-time">${m.time||'?'} &middot; V${m.court||'?'}</span></div><div class="gok-teams"><div class="gok-team-name">${escHtml(t1n)}</div><div class="gok-vs-txt">vs</div><div class="gok-team-name right">${escHtml(t2n)}</div></div><div class="deadline-badge ${Date.now()>getMatchDeadlineMs(m)?'closed':''}">⏱ ${dl}</div></div>`;
-    });
-  } else {html+=`<div class="empty" style="padding-top:20px">Geen open matches om op te gokken</div>`;}
-  if(mybets.length){
-    html+=`<div class="sec-title">Mijn gokken</div>`;
-    mybets.slice().reverse().forEach(({matchId,match,type,pick,predictedS1,predictedS2,amount,resolved,won,payout,underdog})=>{
-      if(!match)return;
-      const cat=CATS[match.cat]||{};
-      const t1n=match.phase==='poule'?(teamName(match.cat,match.poule,match.t1)||'?'):(match.t1_desc||match.t1||'TBD');
-      const t2n=match.phase==='poule'?(teamName(match.cat,match.poule,match.t2)||'?'):(match.t2_desc||match.t2||'TBD');
-      let gokLbl='';
-      if(type==='score')gokLbl=`Uitslag: ${pick==='1'?escHtml(t1n):escHtml(t2n)} wint ${predictedS1}-${predictedS2}`;
-      else if(type==='tiebreak')gokLbl='Gaat naar tiebreak';
-      else gokLbl=`Winnaar: ${pick==='1'?escHtml(t1n):escHtml(t2n)}`;
-      if(underdog)gokLbl+=' <span class="underdog-tag">underdog</span>';
-      let res='';
-      const canWithdraw=!resolved&&canBetOnMatch(match);
-      if(resolved){const p=payout||0;res=`<span class="gok-bet-result ${p>0?'win':'loss'}">${p>0?'+'+p+' credits':'Verloren'}</span>`;}
-      else if(canWithdraw)res=`<button onclick="withdrawBet('${matchId}')" style="padding:4px 10px;border-radius:7px;border:1px solid #555;background:none;color:#888;font-size:11px;font-family:'Rubik',sans-serif;cursor:pointer">Trek in</button>`;
-      else res=`<span class="gok-bet-result pending">Wacht...</span>`;
-      html+=`<div class="leaderboard-row" style="flex-direction:column;align-items:flex-start;gap:4px"><div style="display:flex;width:100%;justify-content:space-between;align-items:center"><span style="font-size:11px;color:${cat.color};font-weight:700">${cat.short} &middot; ${match.time||'?'}</span>${res}</div><div style="font-size:13px">${escHtml(t1n)} vs ${escHtml(t2n)}</div><div style="font-size:11px;color:var(--gray)">${gokLbl} &middot; inzet ${amount}</div></div>`;
-    });
-  }
-  html+=`<div class="sec-title">Lucky Legend Klassement</div><div id="leaderboard-list"><div class="empty">Laden...</div></div>`;
-  html+=`<div class="sec-title">Spelregels</div>
-<div class="spelregels-card">
-  <div class="sr-row"><div class="sr-icon">⭐</div><div class="sr-body"><div class="sr-label">Start</div><div class="sr-val">Iedereen start met <strong>10 Lucky Credits</strong>. Elke dag van het toernooi (di 16/6 t.e.m. zo 21/6) kan je bij aanmelden <strong>+5 credits</strong> claimen.</div></div></div>
-  <div class="sr-divider"></div>
-  <div class="sr-row"><div class="sr-icon">🏆</div><div class="sr-body"><div class="sr-label">Winnaar kiezen</div><div class="sr-val">Inzet <strong>2 credits</strong>, altijd vast. Win = <strong>4 credits</strong> terug (netto +2).</div></div></div>
-  <div class="sr-divider"></div>
-  <div class="sr-row"><div class="sr-icon">🎯</div><div class="sr-body"><div class="sr-label">Exacte uitslag</div><div class="sr-val">Inzet <strong>1-10 credits</strong>. Score juist = <strong>4x</strong> terug. Winnaar juist maar score fout = <strong>2 credits</strong> terug. Alles fout = 0.</div></div></div>
-  <div class="sr-divider"></div>
-  <div class="sr-row"><div class="sr-icon">⚡</div><div class="sr-body"><div class="sr-label">Gaat naar tiebreak?</div><div class="sr-val">Inzet <strong>1-10 credits</strong>. Tiebreak = eindstand 8-9 of 9-8. Raad juist = <strong>4x</strong> terug.</div></div></div>
-  <div class="sr-divider"></div>
-  <div class="sr-row"><div class="sr-icon sr-green">🐶</div><div class="sr-body"><div class="sr-label">Underdog bonus</div><div class="sr-val">Gok je op de underdog (minder dan 40% van de stemmen) en win je, dan krijg je <strong>+1 credit extra</strong>.</div></div></div>
-  <div class="sr-divider"></div>
-  <div class="sr-row"><div class="sr-icon">⏱</div><div class="sr-body"><div class="sr-label">Deadline</div><div class="sr-val">Gokken sluit <strong>15 min voor start</strong> van de poule. De wedstrijdleider kan de deadline aanpassen.</div></div></div>
-</div>`;
-  html+=`<div style="padding:16px;text-align:center;font-size:11px;color:var(--gray)">Meeste credits = Lucky Legend.<br><a href="#" onclick="resetGok()" style="color:#444">Naam wijzigen</a></div>`;
-  el.innerHTML=html;
-  loadLeaderboard();
-}
-function loadLeaderboard(){
-  if(!usersRef){document.getElementById('leaderboard-list').innerHTML='<div class="empty">Niet beschikbaar</div>';return;}
-  usersRef.orderByChild('credits').limitToLast(10).once('value',snap=>{
-    const el=document.getElementById('leaderboard-list');if(!el)return;
-    const entries=[];snap.forEach(c=>{entries.push({nickname:c.val().nickname,credits:c.val().credits,isMe:c.key===GokState.deviceId});});
-    entries.sort((a,b)=>b.credits-a.credits);
-    if(!entries.length){el.innerHTML='<div class="empty">Nog geen spelers</div>';return;}
-    el.innerHTML=entries.map((e,i)=>`<div class="leaderboard-row"><div class="lb-pos ${i<3?'top3':''}">${i+1}</div><div class="lb-name">${escHtml(e.nickname)}${e.isMe?' <span style="color:var(--gold);font-size:10px">(jij)</span>':''}</div><div class="lb-credits"><svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12" style="vertical-align:middle;margin-right:2px"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>${e.credits}</div></div>`).join('');
-  });
-}
-function signInWithGoogle(){
-  if(!firebase||!firebase.auth)return toast('Firebase niet geladen');
-  const provider=new firebase.auth.GoogleAuthProvider();
-  firebase.auth().signInWithRedirect(provider).catch(e=>toast('Google: '+e.message));
-}
-function startGokken(){
-  const nick=document.getElementById('gok-nick-inp').value.trim();
-  if(!nick){toast('Voer een bijnaam in');return;}
-  GokState.nickname=nick;
-  // Behoudt bestaande credits als de user al aangemeld was (Google redirect flow)
-  if(!GokState.credits||GokState.credits<1)GokState.credits=INIT_CREDITS;
-  GokState.bets={};
-  localStorage.setItem('sum26_nick',nick);saveGokLocal();renderGokken();
-}
-function resetGok(){if(confirm('Naam wijzigen? Je credits blijven bewaard.')){const n=prompt('Nieuwe bijnaam:','');if(n&&n.trim()){GokState.nickname=n.trim();localStorage.setItem('sum26_nick',GokState.nickname);saveGokLocal();renderGokken();}}}
-function logoutGok(){
-  if(!confirm('Uitloggen? Je account blijft bewaard in Firebase.'))return;
-  GokState.nickname='';GokState.credits=INIT_CREDITS;GokState.bets={};GokState.isGoogleUser=false;GokState.googleSuggestedName='';
-  localStorage.removeItem('sum26_nick');localStorage.removeItem('sum26_credits');localStorage.removeItem('sum26_bets');
-  // Google uitloggen zodat het login scherm opnieuw getoond wordt
-  if(firebase&&firebase.auth&&firebase.auth().currentUser){
-    firebase.auth().signOut().then(()=>{firebase.auth().signInAnonymously().catch(()=>{});});
-  }
-  renderGokken();
-}
-function withdrawBet(matchId){
-  const bet=GokState.bets[matchId];if(!bet||bet.resolved)return;
-  const m=S.matches.find(x=>x.id===matchId);if(!m||!canBetOnMatch(m)){toast('Deadline voorbij, intrekken niet meer mogelijk');return;}
-  GokState.credits+=bet.amount;
-  delete GokState.bets[matchId];
-  saveGokLocal();
-  auditLog('bet_withdrawn',{matchId,betType:bet.type,amount:bet.amount,creditsAfter:GokState.credits});
-  // verwijder stem uit Firebase picks
-  if(matchPicksRef&&bet.pick){
-    const field=bet.pick==='1'?'t1':'t2';
-    matchPicksRef.child(matchId+'/'+field).transaction(v=>Math.max(0,(v||0)-1));
-  }
-  toast(`Gok ingetrokken. +${bet.amount} credit${bet.amount!==1?'s':''} terug`);
-  renderGokken();
-}
-function openGokModal(matchId){
-  closeDetail();
-  const m=S.matches.find(x=>x.id===matchId);if(!m)return;
-  if(!GokState.nickname){toast('Kies eerst een naam in Lucky Legend');return;}
-  if(GokState.bets[matchId]){toast('Je hebt al een gok op deze match');return;}
-  if(!canBetOnMatch(m)){toast('Inzetten is gesloten voor deze match');return;}
-  if(GokState.credits<1){toast('Niet genoeg credits');return;}
-  const is2set=m.cat==='h_p700'||m.phase==='SF'||m.phase==='F';
-  const maxS=is2set?6:9;
-  const t1n=m.phase==='poule'?(teamName(m.cat,m.poule,m.t1)||'?'):(m.t1_desc||m.t1||'TBD');
-  const t2n=m.phase==='poule'?(teamName(m.cat,m.poule,m.t2)||'?'):(m.t2_desc||m.t2||'TBD');
-  window._gok={matchId,type:'winner',pick:null,loserScore:0,amount:2,maxS,t1n,t2n,cat:m.cat,phase:m.phase};
-  document.getElementById('modal-bg').style.display='flex';
-  _renderGokModal();
-  // laad stemtelling voor underdog indicator
-  if(matchPicksRef)matchPicksRef.child(matchId).once('value',snap=>{window._gokPicks=snap.val()||{t1:0,t2:0};_renderGokModal();});
-}
-function _renderGokModal(){
-  const g=window._gok;if(!g)return;
-  const m=S.matches.find(x=>x.id===g.matchId);if(!m)return;
-  const picks=window._gokPicks||{t1:0,t2:0};
-  const totalPicks=(picks.t1||0)+(picks.t2||0);
-  const pct1=totalPicks>0?Math.round(100*(picks.t1||0)/totalPicks):50;
-  const pct2=100-pct1;
-  // vote bar
-  const voteBarHtml=totalPicks>0?`<div class="vote-lbl"><span>${escHtml(g.t1n)} ${pct1}%</span><span>${pct2}% ${escHtml(g.t2n)}</span></div><div class="vote-bar"><div class="vote-bar-fill" style="width:${pct1}%"></div></div>`:'';
-  // pick row — underdog = minder dan 40% van de stemmen
-  const underdogTag1=totalPicks>0&&pct1<40?'<span class="underdog-tag">underdog</span>':'';
-  const underdogTag2=totalPicks>0&&pct2<40?'<span class="underdog-tag">underdog</span>':'';
-  const pickRow=`<div class="gok-actions" style="margin:10px 0"><button class="btn-pick ${g.pick==='1'?'selected':''}" onclick="gokSetPick('1')">${escHtml(g.t1n)}${underdogTag1}</button><button class="btn-pick ${g.pick==='2'?'selected':''}" onclick="gokSetPick('2')">${escHtml(g.t2n)}${underdogTag2}</button></div>`;
-  // amount row (max min(10, credits))
-  const maxAmt=Math.min(10,GokState.credits);
-  // +/- inzet knoppen
-  const amtRow=`<div style="font-size:11px;color:var(--gray);margin-top:12px;margin-bottom:6px;text-align:center">Inzet (max ${maxAmt} credits)</div>
-<div style="display:flex;align-items:center;justify-content:center;gap:16px">
-  <button onclick="gokSetAmt(Math.max(1,window._gok.amount-1))" style="width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:var(--card2);color:var(--white);font-size:22px;font-weight:700;font-family:'Rubik',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center">-</button>
-  <div style="font-size:28px;font-weight:800;color:var(--gold);min-width:36px;text-align:center">${g.amount}</div>
-  <button onclick="gokSetAmt(Math.min(${maxAmt},window._gok.amount+1))" style="width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:var(--card2);color:var(--white);font-size:22px;font-weight:700;font-family:'Rubik',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center">+</button>
-</div>`;
-  // drum picker voor score (scroll-snap)
-  function drumHtml(field,maxVal,label){
-    const items=Array.from({length:maxVal+1},(_,i)=>`<div class="drum-item">${i}</div>`).join('');
-    return`<div class="sp-side"><div class="sp-name">${escHtml(label)}</div><div class="drum-wrap"><div class="drum-scroll" id="drum-${field}"><div class="drum-pad"></div>${items}<div class="drum-pad"></div></div></div></div>`;
-  }
-  // content per type
-  let body='';
-  if(g.type==='winner'){
-    body=pickRow+`<div style="text-align:center;font-size:11px;color:var(--gray);margin-top:4px">Vaste inzet: <strong style="color:var(--gold)">2 credits</strong> &nbsp;&middot;&nbsp; Win: <strong style="color:#4ade80">4 terug (netto +2)</strong></div>`;
-  }else if(g.type==='score'){
-    // Winnaar = altijd maxS punten. Kies de verliezer-score (0 t.e.m. maxS-1).
-    const winnerName=g.pick==='1'?g.t1n:g.pick==='2'?g.t2n:'?';
-    const loserName=g.pick==='1'?g.t2n:g.pick==='2'?g.t1n:'?';
-    const winFixed=`<div class="sp-side"><div class="sp-name" style="color:var(--gold)">${escHtml(winnerName)} (wint)</div><div style="height:129px;width:72px;border-radius:12px;background:var(--card2);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:800;color:var(--gold)">${g.maxS}</div></div>`;
-    const loserDrum=drumHtml('loser',g.maxS-1,loserName+' (verliest)');
-    const scoreNote=g.pick?`<div style="font-size:11px;color:var(--gray);text-align:center;margin-bottom:8px">Score: <strong style="color:var(--white)">${g.pick==='1'?g.maxS:g.loserScore} - ${g.pick==='1'?g.loserScore:g.maxS}</strong></div>`:'<div style="font-size:11px;color:var(--gray);text-align:center;margin-bottom:8px">Kies eerst een winnaar</div>';
-    const scoreRow=scoreNote+(g.pick?`<div class="sp-row">${winFixed}<div class="sp-vs-lbl">-</div>${loserDrum}</div>`:'');
-    body=pickRow+scoreRow+(g.pick?amtRow:'')+`<div style="font-size:10px;color:var(--gray);margin-top:8px;text-align:center">Exact juist: <strong style="color:#4ade80">4x terug</strong> &nbsp;&middot;&nbsp; Winnaar juist: <strong style="color:#facc15">2 credits terug</strong></div>`;
-  }else if(g.type==='tiebreak'){
-    body=`<div style="text-align:center;padding:10px 0"><div style="font-size:14px;font-weight:700;margin-bottom:6px">Gaat naar tiebreak?</div><div style="font-size:11px;color:var(--gray);line-height:1.5">Enkel bij 8-8 &rarr; eindstand 9-8 of 8-9</div></div>`+amtRow+`<div style="font-size:10px;color:var(--gray);margin-top:8px;text-align:center">Win: <strong style="color:#4ade80">4x terug</strong></div>`;
-  }
-  // underdog bonus info
-  const udInfo=totalPicks>0?`<div style="font-size:10px;color:#4ade80;text-align:center;margin-top:6px">+1 bonus credit als je op de underdog gokt en wint</div>`:'';
-  // submit label
-  let submitLbl='';
-  const inzet=g.type==='winner'?2:g.amount;
-  if(GokState.credits<inzet){submitLbl=`Niet genoeg credits`;}
-  else{submitLbl=`Gok plaatsen (${inzet} credit${inzet!==1?'s':''})`;}
-  // deadline
-  const dlBadge=`<div class="deadline-badge" style="text-align:center;margin-bottom:10px">⏱ ${deadlineStr(m)}</div>`;
-  const catObj=CATS[g.cat]||{};
-  const phase=m.phase==='poule'?`Poule ${m.poule}`:(m.label||m.phase);
-  const content=`<div class="modal-title" style="font-size:15px">${escHtml(catObj.short||g.cat)} ${phase} &middot; ${m.time||'?'}</div>${dlBadge}<div class="bet-type-row"><button class="bet-type-btn ${g.type==='winner'?'active':''}" onclick="gokSetType('winner')">Winnaar<br><span style="font-weight:400;opacity:.7">2 credits</span></button><button class="bet-type-btn ${g.type==='score'?'active':''}" onclick="gokSetType('score')">Uitslag<br><span style="font-weight:400;opacity:.7">4x</span></button><button class="bet-type-btn ${g.type==='tiebreak'?'active':''}" onclick="gokSetType('tiebreak')">Tiebreak<br><span style="font-weight:400;opacity:.7">4x</span></button></div>${voteBarHtml}${body}${udInfo}<div class="modal-row" style="margin-top:14px"><button class="btn-cancel" onclick="closeModal()">Annuleren</button><button class="btn-save" onclick="confirmGokBet()">${escHtml(submitLbl)}</button></div>`;
-  document.getElementById('modal-bg').querySelector('.modal').innerHTML=content;
-  if(window._gok.type==='score')initScrollDrums();
-}
-function initScrollDrums(){
-  const g=window._gok;if(!g)return;
-  const itemH=43;
-  // enkel de verliezer-drum (winnaar is altijd maxS)
-  const drum=document.getElementById('drum-loser');
-  if(!drum)return;
-  drum.scrollTop=(g.loserScore||0)*itemH;
-  let t;
-  drum.addEventListener('scroll',()=>{
-    clearTimeout(t);
-    t=setTimeout(()=>{
-      const idx=Math.round(drum.scrollTop/itemH);
-      g.loserScore=Math.max(0,Math.min(g.maxS-1,idx));
-    },60);
-  },{passive:true});
-}
-function gokSetType(t){window._gok.type=t;if(t==='winner')window._gok.amount=2;_renderGokModal();}
-function gokSetPick(p){window._gok.pick=p;_renderGokModal();}
-function gokSetAmt(a){window._gok.amount=a;_renderGokModal();}
-function gokScoreAdj(field,dir){
-  const g=window._gok;const max=g.maxS;
-  g[field]=Math.max(0,Math.min(max,g[field]+dir));
-  _renderGokModal();
-}
-function confirmGokBet(){
-  const g=window._gok;if(!g)return;
-  if(g.type!=='tiebreak'&&!g.pick){toast('Kies eerst een winnaar');return;}
-  // Score: s1/s2 afleiden van pick + loserScore (winnaar = altijd maxS)
-  let predS1=null,predS2=null;
-  if(g.type==='score'){
-    predS1=g.pick==='1'?g.maxS:g.loserScore;
-    predS2=g.pick==='2'?g.maxS:g.loserScore;
-  }
-  const inzet=g.type==='winner'?2:g.amount;
-  if(GokState.credits<inzet){toast('Niet genoeg credits');return;}
-  const m=S.matches.find(x=>x.id===g.matchId);if(!m||!canBetOnMatch(m)){toast('Inzetten gesloten');closeModal();return;}
-  const bet={type:g.type,pick:g.pick||null,predictedS1:predS1,predictedS2:predS2,amount:inzet,resolved:false,won:null,payout:null,ts:Date.now()};
-  GokState.bets[g.matchId]=bet;
-  GokState.credits-=inzet;
-  saveGokLocal();
-  // schrijf pick naar Firebase voor stemtelling
-  if(matchPicksRef&&g.pick){
-    const field=g.pick==='1'?'t1':'t2';
-    matchPicksRef.child(g.matchId+'/'+field).transaction(v=>(v||0)+1);
-  }
-  auditLog('bet_placed',{matchId:g.matchId,betType:g.type,pick:g.pick||null,amount:inzet,creditsAfter:GokState.credits});
-  closeModal();
-  toast(`Gok geplaatst! -${inzet} credit${inzet!==1?'s':''}`);
-  renderGokken();
-}
-
-// ============================================================
 // ADMIN
 // ============================================================
 function renderAdmin(){
@@ -1316,84 +759,10 @@ function setAdminTab(tab){
   adminTab=tab;
   document.getElementById('atab-wedstrijden').classList.toggle('active',tab==='wedstrijden');
   document.getElementById('atab-deelnemers').classList.toggle('active',tab==='deelnemers');
-  document.getElementById('atab-deadlines').classList.toggle('active',tab==='deadlines');
-  document.getElementById('atab-lucky').classList.toggle('active',tab==='lucky');
   document.getElementById('admin-tab-wedstrijden').style.display=tab==='wedstrijden'?'':'none';
   document.getElementById('admin-tab-deelnemers').style.display=tab==='deelnemers'?'':'none';
-  document.getElementById('admin-tab-deadlines').style.display=tab==='deadlines'?'':'none';
-  document.getElementById('admin-tab-lucky').style.display=tab==='lucky'?'':'none';
   if(tab==='wedstrijden')renderAdminWedstrijden();
   if(tab==='deelnemers')renderDeelnemers();
-  if(tab==='deadlines')renderAdminDeadlines();
-  if(tab==='lucky')renderAdminLucky();
-}
-function renderAdminDeadlines(){
-  const el=document.getElementById('admin-deadline-list');if(!el)return;
-  let html='';
-  // Poule deadlines per dag — elke poule apart, alle rondes zichtbaar
-  DAYS.slice(0,5).forEach(dayObj=>{
-    const poulesForDay=[];
-    Object.entries(POULE_SCHED).forEach(([cat,catPoules])=>{
-      Object.entries(catPoules).forEach(([poule,ps])=>{
-        if(ps.day===dayObj.key)poulesForDay.push({cat,poule,ps});
-      });
-    });
-    if(!poulesForDay.length)return;
-    // sorteer op eerste ronde starttijd
-    poulesForDay.sort((a,b)=>a.ps.rounds[0]<b.ps.rounds[0]?-1:1);
-    html+=`<div class="sec-title">${dayObj.full}</div>`;
-    poulesForDay.forEach(({cat,poule,ps})=>{
-      const key=getPouleKey(cat,poule);
-      const delta=deadlineOverrides[key]||0;
-      const overridden=delta!==0;
-      const catLabel=(CATS[cat]?.short||cat)+' Poule '+poule;
-      const roundsHtml=ps.rounds.map((t,i)=>{
-        const eff=delta?addMins(t,delta):t;
-        const diffHtml=delta?` <span style="color:${delta>0?'#f87171':'#4ade80'};font-weight:700">${delta>0?'+':''}${delta}m</span>`:'';
-        return `<span class="dl-round">R${i+1}: ${eff}${diffHtml}</span>`;
-      }).join('');
-      html+=`<div class="dl-block">
-<div class="dl-head">${catLabel}${overridden?` <span style="color:var(--gold);font-size:11px">${delta>0?'+':''}${delta} min</span>`:''}</div>
-<div class="dl-rounds">${roundsHtml}</div>
-<div class="dl-btns"><button class="dl-adj" onclick="adjustDeadline('${key}',-5)">−5 min</button><button class="dl-adj" onclick="adjustDeadline('${key}',5)">+5 min</button>${overridden?`<button class="dl-reset" onclick="resetDeadline('${key}')">reset</button>`:''}</div>
-</div>`;
-    });
-  });
-  // Eindronde deadlines
-  ['za','zo'].forEach(dayKey=>{
-    const dayObj=DAYS.find(d=>d.key===dayKey);
-    const eindMatches=S.matches.filter(m=>m.day===dayKey&&m.phase!=='poule');
-    if(!eindMatches.length)return;
-    html+=`<div class="sec-title">${dayObj.full} - Eindronde</div>`;
-    eindMatches.forEach(m=>{
-      const key=getEindrKey(m.cat,m.phase);
-      const delta=deadlineOverrides[key]||0;
-      const overridden=delta!==0;
-      const eff=delta?addMins(m.time,delta):m.time;
-      const cat=CATS[m.cat]||{};const phase=m.label||m.phase;
-      html+=`<div class="dl-block">
-<div class="dl-head">${cat.short} ${phase}${overridden?` <span style="color:var(--gold);font-size:11px">${delta>0?'+':''}${delta} min</span>`:''}</div>
-<div class="dl-info">Start: <strong>${eff}</strong>${overridden?` <span style="color:${delta>0?'#f87171':'#4ade80'};font-weight:700">(${delta>0?'+':''}${delta}m)</span>`:''}</div>
-<div class="dl-btns"><button class="dl-adj" onclick="adjustDeadline('${key}',-5)">−5 min</button><button class="dl-adj" onclick="adjustDeadline('${key}',5)">+5 min</button>${overridden?`<button class="dl-reset" onclick="resetDeadline('${key}')">reset</button>`:''}</div>
-</div>`;
-    });
-  });
-  if(!html)html='<div class="empty">Geen data</div>';
-  el.innerHTML=html;
-}
-// adjustDeadline: delta in minuten (cumulatief). Alle rondes van de poule schuiven mee.
-function adjustDeadline(key,deltaMin){
-  if(!deadlineRef)return;
-  const current=deadlineOverrides[key]||0;
-  const newVal=current+deltaMin;
-  if(newVal===0)deadlineRef.child(key).remove();
-  else deadlineRef.child(key).set(newVal);
-  setTimeout(renderAdminDeadlines,300);
-}
-function resetDeadline(key){
-  if(!deadlineRef)return;
-  deadlineRef.child(key).remove();
-  setTimeout(renderAdminDeadlines,300);
 }
 function renderAdminWedstrijden(){
   const fEl=document.getElementById('admin-filter');
@@ -1417,77 +786,8 @@ function renderAdminList(){
   el.innerHTML=html;
 }
 function setAdminFilter(cat){adminFilterCat=cat;renderAdminWedstrijden();}
-function renderAdminLucky(){
-  const el=document.getElementById('admin-lucky-list');
-  el.innerHTML='<div class="empty">Laden...</div>';
-  if(!usersRef){el.innerHTML='<div class="empty">Firebase niet beschikbaar</div>';return;}
-  usersRef.orderByChild('credits').once('value',snap=>{
-    const players=[];
-    snap.forEach(c=>{
-      const v=c.val();
-      if(v&&v.nickname)players.push({id:c.key,nickname:v.nickname,credits:v.credits||0,lastSeen:v.lastSeen||0});
-    });
-    players.sort((a,b)=>b.credits-a.credits);
-    if(!players.length){el.innerHTML='<div class="empty">Nog geen spelers</div>';return;}
-    let html=`<div style="padding:10px 14px 4px;font-size:11px;color:var(--gray);font-weight:700;text-transform:uppercase;letter-spacing:.5px">${players.length} spelers</div>`;
-    players.forEach((p,i)=>{
-      const lastSeenStr=p.lastSeen?new Date(p.lastSeen).toLocaleString('nl-BE',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'—';
-      html+=`<div class="admin-match" style="flex-direction:column;align-items:stretch;gap:8px">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div>
-            <div style="font-size:14px;font-weight:700">${i<3?'⭐ ':''}${escHtml(p.nickname)}</div>
-            <div style="font-size:10px;color:var(--gray);margin-top:2px">Laatste activiteit: ${lastSeenStr}</div>
-          </div>
-          <div style="font-size:20px;font-weight:800;color:var(--gold)">${p.credits} cr</div>
-        </div>
-        <div style="display:flex;gap:6px">
-          <button onclick="adminAdjustCredits('${p.id}','${escHtml(p.nickname)}',5)" style="flex:1;padding:7px;border-radius:8px;border:1px solid #2a2a2a;background:#1a1a1a;color:#4ade80;font-size:12px;font-weight:700;font-family:'Rubik',sans-serif;cursor:pointer">+5</button>
-          <button onclick="adminAdjustCredits('${p.id}','${escHtml(p.nickname)}',-5)" style="flex:1;padding:7px;border-radius:8px;border:1px solid #2a2a2a;background:#1a1a1a;color:#f87171;font-size:12px;font-weight:700;font-family:'Rubik',sans-serif;cursor:pointer">-5</button>
-          <button onclick="adminAdjustCredits('${p.id}','${escHtml(p.nickname)}',null)" style="flex:1;padding:7px;border-radius:8px;border:1px solid #2a2a2a;background:#1a1a1a;color:var(--gray);font-size:11px;font-weight:700;font-family:'Rubik',sans-serif;cursor:pointer">Reset</button>
-          <button onclick="adminViewAudit('${p.id}')" style="flex:1;padding:7px;border-radius:8px;border:1px solid #2a2a2a;background:#1a1a1a;color:var(--gray);font-size:11px;font-family:'Rubik',sans-serif;cursor:pointer">Log</button>
-          <button onclick="adminDeleteUser('${p.id}','${escHtml(p.nickname)}')" style="flex:1;padding:7px;border-radius:8px;border:1px solid #7f1d1d;background:#1a1a1a;color:#f87171;font-size:11px;font-weight:700;font-family:'Rubik',sans-serif;cursor:pointer">Verwijder</button>
-        </div>
-      </div>`;
-    });
-    el.innerHTML=html;
-  });
-}
-function adminAdjustCredits(deviceId,nickname,delta){
-  if(!usersRef)return;
-  usersRef.child(deviceId+'/credits').once('value',snap=>{
-    const current=snap.val()||0;
-    const newVal=delta===null?INIT_CREDITS:Math.max(0,current+delta);
-    usersRef.child(deviceId).update({credits:newVal});
-    const actionType=delta===null?'admin_reset':(delta>0?'admin_add':'admin_subtract');
-    if(auditRef)auditRef.push({type:actionType,deviceId,nickname,delta:delta===null?INIT_CREDITS-current:delta,creditsAfter:newVal,byAdmin:true,ts:Date.now()});
-    toast(`${nickname}: ${current} → ${newVal} credits`);
-    renderAdminLucky();
-  });
-}
-function adminDeleteUser(deviceId,nickname){
-  if(!usersRef)return;
-  if(!confirm(`Verwijder "${nickname}" uit de Firebase users? Dit kan niet ongedaan gemaakt worden.`))return;
-  usersRef.child(deviceId).remove().then(()=>{
-    toast(`${nickname} verwijderd`);
-    setTimeout(renderAdminLucky,300);
-  }).catch(e=>toast('Fout: '+e.message));
-}
-function adminViewAudit(deviceId){
-  if(!auditRef){toast('Audit log niet beschikbaar');return;}
-  auditRef.orderByChild('deviceId').equalTo(deviceId).limitToLast(20).once('value',snap=>{
-    const entries=[];snap.forEach(c=>entries.push(c.val()));entries.reverse();
-    if(!entries.length){toast('Geen log voor deze speler');return;}
-    const lines=entries.map(e=>{
-      const d=new Date(e.ts);
-      const t=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
-      const day=String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0');
-      return`${day} ${t} · ${e.type} · ${e.creditsAfter}cr`;
-    }).join('\n');
-    alert(`Audit log: ${entries[0].nickname||deviceId}\n\n${lines}`);
-  });
-}
 function adminLogout(){adminActive=false;document.getElementById('admin-lock-screen').style.display='block';document.getElementById('admin-panel').style.display='none';pinBuffer='';updatePinDots();}
-function toggleLock(id){const m=S.matches.find(x=>x.id===id);if(!m)return;m.locked=!m.locked;save();resolveGokBets();renderAdminList();renderHome();}
+function toggleLock(id){const m=S.matches.find(x=>x.id===id);if(!m)return;m.locked=!m.locked;save();renderAdminList();renderHome();}
 function renderDeelnemers(){
   document.getElementById('deeln-cat-sel').innerHTML=Object.entries(CATS).map(([key,cat])=>`<button class="cat-pill ${key===deelnCat?'active':''}" onclick="setDeelnCat('${key}')">${cat.short}</button>`).join('');
   const content=document.getElementById('deeln-content');const cat=CATS[deelnCat];if(!cat)return;
@@ -1595,7 +895,6 @@ function toast(msg){const el=document.getElementById('toast');el.textContent=msg
 // ============================================================
 // INIT
 // ============================================================
-initGokProfile();
 // Desktop blocker: app enkel op telefoon (UA-check), admin toegankelijk op alle apparaten
 (function(){
   const ua=navigator.userAgent;
