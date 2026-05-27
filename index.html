@@ -267,21 +267,25 @@
 
   <div class="sec-title">Randactiviteiten</div>
   <div class="activities-scroll">
-    <div class="act-card" onclick="window.open('#','_blank')">
+    <div class="act-card" onclick="openAct('steak')">
       <div class="act-img"><img src="assets/Steak_app_icon.png" alt="WDP Steak"></div>
-      <div class="act-body"><div class="act-title">WDP Steak</div><div class="act-desc">Inschrijven voor een steak na je match</div><div class="act-days">MA · DI · WO</div></div>
+      <div class="act-body"><div class="act-title">WDP Steak</div><div class="act-desc">Steak, vol-au-vent of veggie na je match</div><div class="act-days">MA · DI · WO</div></div>
     </div>
-    <div class="act-card">
+    <div class="act-card" onclick="openAct('afterwork')">
       <div class="act-img"><img src="assets/Beer_Hotdog_app_icon.png" alt="Afterwork"></div>
       <div class="act-body"><div class="act-title">Afterwork</div><div class="act-desc">Tripels en hotdogs zolang de voorraad strekt</div><div class="act-days">DO</div></div>
     </div>
-    <div class="act-card">
-      <div class="act-img"><img src="assets/Wine_app_icon.png" alt="Ladies Night"></div>
-      <div class="act-body"><div class="act-title">Ladies Night</div><div class="act-desc">by Unwined</div><div class="act-days">VR</div></div>
+    <div class="act-card" onclick="openAct('winetasting')">
+      <div class="act-img"><img src="assets/Wine_app_icon.png" alt="Wine Tasting"></div>
+      <div class="act-body"><div class="act-title">Wine Tasting</div><div class="act-desc">Stem op jouw favoriete wijn voor aan de bar</div><div class="act-days">VR</div></div>
     </div>
-    <div class="act-card">
+    <div class="act-card" onclick="openAct('barbecue')">
       <div class="act-img"><img src="assets/Barbecue_app_icon.png" alt="Barbecue"></div>
-      <div class="act-body"><div class="act-title">Barbecue</div><div class="act-desc">Afsluiten met een BBQ op het terras</div><div class="act-days">ZA · ZO</div></div>
+      <div class="act-body"><div class="act-title">Barbecue</div><div class="act-desc">Gezellige BBQ tijdens de eindrondes</div><div class="act-days">ZA · ZO</div></div>
+    </div>
+    <div class="act-card" onclick="openAct('lucky')">
+      <div class="act-img" style="background:linear-gradient(135deg,#1a1400,#3d2e00);font-size:44px;display:flex;align-items:center;justify-content:center;height:100px;">&#11088;</div>
+      <div class="act-body"><div class="act-title">Lucky Legends</div><div class="act-desc">Win een half jaar gratis spelen</div><div class="act-days">MA na toernooi</div></div>
     </div>
   </div>
 
@@ -915,6 +919,32 @@ initFirebase();
 // Admin via URL hash: sportico28.github.io/summer-open-2026/#admin
 if(window.location.hash==='#admin')setTimeout(()=>goPage('admin'),600);
 window.addEventListener('hashchange',()=>{if(window.location.hash==='#admin')goPage('admin');});
+
+// ============================================================
+// ACTIVITY POPUPS
+// ============================================================
+const ACT_DATA={
+  steak:{title:'WDP Steak',days:'Maandag, dinsdag en woensdag',body:'Geniet na je match van de gekende WDP-Steak, vol-au-vent of vegetarische vol-au-vent!',link:'https://app.webhero-bookings.com/sportico-vzw/pachanga-summer-open-toernooiweek-1',linkLabel:'Inschrijven'},
+  afterwork:{title:'Afterwork',days:'Donderdag',body:'Alle tripels (Karmeliet, d'Anvers, Carolus) aan 3+1 en hotdogs zolang de voorraad strekt! Geen inschrijving nodig.',link:null},
+  winetasting:{title:'Wine Tasting',days:'Vrijdag',body:'Kom mee beslissen welke wijn Pachanga binnenkort zal serveren aan de bar. We testen verschillende opties en laten jullie kiezen! Stem op jouw favoriete wijn. Geen inschrijving nodig.',link:null},
+  barbecue:{title:'Barbecue',days:'Zaterdag en zondag',body:'Tijdens de eindrondes voorzien we een gezellige barbecue en uiteraard padelmatchen van top-niveau.',link:'https://app.webhero-bookings.com/sportico-vzw/pachanga-summer-open-toernooiweek-1',linkLabel:'Inschrijven'},
+  lucky:{title:'Lucky Legends',days:'Loting: maandag 22 juni',body:'Ook dit jaar maakt iedereen weer kans om een half jaar gratis te spelen. 3 nieuwe Lucky Legends worden gekozen de maandag na het toernooi.\n\nWat moet je doen om kans te maken?\nSchrijf je in voor minstens 1 WDP Steak dag, kom donderdag naar de afterwork of vrijdag naar de wine tasting, of kom zaterdag of zondag naar 1 van de barbecues tijdens de eindrondes.',link:null}
+};
+function openAct(id){
+  const a=ACT_DATA[id];if(!a)return;
+  let html=`<div class="modal-title" style="font-size:16px;margin-bottom:4px">${a.title}</div>`;
+  html+=`<div class="modal-sub">${a.days}</div>`;
+  html+=`<div style="font-size:14px;line-height:1.7;color:var(--white);white-space:pre-line;margin-top:4px">${a.body}</div>`;
+  if(a.link)html+=`<div class="modal-row"><a href="${a.link}" target="_blank" style="flex:1;display:block;padding:13px;background:var(--gold);color:#000;font-weight:700;font-size:14px;border-radius:10px;text-align:center;text-decoration:none">${a.linkLabel||'Meer info'}</a></div>`;
+  html+=`<div class="modal-row"><button class="btn-cancel" onclick="closeAct()">Sluiten</button></div>`;
+  document.getElementById('act-modal').innerHTML=html;
+  document.getElementById('act-bg').style.display='flex';
+}
+function closeAct(){document.getElementById('act-bg').style.display='none';}
 </script>
+
+<div class="modal-bg" id="act-bg" style="display:none" onclick="if(event.target===this)closeAct()">
+  <div class="modal" onclick="event.stopPropagation()" id="act-modal"></div>
+</div>
 </body>
 </html>
