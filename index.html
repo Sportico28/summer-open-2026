@@ -11,7 +11,7 @@
     *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
     button{touch-action:manipulation;}
     html{height:100%;}
-    body{min-height:100%;background:var(--black);color:var(--white);font-family:'Rubik',sans-serif;padding-bottom:calc(var(--nav-h)+20px);overflow-y:auto;}
+    html{height:100%;}body{height:100%;background:var(--black);color:var(--white);font-family:'Rubik',sans-serif;overflow:hidden;}
 
     /* NAV */
     .bottom-nav{position:fixed;bottom:0;left:0;right:0;height:var(--nav-h);background:#0a0a0a;border-top:1px solid var(--border);display:flex;z-index:100;}
@@ -20,7 +20,7 @@
     .nav-btn svg{transition:fill .15s;}
 
     /* PAGES */
-    .page{display:none;min-height:calc(100vh - var(--nav-h));}
+    .page{display:none;height:calc(100dvh - var(--nav-h));overflow-y:auto;-webkit-overflow-scrolling:touch;}
     .page.active{display:block;}
 
     /* LOADING */
@@ -267,9 +267,13 @@
 
   <div class="sec-title">Randactiviteiten</div>
   <div class="activities-scroll">
+    <div class="act-card" onclick="openAct('lucky')">
+      <div class="act-img"><img src="assets/Lucky_legends_app_icon.png" alt="Lucky Legends"></div>
+      <div class="act-body"><div class="act-title">Lucky Legends</div><div class="act-desc">Win een half jaar gratis spelen</div></div>
+    </div>
     <div class="act-card" onclick="openAct('steak')">
       <div class="act-img"><img src="assets/Steak_app_icon.png" alt="WDP Steak"></div>
-      <div class="act-body"><div class="act-title">WDP Steak</div><div class="act-desc">Steak, vol-au-vent of veggie na je match</div><div class="act-days">MA · DI · WO</div></div>
+      <div class="act-body"><div class="act-title">WDP Steak</div><div class="act-desc">Steak, vol-au-vent of veggie op het menu</div><div class="act-days">MA · DI · WO</div></div>
     </div>
     <div class="act-card" onclick="openAct('afterwork')">
       <div class="act-img"><img src="assets/Beer_Hotdog_app_icon.png" alt="Afterwork"></div>
@@ -282,10 +286,6 @@
     <div class="act-card" onclick="openAct('barbecue')">
       <div class="act-img"><img src="assets/Barbecue_app_icon.png" alt="Barbecue"></div>
       <div class="act-body"><div class="act-title">Barbecue</div><div class="act-desc">Gezellige BBQ tijdens de eindrondes</div><div class="act-days">ZA · ZO</div></div>
-    </div>
-    <div class="act-card" onclick="openAct('lucky')">
-      <div class="act-img" style="background:linear-gradient(135deg,#1a1400,#3d2e00);font-size:44px;display:flex;align-items:center;justify-content:center;height:100px;">&#11088;</div>
-      <div class="act-body"><div class="act-title">Lucky Legends</div><div class="act-desc">Win een half jaar gratis spelen</div><div class="act-days">MA na toernooi</div></div>
     </div>
   </div>
 
@@ -928,7 +928,7 @@ const ACT_DATA={
   afterwork:{title:'Afterwork',days:'Donderdag',body:'Alle tripels (Karmeliet, d’Anvers, Carolus) aan 3+1 en hotdogs zolang de voorraad strekt! Geen inschrijving nodig.',link:null},
   winetasting:{title:'Wine Tasting',days:'Vrijdag',body:'Kom mee beslissen welke wijn Pachanga binnenkort zal serveren aan de bar. We testen verschillende opties en laten jullie kiezen! Stem op jouw favoriete wijn. Geen inschrijving nodig.',link:null},
   barbecue:{title:'Barbecue',days:'Zaterdag en zondag',body:'Tijdens de eindrondes voorzien we een gezellige barbecue en uiteraard padelmatchen van top-niveau.',link:'https://app.webhero-bookings.com/sportico-vzw/pachanga-summer-open-toernooiweek-1',linkLabel:'Inschrijven'},
-  lucky:{title:'Lucky Legends',days:'Loting: maandag 22 juni',body:'Ook dit jaar maakt iedereen weer kans om een half jaar gratis te spelen. 3 nieuwe Lucky Legends worden gekozen de maandag na het toernooi.\n\nWat moet je doen om kans te maken?\nSchrijf je in voor minstens 1 WDP Steak dag, kom donderdag naar de afterwork of vrijdag naar de wine tasting, of kom zaterdag of zondag naar 1 van de barbecues tijdens de eindrondes.',link:null}
+  lucky:{title:'Lucky Legends',days:'Toernooiweek 15-21 juni 2026',body:'Ook dit jaar maakt iedereen weer kans om een half jaar gratis te spelen. 3 nieuwe Lucky Legends worden gekozen de maandag na het toernooi.\n\nWat moet je doen om kans te maken?\nSchrijf je in voor minstens 1 WDP Steak dag, kom donderdag naar de afterwork of vrijdag naar de wine tasting, of kom zaterdag of zondag naar 1 van de barbecues tijdens de eindrondes.',link:null}
 };
 function openAct(id){
   const a=ACT_DATA[id];if(!a)return;
