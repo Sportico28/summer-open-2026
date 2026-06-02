@@ -271,6 +271,14 @@
       <div class="act-img"><img src="assets/Lucky_legends_app_icon.png" alt="Lucky Legends"></div>
       <div class="act-body"><div class="act-title">Lucky Legends</div><div class="act-desc">Win een half jaar gratis spelen</div></div>
     </div>
+    <div class="act-card" onclick="openAct('wk1')">
+      <div class="act-img" style="background:linear-gradient(to right,#000 33%,#FFD700 33%,#FFD700 66%,#EF3340 66%);display:flex;align-items:center;justify-content:center;height:100px;font-size:46px;">⚽</div>
+      <div class="act-body"><div class="act-title">Rode Duivels</div><div class="act-desc">België vs Egypte</div><div class="act-days">MA 15/06 · 21:00</div></div>
+    </div>
+    <div class="act-card" onclick="openAct('wk2')">
+      <div class="act-img" style="background:linear-gradient(to right,#000 33%,#FFD700 33%,#FFD700 66%,#EF3340 66%);display:flex;align-items:center;justify-content:center;height:100px;font-size:46px;">⚽</div>
+      <div class="act-body"><div class="act-title">Rode Duivels</div><div class="act-desc">België vs Iran</div><div class="act-days">ZO 21/06 · 21:00</div></div>
+    </div>
     <div class="act-card" onclick="openAct('steak')">
       <div class="act-img"><img src="assets/Steak_app_icon.png" alt="WDP Steak"></div>
       <div class="act-body"><div class="act-title">WDP Steak</div><div class="act-desc">Steak, vol-au-vent of veggie op het menu</div><div class="act-days">MA · DI · WO</div></div>
@@ -928,6 +936,8 @@ const ACT_DATA={
   afterwork:{title:'Afterwork',days:'Donderdag',body:'Alle tripels (Karmeliet, d’Anvers, Carolus) aan 3+1 en hotdogs zolang de voorraad strekt! Geen inschrijving nodig.',link:null},
   winetasting:{title:'Wine Tasting',days:'Vrijdag',body:'Kom mee beslissen welke wijn Pachanga binnenkort zal serveren aan de bar. We testen verschillende opties en laten jullie kiezen! Stem op jouw favoriete wijn. Geen inschrijving nodig.',link:null},
   barbecue:{title:'Barbecue',days:'Zaterdag en zondag',body:'Tijdens de eindrondes voorzien we een gezellige barbecue en uiteraard padelmatchen van top-niveau.',link:'https://app.webhero-bookings.com/sportico-vzw/pachanga-summer-open-toernooiweek-1',linkLabel:'Inschrijven'},
+  wk1:{title:'🇧🇪 België vs Egypte',days:'Maandag 15 juni · 21:00u',body:'De Rode Duivels spelen hun eerste poulematch op het WK voetbal. Kom supporteren bij Pachanga, groot scherm, koude pintjes en de sfeer van een grote wedstrijd.',link:null},
+  wk2:{title:"🇧🇪 België vs Iran",days:"Zondag 21 juni · 21:00u",body:"De laatste dag van het toernooi én een nieuwe WK-match. Eindrondes overdag, Rode Duivels in de avond. Kom supporteren bij Pachanga.",link:null},
   lucky:{title:'Lucky Legends',days:'Toernooiweek 15-21 juni 2026',body:'Ook dit jaar maakt iedereen weer kans om een half jaar gratis te spelen. 3 nieuwe Lucky Legends worden gekozen de maandag na het toernooi.\n\nWat moet je doen om kans te maken?\nSchrijf je in voor minstens 1 steak avond (ma, di of wo), kom donderdag naar de afterwork of vrijdag naar de wine tasting, en kom zaterdag of zondag naar de barbecue tijdens de eindrondes.',link:null}
 };
 function openAct(id){
