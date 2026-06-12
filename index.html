@@ -106,7 +106,7 @@
     .poule-block{margin:8px 12px;}
     .poule-head{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;padding-left:2px;}
     .standings-table{background:var(--card);border-radius:12px;overflow:hidden;}
-    .st-row{display:grid;grid-template-columns:20px 1fr 32px 32px 32px 32px 32px;align-items:center;padding:10px 12px;gap:6px;font-size:12px;border-bottom:1px solid var(--border);}
+    .st-row{display:grid;grid-template-columns:20px 1fr 36px 36px 40px;align-items:center;padding:10px 12px;gap:6px;font-size:12px;border-bottom:1px solid var(--border);}
     .st-row:last-child{border-bottom:none;}
     .st-row.header{color:var(--gray);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;background:var(--card2);}
     .st-pos{color:var(--gray);font-weight:700;}
@@ -139,6 +139,15 @@
     .pin-key{padding:18px;background:var(--card);border:1px solid var(--border);border-radius:12px;font-size:20px;font-weight:700;font-family:'Rubik',sans-serif;color:var(--white);cursor:pointer;text-align:center;transition:all .1s;}
     .pin-key:active{background:var(--gold);color:var(--black);}
     .pin-key.del{font-size:15px;color:var(--gray);}
+    .login-form{max-width:280px;margin:0 auto;display:flex;flex-direction:column;gap:12px;}
+    .login-form input{padding:14px;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--white);font-size:15px;font-family:'Rubik',sans-serif;}
+    .btn-login{padding:14px;background:var(--gold);color:#000;font-weight:700;font-size:15px;border:none;border-radius:10px;cursor:pointer;font-family:'Rubik',sans-serif;}
+    .login-err{color:#ff6b6b;font-size:12px;min-height:16px;}
+    .winner-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;}
+    .winner-btn{padding:16px 10px;background:var(--card);border:2px solid var(--border);border-radius:10px;color:var(--white);font-size:14px;font-weight:700;font-family:'Rubik',sans-serif;cursor:pointer;line-height:1.3;}
+    .winner-btn.active{border-color:var(--gold);background:rgba(233,183,69,.15);color:var(--gold);}
+    .winner-clear{width:100%;padding:10px;background:none;border:1px solid var(--border);border-radius:8px;color:var(--gray);font-size:12px;font-family:'Rubik',sans-serif;cursor:pointer;}
+    .winner-clear.active{border-color:var(--gold);color:var(--gold);}
     .admin-top{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;}
     .admin-status{font-size:12px;color:var(--gold);font-weight:600;}
     .btn-sm{padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--gray);font-size:12px;font-family:'Rubik',sans-serif;cursor:pointer;}
@@ -238,6 +247,7 @@
   </style>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 </head>
 <body>
 
@@ -327,13 +337,12 @@
         <svg viewBox="0 0 24 24" fill="#E9B745" width="48" height="48"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
       </div>
       <h2>Admin Paneel</h2>
-      <p>Voer de PIN in om scores in te geven.</p>
-      <div class="pin-dots" id="pin-dots"></div>
-      <div class="pin-pad">
-        <button class="pin-key" onclick="pinKey('1')">1</button><button class="pin-key" onclick="pinKey('2')">2</button><button class="pin-key" onclick="pinKey('3')">3</button>
-        <button class="pin-key" onclick="pinKey('4')">4</button><button class="pin-key" onclick="pinKey('5')">5</button><button class="pin-key" onclick="pinKey('6')">6</button>
-        <button class="pin-key" onclick="pinKey('7')">7</button><button class="pin-key" onclick="pinKey('8')">8</button><button class="pin-key" onclick="pinKey('9')">9</button>
-        <button class="pin-key" onclick="pinKey('')"></button><button class="pin-key" onclick="pinKey('0')">0</button><button class="pin-key del" onclick="pinDel()">&#9003;</button>
+      <p>Log in om scores in te geven.</p>
+      <div class="login-form">
+        <input type="email" id="admin-email" placeholder="E-mail" autocomplete="username">
+        <input type="password" id="admin-pw" placeholder="Wachtwoord" autocomplete="current-password" onkeydown="if(event.key==='Enter')adminLogin()">
+        <button class="btn-login" onclick="adminLogin()">Inloggen</button>
+        <div class="login-err" id="login-err"></div>
       </div>
     </div>
   </div>
@@ -371,10 +380,10 @@
   <div id="nav-admin" style="display:none"></div>
 </nav>
 
-<!-- MODAL: Score -->
+<!-- MODAL: Resultaat (winnaar) -->
 <div class="modal-bg" id="modal-bg" style="display:none" onclick="if(event.target===this)closeModal()">
   <div class="modal" onclick="event.stopPropagation()">
-    <div class="modal-title" id="modal-title">Score ingeven</div>
+    <div class="modal-title" id="modal-title">Resultaat</div>
     <div class="modal-sub" id="modal-sub"></div>
     <div class="form-grp"><label class="form-lbl">Tijd</label><input type="text" id="edit-time" placeholder="18:00"></div>
     <div class="form-grp"><label class="form-lbl">Veld</label><input type="number" id="edit-court" min="1" max="8" placeholder="1-8"></div>
@@ -384,17 +393,12 @@
       <input type="text" id="edit-t2name" placeholder="Team 2">
     </div>
     <div class="form-grp">
-      <label class="form-lbl">Score (sets)</label>
-      <div class="score-row">
-        <div class="score-team-lbl" id="edit-t1lbl">Team 1</div>
-        <div class="score-vs-lbl">vs</div>
-        <div class="score-team-lbl" id="edit-t2lbl">Team 2</div>
+      <label class="form-lbl">Winnaar</label>
+      <div class="winner-row">
+        <button type="button" class="winner-btn" id="win-1" onclick="pickWinner('1')"><span id="win-1lbl">Team 1</span></button>
+        <button type="button" class="winner-btn" id="win-2" onclick="pickWinner('2')"><span id="win-2lbl">Team 2</span></button>
       </div>
-      <div class="score-row">
-        <input type="number" class="score-input" id="edit-s1" min="0" max="3" placeholder="0">
-        <div class="score-vs-lbl" style="font-size:20px;font-weight:800;color:var(--border)">-</div>
-        <input type="number" class="score-input" id="edit-s2" min="0" max="3" placeholder="0">
-      </div>
+      <button type="button" class="winner-clear" id="win-clear" onclick="pickWinner(null)">Nog niet gespeeld</button>
     </div>
     <div class="modal-row">
       <button class="btn-cancel" onclick="closeModal()">Annuleren</button>
@@ -426,10 +430,10 @@ const CATS={
   h_p100:{label:'Heren P100',short:'H P100',type:'outdoor',color:'#4a9eff',poules:['A','B','C','D'],bracket:'QF',days_poule:['ma','do'],day_final:'za'},
   h_p300:{label:'Heren P300',short:'H P300',type:'outdoor',color:'#9775fa',poules:['A','B','C','D'],bracket:'QF',days_poule:['ma','do'],day_final:'za'},
   h_p500:{label:'Heren P500',short:'H P500',type:'outdoor',color:'#ff6b6b',poules:['A','B','C','D'],bracket:'QF',days_poule:['di','wo'],day_final:'za'},
-  h_p700:{label:'Heren P700',short:'H P700',type:'indoor',color:'#ffa94d',poules:['A','B'],bracket:'SF',days_poule:['ma','wo'],day_final:'zo'},
+  h_p700:{label:'Heren P700',short:'H P700',type:'indoor',color:'#ffa94d',poules:['A','B','C'],bracket:'SF',days_poule:['ma','wo','do'],day_final:'zo'},
   d_p100:{label:'Dames P100',short:'D P100',type:'outdoor',color:'#f783ac',poules:['A','B','C','D'],bracket:'QF',days_poule:['di','wo','vr'],day_final:'zo'},
   d_p300:{label:'Dames P300',short:'D P300',type:'outdoor',color:'#a9e34b',poules:['A','B','C','D'],bracket:'QF',days_poule:['di','wo','vr'],day_final:'zo'},
-  d_p500:{label:'Dames P500',short:'D P500',type:'indoor',color:'#69db7c',poules:['A','B','C'],bracket:'QF',days_poule:['di','do','vr'],day_final:'zo'},
+  d_p500:{label:'Dames P500',short:'D P500',type:'indoor',color:'#69db7c',poules:['A','B'],bracket:'SF',pouleSize:3,days_poule:['di','vr'],day_final:'zo'},
 };
 const POULE_SCHED={
   h_p100:{
@@ -452,7 +456,8 @@ const POULE_SCHED={
   },
   h_p700:{
     A:{day:'ma',c1:6,c2:7,rounds:['18:30','19:45','21:00']},
-    B:{day:'wo',c1:6,c2:7,rounds:['18:30','19:45','21:00']}
+    B:{day:'wo',c1:6,c2:7,rounds:['18:30','19:45','21:00']},
+    C:{day:'do',c1:6,c2:7,rounds:['18:30','19:45','21:00']}
   },
   d_p100:{
     A:{day:'di',c1:4,c2:5,rounds:['18:00','18:45','19:30']},
@@ -468,8 +473,7 @@ const POULE_SCHED={
   },
   d_p500:{
     A:{day:'di',c1:6,c2:7,rounds:['18:30','19:15','20:00']},
-    B:{day:'do',c1:6,c2:7,rounds:['18:30','19:15','20:00']},
-    C:{day:'vr',c1:6,c2:7,rounds:['18:30','19:15','20:00']}
+    B:{day:'vr',c1:6,c2:7,rounds:['18:30','19:15','20:00']}
   },
 };
 const EINDRONDE_SCHED={
@@ -477,7 +481,7 @@ const EINDRONDE_SCHED={
   h_p100:{QF:{t:'12:30',courts:[2,3,4,5]},SF:{t:'13:30',courts:[4,5]},F:{t:'15:00',courts:[5]}},
   h_p300:{QF:{t:'15:30',courts:[1,2,3,4]},SF:{t:'16:30',courts:[1,2]},F:{t:'18:00',courts:[1]}},
   d_p300:{QF:{t:'09:30',courts:[1,2,4,5]},SF:{t:'10:30',courts:[1,2]},F:{t:'12:00',courts:[1]}},
-  d_p500:{QF:{t:'10:30',courts:[6,7]},SF:{t:'12:00',courts:[6,7]},F:{t:'13:30',courts:[6]}},
+  d_p500:{SF:{t:'12:00',courts:[6,7]},F:{t:'13:30',courts:[6]}},
   d_p100:{QF:{t:'14:00',courts:[2,3,4,5]},SF:{t:'15:00',courts:[1,2]},F:{t:'16:30',courts:[1]}},
   h_p700:{SF:{t:'15:30',courts:[6,7]},F:{t:'16:45',courts:[6]}},
 };
@@ -492,7 +496,10 @@ const DAYS=[
 ];
 const FIREBASE_CONFIG={apiKey:"AIzaSyDrlCpuO2a5yzSUB1JoZ96KSaYjCQniu48",authDomain:"mgpc-2026.firebaseapp.com",databaseURL:"https://mgpc-2026-default-rtdb.europe-west1.firebasedatabase.app",projectId:"mgpc-2026",storageBucket:"mgpc-2026.firebasestorage.app",messagingSenderId:"78506921375",appId:"1:78506921375:web:3a4b325a3981a9195901aa"};
 const FB_PATH='summer2026c';
-const ADMIN_PIN='32472418789';
+// ===== LOTING SEED (uit officiële PV-poule-PDF's, 12/06/2026) =====
+// Alle 7 reeksen uit de officiële PV-poule-PDF's (12/06/2026). d_p500 = 3-teams poules.
+const SEED_TEAMS={"h_p100": {"A": {"1": "B. De Loore & C. Ravert", "2": "B. Aerts & L. Juliens", "3": "G. Paulissen & C. Van Roey", "4": "P. Van Loock & P. Van Vlasselaer"}, "B": {"1": "A. Baeten & M. Dumont", "2": "K. Peleman & S. Van Loock", "3": "D. Debougnoux & E. Morel", "4": "G. Van den Bruel & T. Verschaeren"}, "C": {"1": "F. Catteeuw & T. Vervoort", "2": "M. Kerkhofs & D. Verhanneman", "3": "Y. Broothaers & G. Dietens", "4": "R. Poppe & X. Vermote"}, "D": {"1": "J. Ghesquière & S. Van Loo", "2": "C. Cierkens & M. Hoefnagels", "3": "J. Van Dyck & T. Van Elshocht", "4": "T. Bynens & K. Vandenbroucke"}}, "h_p300": {"A": {"1": "J. Vertommen & T. Vertommen", "2": "G. Dony & B. Houthuys", "3": "L. De Wolf & T. Van Geenhoven", "4": "B. De Win & K. Robijns"}, "B": {"1": "J. Van Gestel & G. Van Raemdonck", "2": "J. Laureys & M. Sel", "3": "T. Claessens & D. Hermans", "4": "B. Houdenaert & R. Mertens"}, "C": {"1": "J. De becker & D. Van Velthoven", "2": "R. Libens & T. Verhamme", "3": "S. Horckmans & K. Verschueren", "4": "C. Keuleers & J. Van den Brande"}, "D": {"1": "S. Monbrun & S. Van Campenhout", "2": "J. Franck & B. Van Den Broeck", "3": "D. De Witte & K. Nauwelaerts", "4": "D. Ghys & R. Wuyten"}}, "h_p500": {"A": {"1": "J. Rome & R. Vanderheyden", "2": "G. Uytterhoeven & K. Wyns", "3": "K. Luyckfasseel & R. Van Liefferinge", "4": "D. Boux & Y. Vranckx"}, "B": {"1": "T. Van Den Broeck & J. Van Hout", "2": "P. Joossens & N. van het Groenewoud", "3": "G. Moris & K. Simons", "4": "T. Cornelis & W. Verbelen"}, "C": {"1": "R. De Vocht & M. Lambrechts", "2": "A. Bastiaens & G. Meuleman", "3": "S. De Groote & A. Kaerts", "4": "K. Van Dyck & T. Van Elst"}, "D": {"1": "K. Claes & K. Smets", "2": "R. Slachmuylders & B. Vannitsen", "3": "Y. De Bruyn & G. Frederiks", "4": "O. Becart & B. Stiers"}}, "h_p700": {"A": {"1": "J. Heyvaert & D. Poitevin", "2": "C. L'Allemand & Y. Saenen", "3": "J. Ramaut & A. Van Wunsel", "4": "W. Coomans & J. Van Acker"}, "B": {"1": "T. Huis & P. Ysebaert", "2": "J. Heremans & J. Van Hul", "3": "C. Dupont & G. Cleiren", "4": "D. Blommaert & J. De Bock"}, "C": {"1": "S. Braeckmans & K. Dellaert", "2": "B. Van Puymbroeck & N. Waem", "3": "S. De Beurme & B. Van den Bergh", "4": "P. Claes & N. Goossens"}}, "d_p100": {"A": {"1": "I. De Vocht & E. Verlet", "2": "K. Lanens & K. Resseler", "3": "S. Boelens & I. Vermeylen", "4": "R. Claes & L. Van den Bosch"}, "B": {"1": "S. Jacobs & A. van Kuyck", "2": "K. Meylemans & L. Vinckx", "3": "K. Lammens & V. Van Rooy", "4": "K. Geets & I. Vanheyste"}, "C": {"1": "K. Van Cauwenbergh & E. Verbist", "2": "H. De Vlam & I. De Vlam", "3": "H. Leys & M. Muizers", "4": "S. Aptekers & I. Wevers"}, "D": {"1": "E. De Rop & N. De Winter", "2": "S. Paternoster & H. Stevens", "3": "L. Gugutkova & I. Janssens", "4": "C. Hombroukx & S. Van goethem"}}, "d_p300": {"A": {"1": "C. De Buck & A. Mentens", "2": "T. De Schepper & J. Vandenberghe", "3": "J. De Preter & N. Struyf", "4": "C. Van Looy & R. Vermoesen"}, "B": {"1": "H. Delafaille & A. Van Damme", "2": "J. Dokter & T. Vermeulen", "3": "S. Nijs & I. Van Winkel", "4": "L. De Coster & S. Rogge"}, "C": {"1": "V. De Muyer & V. Vander poorten", "2": "C. Amandt & P. De Wulf", "3": "Y. Hermans & F. Vanderreydt", "4": "C. Huys & I. Louis"}, "D": {"1": "J. Naenen & Y. Van Hooff", "2": "L. Diels & L. Smets", "3": "D. Somers & S. Van Aenrode", "4": "H. Boey & G. Ferket"}}, "d_p500": {"A": {"1": "L. Kosynsky & S. Verhofstadt", "2": "I. De Prins & N. Verstraeten", "3": "S. Claes & D. Wernaers"}, "B": {"1": "E. De Mesmaecker & H. Diels", "2": "E. Broodtaerts & S. Dassonville", "3": "E. Pessemier & H. Schelfaut"}}};
+const SEED_DEELN={"h_p100": {"A": {"1": {"naam1": "Bram De Loore", "naam2": "Christophe Ravert"}, "2": {"naam1": "Benjamin Aerts", "naam2": "Lars Juliens"}, "3": {"naam1": "Gijs Paulissen", "naam2": "Christophe Van Roey"}, "4": {"naam1": "Peter Van Loock", "naam2": "Pieter Van Vlasselaer"}}, "B": {"1": {"naam1": "Anton Baeten", "naam2": "Mathias Dumont"}, "2": {"naam1": "Kurt Peleman", "naam2": "Stijn Van Loock"}, "3": {"naam1": "Dimitri Debougnoux", "naam2": "Erik Morel"}, "4": {"naam1": "Geert Van den Bruel", "naam2": "Tom Verschaeren"}}, "C": {"1": {"naam1": "Frederic Catteeuw", "naam2": "Thomas Vervoort"}, "2": {"naam1": "Matias Kerkhofs", "naam2": "Dries Verhanneman"}, "3": {"naam1": "Yannick Broothaers", "naam2": "Gunther Dietens"}, "4": {"naam1": "Ruben Poppe", "naam2": "Xander Vermote"}}, "D": {"1": {"naam1": "Jeroen Ghesquière", "naam2": "Sam Van Loo"}, "2": {"naam1": "Christophe Cierkens", "naam2": "Matthias Hoefnagels"}, "3": {"naam1": "Johan Van Dyck", "naam2": "Tom Van Elshocht"}, "4": {"naam1": "Toon Bynens", "naam2": "Kristof Vandenbroucke"}}}, "h_p300": {"A": {"1": {"naam1": "Joël Vertommen", "naam2": "Tibo Vertommen"}, "2": {"naam1": "Gert Dony", "naam2": "Bart Houthuys"}, "3": {"naam1": "Lucas De Wolf", "naam2": "Tom Van Geenhoven"}, "4": {"naam1": "Bruno De Win", "naam2": "Koen Robijns"}}, "B": {"1": {"naam1": "Jan Van Gestel", "naam2": "Gianni Van Raemdonck"}, "2": {"naam1": "Joost Laureys", "naam2": "Michael Sel"}, "3": {"naam1": "Tom Claessens", "naam2": "Didier Hermans"}, "4": {"naam1": "Bart Houdenaert", "naam2": "Robin Mertens"}}, "C": {"1": {"naam1": "Jeroen De becker", "naam2": "Dirk Van Velthoven"}, "2": {"naam1": "Ruud Libens", "naam2": "Thomas Verhamme"}, "3": {"naam1": "Stephan Horckmans", "naam2": "Kim Verschueren"}, "4": {"naam1": "Christophe Keuleers", "naam2": "Joris Van den Brande"}}, "D": {"1": {"naam1": "Sebastien Monbrun", "naam2": "Stijn Van Campenhout"}, "2": {"naam1": "Johan Franck", "naam2": "Ben Van Den Broeck"}, "3": {"naam1": "Dieter De Witte", "naam2": "Kristof Nauwelaerts"}, "4": {"naam1": "Dries Ghys", "naam2": "Robin Wuyten"}}}, "h_p500": {"A": {"1": {"naam1": "Joris Rome", "naam2": "Roeland Vanderheyden"}, "2": {"naam1": "Glenn Uytterhoeven", "naam2": "Koen Wyns"}, "3": {"naam1": "Karel Luyckfasseel", "naam2": "Robin Van Liefferinge"}, "4": {"naam1": "Didier Boux", "naam2": "Yves Vranckx"}}, "B": {"1": {"naam1": "Tim Van Den Broeck", "naam2": "Jan Van Hout"}, "2": {"naam1": "Patrick Joossens", "naam2": "Nicolas van het Groenewoud"}, "3": {"naam1": "Giano Moris", "naam2": "Kenny Simons"}, "4": {"naam1": "Thomas Cornelis", "naam2": "Wim Verbelen"}}, "C": {"1": {"naam1": "Robbe De Vocht", "naam2": "Mathias Lambrechts"}, "2": {"naam1": "Alex Bastiaens", "naam2": "Goran Meuleman"}, "3": {"naam1": "Sebastien De Groote", "naam2": "Arn Kaerts"}, "4": {"naam1": "Ken Van Dyck", "naam2": "Tim Van Elst"}}, "D": {"1": {"naam1": "Kim Claes", "naam2": "Kristof Smets"}, "2": {"naam1": "Roel Slachmuylders", "naam2": "Ben Vannitsen"}, "3": {"naam1": "Yannick De Bruyn", "naam2": "Guido Frederiks"}, "4": {"naam1": "Olivier Becart", "naam2": "Bart Stiers"}}}, "h_p700": {"A": {"1": {"naam1": "Jordy Heyvaert", "naam2": "Dimitri Poitevin"}, "2": {"naam1": "Chris L'Allemand", "naam2": "Yannick Saenen"}, "3": {"naam1": "Jasper Ramaut", "naam2": "Adriaan Van Wunsel"}, "4": {"naam1": "William Coomans", "naam2": "Jochen Van Acker"}}, "B": {"1": {"naam1": "Tom Huis", "naam2": "Philip Ysebaert"}, "2": {"naam1": "Jarni Heremans", "naam2": "Jasper Van Hul"}, "3": {"naam1": "Charlotte Dupont", "naam2": "Geert Cleiren"}, "4": {"naam1": "Dominique Blommaert", "naam2": "Jentl De Bock"}}, "C": {"1": {"naam1": "Sebastiaan Braeckmans", "naam2": "Kobe Dellaert"}, "2": {"naam1": "Bram Van Puymbroeck", "naam2": "Nicolas Waem"}, "3": {"naam1": "Sam De Beurme", "naam2": "Bart Van den Bergh"}, "4": {"naam1": "Pieter Claes", "naam2": "Nico Goossens"}}}, "d_p100": {"A": {"1": {"naam1": "Iris De Vocht", "naam2": "Eline Verlet"}, "2": {"naam1": "Katleen Lanens", "naam2": "Kristel Resseler"}, "3": {"naam1": "Sabine Boelens", "naam2": "Inge Vermeylen"}, "4": {"naam1": "Ruth Claes", "naam2": "Leen Van den Bosch"}}, "B": {"1": {"naam1": "Sofie Jacobs", "naam2": "Annelies van Kuyck"}, "2": {"naam1": "Kathleen Meylemans", "naam2": "Lesly Vinckx"}, "3": {"naam1": "Katrien Lammens", "naam2": "Veerle Van Rooy"}, "4": {"naam1": "Katrien Geets", "naam2": "Ine Vanheyste"}}, "C": {"1": {"naam1": "Kim Van Cauwenbergh", "naam2": "Els Verbist"}, "2": {"naam1": "Hilde De Vlam", "naam2": "Inge De Vlam"}, "3": {"naam1": "Hilde Leys", "naam2": "Maggy Muizers"}, "4": {"naam1": "Sylvie Aptekers", "naam2": "Inge Wevers"}}, "D": {"1": {"naam1": "Evelien De Rop", "naam2": "Nele De Winter"}, "2": {"naam1": "Sandra Paternoster", "naam2": "Hilde Stevens"}, "3": {"naam1": "Lyudmila Gugutkova", "naam2": "Ine Janssens"}, "4": {"naam1": "Caroline Hombroukx", "naam2": "Sigrid Van goethem"}}}, "d_p300": {"A": {"1": {"naam1": "Chloé De Buck", "naam2": "Annemie Mentens"}, "2": {"naam1": "Tess De Schepper", "naam2": "Jill Vandenberghe"}, "3": {"naam1": "Jannike De Preter", "naam2": "Nore Struyf"}, "4": {"naam1": "Charlotte Van Looy", "naam2": "Ruth Vermoesen"}}, "B": {"1": {"naam1": "Hanne Delafaille", "naam2": "An Van Damme"}, "2": {"naam1": "Janne Dokter", "naam2": "Tiffany Vermeulen"}, "3": {"naam1": "Shari Nijs", "naam2": "Inge Van Winkel"}, "4": {"naam1": "Lies De Coster", "naam2": "Sofie Rogge"}}, "C": {"1": {"naam1": "Vanessa De Muyer", "naam2": "Vanessa Vander poorten"}, "2": {"naam1": "Charlotte Amandt", "naam2": "Pauline De Wulf"}, "3": {"naam1": "Yoni Hermans", "naam2": "Fien Vanderreydt"}, "4": {"naam1": "Caroline Huys", "naam2": "Isabelle Louis"}}, "D": {"1": {"naam1": "Jolien Naenen", "naam2": "Ymke Van Hooff"}, "2": {"naam1": "Leen Diels", "naam2": "Leen Smets"}, "3": {"naam1": "Dominique Somers", "naam2": "Sandra Van Aenrode"}, "4": {"naam1": "Hanne Boey", "naam2": "Gaelle Ferket"}}}, "d_p500": {"A": {"1": {"naam1": "Lotte Kosynsky", "naam2": "Sandrine Verhofstadt"}, "2": {"naam1": "Isabelle De Prins", "naam2": "Nathalie Verstraeten"}, "3": {"naam1": "Stefanie Claes", "naam2": "Daphne Wernaers"}}, "B": {"1": {"naam1": "Evy De Mesmaecker", "naam2": "Hanne Diels"}, "2": {"naam1": "Elien Broodtaerts", "naam2": "Stéphanie Dassonville"}, "3": {"naam1": "Elke Pessemier", "naam2": "Hilde Schelfaut"}}}};
 // ============================================================
 // HELPERS
 // ============================================================
@@ -510,13 +517,24 @@ function courtLbl(c){if(!c)return'?';return`V${c}`;}
 // ============================================================
 function makeSeed(){
   const teams={},deelnemers={},matches=[];
-  const RR=[[['1','2'],['3','4']],[['1','3'],['2','4']],[['1','4'],['2','3']]];
+  // Officiële PV-volgorde 4-team poule: R1 1v3 & 2v4, R2 1v4 & 2v3, R3 1v2 & 3v4
+  const RR4=[[['1','3'],['2','4']],[['1','4'],['2','3']],[['1','2'],['3','4']]];
+  // 3-team poule (1 match per ronde): R1 1v3, R2 2v3, R3 1v2
+  const RR3=[[['1','3']],[['2','3']],[['1','2']]];
   Object.keys(CATS).forEach(cat=>{
     const sh=CATS[cat].short.replace(' ','');
+    const sz=CATS[cat].pouleSize||4;
+    const RR=sz===3?RR3:RR4;
+    const slots=sz===3?['1','2','3']:['1','2','3','4'];
     teams[cat]={};deelnemers[cat]={};
     CATS[cat].poules.forEach(poule=>{
-      teams[cat][poule]={'1':`${sh}${poule}1`,'2':`${sh}${poule}2`,'3':`${sh}${poule}3`,'4':`${sh}${poule}4`};
-      deelnemers[cat][poule]={'1':{lidnr1:'',lidnr2:''},'2':{lidnr1:'',lidnr2:''},'3':{lidnr1:'',lidnr2:''},'4':{lidnr1:'',lidnr2:''}};
+      const st=(typeof SEED_TEAMS!=='undefined'&&SEED_TEAMS[cat]&&SEED_TEAMS[cat][poule])||{};
+      const sd=(typeof SEED_DEELN!=='undefined'&&SEED_DEELN[cat]&&SEED_DEELN[cat][poule])||{};
+      teams[cat][poule]={};deelnemers[cat][poule]={};
+      slots.forEach(n=>{
+        teams[cat][poule][n]=st[n]||`${sh}${poule}${n}`;
+        deelnemers[cat][poule][n]=sd[n]?{naam1:sd[n].naam1,naam2:sd[n].naam2,lidnr1:'',lidnr2:''}:{lidnr1:'',lidnr2:''};
+      });
       const ps=POULE_SCHED[cat][poule];
       RR.forEach((ronde,ri)=>ronde.forEach((pair,pi)=>{
         matches.push({id:`${cat}-${poule}-r${ri+1}m${pi+1}`,cat,poule,phase:'poule',t1:pair[0],t2:pair[1],s1:null,s2:null,day:ps.day,time:ps.rounds[ri],court:pi===0?ps.c1:ps.c2,locked:false});
@@ -532,7 +550,11 @@ function makeSeed(){
       [1,2].forEach(n=>matches.push({id:`${cat}-sf${n}`,cat,poule:null,phase:'SF',t1:null,t2:null,s1:null,s2:null,day:fd,time:sf.t,court:sf.courts[n-1]||n,locked:false,label:`SF${n}`,t1_desc:`Winnaar QF${n*2-1}`,t2_desc:`Winnaar QF${n*2}`}));
     } else {
       const sf=es.SF||{t:'14:30',courts:[7,8]};
-      [1,2].forEach(n=>matches.push({id:`${cat}-sf${n}`,cat,poule:null,phase:'SF',t1:null,t2:null,s1:null,s2:null,day:fd,time:sf.t,court:sf.courts[n-1]||7,locked:false,label:`SF${n}`,t1_desc:n===1?'1e Poule A':'1e Poule B',t2_desc:n===1?'2e Poule B':'2e Poule A'}));
+      // 3 poules (h_p700): 3 winnaars + beste 2e. Anders: 2 poules, top 2 elk.
+      const sfDesc=CATS[cat].poules.length>=3
+        ?[{d1:'1e Poule A',d2:'Beste 2e'},{d1:'1e Poule B',d2:'1e Poule C'}]
+        :[{d1:'1e Poule A',d2:'2e Poule B'},{d1:'1e Poule B',d2:'2e Poule A'}];
+      [1,2].forEach(n=>matches.push({id:`${cat}-sf${n}`,cat,poule:null,phase:'SF',t1:null,t2:null,s1:null,s2:null,day:fd,time:sf.t,court:sf.courts[n-1]||7,locked:false,label:`SF${n}`,t1_desc:sfDesc[n-1].d1,t2_desc:sfDesc[n-1].d2}));
     }
     const f=es.F||{t:'16:00',courts:[1]};
     matches.push({id:`${cat}-f`,cat,poule:null,phase:'F',t1:null,t2:null,s1:null,s2:null,day:fd,time:f.t,court:f.courts[0]||1,locked:false,label:'Finale',t1_desc:'Winnaar SF1',t2_desc:'Winnaar SF2'});
@@ -545,7 +567,8 @@ function makeSeed(){
 // ============================================================
 let S={teams:{},deelnemers:{},matches:[]};
 let fbRef=null;
-let adminActive=false,currentDay='ma',currentCat='h_p100',adminFilterCat='all',adminTab='wedstrijden',deelnCat='h_p100',editMatchId=null,detailMatchId=null,pinBuffer='';
+let fbAuth=null;
+let adminActive=false,currentDay='ma',currentCat='h_p100',adminFilterCat='all',adminTab='wedstrijden',deelnCat='h_p100',editMatchId=null,detailMatchId=null,editWinner=null;
 
 // ============================================================
 // FIREBASE
@@ -554,6 +577,7 @@ function initFirebase(){
   try{
     firebase.initializeApp(FIREBASE_CONFIG);
     fbRef=firebase.database().ref(FB_PATH);
+    try{fbAuth=firebase.auth();fbAuth.onAuthStateChanged(u=>{adminActive=!!u;if(u&&document.getElementById('page-admin').classList.contains('active'))renderAdmin();});}catch(e){console.error('auth init',e);}
     fbRef.child('data').on('value',snap=>{
       const d=snap.val();
       if(d&&d.matches&&d.matches.length){S.matches=d.matches.map(m=>({...m,s1:m.s1??null,s2:m.s2??null,locked:!!m.locked,t1:m.t1??null,t2:m.t2??null}));S.teams=d.teams||{};S.deelnemers=d.deelnemers||{};}
@@ -676,7 +700,7 @@ function renderDag(){
       const badge=isEdr?`${cat.short} · ${shortPhaseLabel(m.phase)}`:`${cat.short} ${m.poule}`;
       const left=(t2m(m.time)-sM)*PX;
       const w=matchDurMin(m)*PX-3;
-      return`<div class="cal-block" style="left:${left}px;width:${w}px;background:${cat.color}22;border-top:3px solid ${cat.color}" onclick="openDetail('${m.id}')"><div class="cal-bcat" style="color:${cat.color}">${escHtml(badge)}</div><div class="cal-bteams">${played?`<span class="${t1won?'cal-bteam won':''}">${escHtml(t1n)}</span> <span style="opacity:.4">vs</span> <span class="${t2won?'cal-bteam won':''}">${escHtml(t2n)}</span> <span class="cal-bscore">${m.s1}-${m.s2}</span>`:`${escHtml(t1n)} vs ${escHtml(t2n)}`}</div></div>`;
+      return`<div class="cal-block" style="left:${left}px;width:${w}px;background:${cat.color}22;border-top:3px solid ${cat.color}" onclick="openDetail('${m.id}')"><div class="cal-bcat" style="color:${cat.color}">${escHtml(badge)}</div><div class="cal-bteams">${played?`<span class="${t1won?'cal-bteam won':''}">${escHtml(t1n)}</span> <span style="opacity:.4">vs</span> <span class="${t2won?'cal-bteam won':''}">${escHtml(t2n)}</span> <span class="cal-bscore">✓</span>`:`${escHtml(t1n)} vs ${escHtml(t2n)}`}</div></div>`;
     }).join('');
     return`<div class="cal-court-row"><div class="cal-court-lbl">B${court}</div><div class="cal-court-body" style="width:${totalW}px">${vlines}${blocks}</div></div>`;
   }).join('');
@@ -699,8 +723,8 @@ function openDetail(id){
   const t1won=played&&+m.s1>+m.s2,t2won=played&&+m.s2>+m.s1;
   const badge=isEdr?(m.label||cat.short):`${cat.short} - Poule ${m.poule}`;
   let html=`<div class="modal-title">${escHtml(badge)}</div><div class="modal-sub">${DAYS.find(d=>d.key===m.day)?.full||m.day} &middot; Veld ${m.court||'?'} &middot; ${m.time||'?'}</div>`;
-  html+=`<div class="detail-team-row"><div class="detail-team ${t1won?'won':''}">${escHtml(t1n)}</div><div class="detail-score-big">${played?`${m.s1}-${m.s2}`:'vs'}</div><div class="detail-team right ${t2won?'won':''}">${escHtml(t2n)}</div></div>`;
-  if(adminActive){html+=`<button class="btn-sm" style="width:100%;margin-top:12px;text-align:center" onclick="closeDetail();openEdit('${id}')">Score ingeven (admin)</button>`;}
+  html+=`<div class="detail-team-row"><div class="detail-team ${t1won?'won':''}">${escHtml(t1n)}</div><div class="detail-score-big">${played?'✓':'vs'}</div><div class="detail-team right ${t2won?'won':''}">${escHtml(t2n)}</div></div>`;
+  if(adminActive){html+=`<button class="btn-sm" style="width:100%;margin-top:12px;text-align:center" onclick="closeDetail();openEdit('${id}')">Winnaar aanduiden (admin)</button>`;}
   html+=`<div class="modal-row"><button class="btn-cancel" onclick="closeDetail()">Sluiten</button></div>`;
   document.getElementById('detail-modal').innerHTML=html;
   document.getElementById('detail-bg').style.display='flex';
@@ -717,8 +741,8 @@ function renderStanden(){
   let html=`<div class="sec-title">${cat.label}</div>`;
   cat.poules.forEach(poule=>{
     const rows=calcStandings(currentCat,poule);
-    html+=`<div class="poule-block"><div class="poule-head">Poule ${poule}</div><div class="standings-table"><div class="st-row header"><div></div><div>Team</div><div style="text-align:center">W</div><div style="text-align:center">V</div><div style="text-align:center">GS</div><div style="text-align:center">GT</div><div style="text-align:center">PTS</div></div>`;
-    rows.forEach((r,i)=>{const name=teamName(currentCat,poule,r.key)||r.key;const isTop=i<2;html+=`<div class="st-row"><div class="st-pos ${isTop?'top':''}">${i+1}</div><div class="st-team ${isTop?'leader':''}">${escHtml(name)}</div><div class="st-num">${r.w}</div><div class="st-num">${r.l}</div><div class="st-num">${r.gs}</div><div class="st-num">${r.gc}</div><div class="st-pts">${r.pts}</div></div>`;});
+    html+=`<div class="poule-block"><div class="poule-head">Poule ${poule}</div><div class="standings-table"><div class="st-row header"><div></div><div>Team</div><div style="text-align:center">W</div><div style="text-align:center">V</div><div style="text-align:center">PTS</div></div>`;
+    rows.forEach((r,i)=>{const name=teamName(currentCat,poule,r.key)||r.key;const isTop=i<2;html+=`<div class="st-row"><div class="st-pos ${isTop?'top':''}">${i+1}</div><div class="st-team ${isTop?'leader':''}">${escHtml(name)}</div><div class="st-num">${r.w}</div><div class="st-num">${r.l}</div><div class="st-pts">${r.pts}</div></div>`;});
     html+=`</div></div>`;
     const pm=S.matches.filter(m=>m.cat===currentCat&&m.poule===poule&&m.phase==='poule');
     if(pm.length){html+=`<div style="margin:4px 12px 12px">`;pm.sort((a,b)=>a.time>b.time?1:-1).forEach(m=>{html+=renderMatchCard(m);});html+=`</div>`;}
@@ -733,7 +757,7 @@ function renderStanden(){
         const t1n=m.t1?teamName(m.cat,null,m.t1):(m.t1_desc||'TBD');
         const t2n=m.t2?teamName(m.cat,null,m.t2):(m.t2_desc||'TBD');
         const played=m.locked&&m.s1!==null;const t1won=played&&+m.s1>+m.s2,t2won=played&&+m.s2>+m.s1;
-        html+=`<div class="bracket-match"><div class="bm-left"><div class="bm-team ${!m.t1?'tbd':t1won?'won':''}">${escHtml(t1n)}${m.time?` <span class="bm-badge">${m.time}</span>`:''}</div><div class="bm-vs">vs</div><div class="bm-team ${!m.t2?'tbd':t2won?'won':''}">${escHtml(t2n)}</div></div>${played?`<div class="bm-score">${m.s1}-${m.s2}</div>`:`<div class="bm-score" style="color:var(--border)">-</div>`}</div>`;
+        html+=`<div class="bracket-match"><div class="bm-left"><div class="bm-team ${!m.t1?'tbd':t1won?'won':''}">${escHtml(t1n)}${m.time?` <span class="bm-badge">${m.time}</span>`:''}</div><div class="bm-vs">vs</div><div class="bm-team ${!m.t2?'tbd':t2won?'won':''}">${escHtml(t2n)}</div></div>${played?`<div class="bm-score">✓</div>`:`<div class="bm-score" style="color:var(--border)">-</div>`}</div>`;
       });
       html+=`</div>`;
     });
@@ -744,7 +768,7 @@ function renderStanden(){
 function setCat(cat){currentCat=cat;renderStanden();}
 function calcStandings(cat,poule){
   const ms=S.matches.filter(m=>m.cat===cat&&m.poule===poule&&m.phase==='poule');
-  const tkeys=S.teams[cat]&&S.teams[cat][poule]?Object.keys(S.teams[cat][poule]):['1','2','3','4'];
+  const tkeys=(S.teams[cat]&&S.teams[cat][poule]?Object.keys(S.teams[cat][poule]):['1','2','3','4']).filter(k=>S.teams[cat]&&S.teams[cat][poule]&&S.teams[cat][poule][k]);
   const rows={};tkeys.forEach(t=>rows[t]={key:t,gs:0,gc:0,pts:0,w:0,l:0});
   ms.forEach(m=>{if(!m.locked||m.s1===null||m.s2===null)return;const s1=+m.s1,s2=+m.s2;if(!rows[m.t1]||!rows[m.t2])return;rows[m.t1].gs+=s1;rows[m.t1].gc+=s2;rows[m.t2].gs+=s2;rows[m.t2].gc+=s1;if(s1>s2){rows[m.t1].pts+=2;rows[m.t1].w++;rows[m.t2].pts+=1;rows[m.t2].l++;}else if(s2>s1){rows[m.t2].pts+=2;rows[m.t2].w++;rows[m.t1].pts+=1;rows[m.t1].l++;}else{rows[m.t1].pts+=1;rows[m.t2].pts+=1;}});
   return Object.values(rows).sort((a,b)=>b.pts!==a.pts?b.pts-a.pts:(b.gs-b.gc)-(a.gs-a.gc));
@@ -755,7 +779,7 @@ function renderMatchCard(m){
   const t2n=isEdr?(m.t2?teamName(m.cat,null,m.t2):(m.t2_desc||'TBD')):(teamName(m.cat,m.poule,m.t2)||'?');
   const played=m.locked&&m.s1!==null&&m.s2!==null;const t1won=played&&+m.s1>+m.s2,t2won=played&&+m.s2>+m.s1;
   const courtTxt=m.court?`Veld ${m.court}`:'';const badgeTxt=isEdr?(m.label||phaseLabel(m.phase)):`Poule ${m.poule}`;
-  return`<div class="match-card ${played?'played':''} ${isEdr?'eindronde':''}" onclick="openDetail('${m.id}')"><div class="mc-top"><div class="mc-meta">${courtTxt}</div><div class="mc-badge ${isEdr?'gold':''}">${cat.short||''} &middot; ${badgeTxt}</div></div><div class="mc-teams"><div class="mc-team ${t1won?'won':''} ${!m.t1&&isEdr?'tbd':''}">${escHtml(t1n)}</div>${played?`<div class="mc-score"><span class="${t1won?'w':'l'}">${m.s1}</span><span class="d">-</span><span class="${t2won?'w':'l'}">${m.s2}</span></div>`:`<div class="mc-vs">vs</div>`}<div class="mc-team right ${t2won?'won':''} ${!m.t2&&isEdr?'tbd':''}">${escHtml(t2n)}</div></div></div>`;
+  return`<div class="match-card ${played?'played':''} ${isEdr?'eindronde':''}" onclick="openDetail('${m.id}')"><div class="mc-top"><div class="mc-meta">${courtTxt}</div><div class="mc-badge ${isEdr?'gold':''}">${cat.short||''} &middot; ${badgeTxt}</div></div><div class="mc-teams"><div class="mc-team ${t1won?'won':''} ${!m.t1&&isEdr?'tbd':''}">${escHtml(t1n)}</div>${played?`<div class="mc-score">✓</div>`:`<div class="mc-vs">vs</div>`}<div class="mc-team right ${t2won?'won':''} ${!m.t2&&isEdr?'tbd':''}">${escHtml(t2n)}</div></div></div>`;
 }
 
 // ============================================================
@@ -792,13 +816,23 @@ function renderAdminList(){
     const cat=CATS[m.cat]||{};
     const t1n=m.phase==='poule'?(teamName(m.cat,m.poule,m.t1)||'?'):(m.t1_desc||m.t1||'TBD');
     const t2n=m.phase==='poule'?(teamName(m.cat,m.poule,m.t2)||'?'):(m.t2_desc||m.t2||'TBD');
-    const scoreStr=(m.locked&&m.s1!==null)?`${m.s1}-${m.s2}`:'-';
+    const scoreStr=(m.locked&&m.s1!==null&&m.s2!==null)?('✓ '+escHtml(+m.s1>+m.s2?t1n:t2n)):'-';
     html+=`<div class="admin-match"><div class="am-info"><div class="am-title">${escHtml(t1n)} vs ${escHtml(t2n)}</div><div class="am-sub">${cat.short} &middot; ${m.phase==='poule'?'Poule '+m.poule:(m.label||m.phase)} &middot; ${m.time||'?'} &middot; V${m.court||'?'} &middot; ${scoreStr} ${m.locked?'🔒':'✏️'}</div></div><div class="am-btns"><button class="btn-edit" onclick="openEdit('${m.id}')">Bewerk</button>${m.locked?`<button class="btn-lock" style="background:var(--border);color:var(--white)" onclick="toggleLock('${m.id}')">🔓</button>`:`<button class="btn-lock" onclick="toggleLock('${m.id}')">🔒</button>`}</div></div>`;
   });
   el.innerHTML=html;
 }
 function setAdminFilter(cat){adminFilterCat=cat;renderAdminWedstrijden();}
-function adminLogout(){adminActive=false;document.getElementById('admin-lock-screen').style.display='block';document.getElementById('admin-panel').style.display='none';pinBuffer='';updatePinDots();}
+function adminLogin(){
+  const email=(document.getElementById('admin-email').value||'').trim();
+  const pw=document.getElementById('admin-pw').value||'';
+  const err=document.getElementById('login-err');err.textContent='';
+  if(!fbAuth){err.textContent='Auth nog niet geladen, even wachten.';return;}
+  if(!email||!pw){err.textContent='Vul e-mail en wachtwoord in.';return;}
+  fbAuth.signInWithEmailAndPassword(email,pw)
+    .then(()=>{adminActive=true;document.getElementById('admin-pw').value='';renderAdmin();})
+    .catch(e=>{err.textContent='Inloggen mislukt ('+(e.code||e.message)+')';});
+}
+function adminLogout(){adminActive=false;if(fbAuth)fbAuth.signOut();document.getElementById('admin-lock-screen').style.display='block';document.getElementById('admin-panel').style.display='none';}
 function toggleLock(id){const m=S.matches.find(x=>x.id===id);if(!m)return;m.locked=!m.locked;save();renderAdminList();renderHome();}
 function renderDeelnemers(){
   document.getElementById('deeln-cat-sel').innerHTML=Object.entries(CATS).map(([key,cat])=>`<button class="cat-pill ${key===deelnCat?'active':''}" onclick="setDeelnCat('${key}')">${cat.short}</button>`).join('');
@@ -806,7 +840,7 @@ function renderDeelnemers(){
   let html=`<div class="sec-title">${cat.label} - Deelnemers</div>`;
   cat.poules.forEach(poule=>{
     html+=`<div class="deeln-block"><div class="deeln-poule-head">Poule ${poule}</div>`;
-    const slots=S.teams[deelnCat]&&S.teams[deelnCat][poule]?Object.keys(S.teams[deelnCat][poule]):['1','2','3','4'];
+    const slots=(S.teams[deelnCat]&&S.teams[deelnCat][poule]?Object.keys(S.teams[deelnCat][poule]):['1','2','3','4']).filter(k=>S.teams[deelnCat]&&S.teams[deelnCat][poule]&&S.teams[deelnCat][poule][k]);
     slots.forEach(slot=>{
       const name=(S.teams[deelnCat]&&S.teams[deelnCat][poule]&&S.teams[deelnCat][poule][slot])||'';
       const d=(S.deelnemers&&S.deelnemers[deelnCat]&&S.deelnemers[deelnCat][poule]&&S.deelnemers[deelnCat][poule][slot])||{};
@@ -853,9 +887,7 @@ function saveDeelnemer(cat,poule,slot){
 // ============================================================
 // PIN
 // ============================================================
-function pinKey(d){if(pinBuffer.length>=ADMIN_PIN.length)return;pinBuffer+=d;updatePinDots();if(pinBuffer.length===ADMIN_PIN.length)setTimeout(()=>{if(pinBuffer===ADMIN_PIN){adminActive=true;renderAdmin();}else{pinBuffer='';updatePinDots();toast('Verkeerde PIN');}},200);}
-function pinDel(){pinBuffer=pinBuffer.slice(0,-1);updatePinDots();}
-function updatePinDots(){for(let i=0;i<ADMIN_PIN.length;i++){const el=document.getElementById('pd'+i);if(el)el.classList.toggle('filled',i<pinBuffer.length);}}
+function pickWinner(w){editWinner=w;['1','2'].forEach(n=>{const b=document.getElementById('win-'+n);if(b)b.classList.toggle('active',editWinner===n);});const c=document.getElementById('win-clear');if(c)c.classList.toggle('active',editWinner===null);}
 
 // ============================================================
 // EDIT MODAL
@@ -869,17 +901,17 @@ function openEdit(id){
   const phaseLbl=m.phase==='poule'?`Poule ${m.poule}`:(m.label||m.phase);
   // Reset modal content if it was replaced by gok modal
   const modalEl=document.getElementById('modal-bg').querySelector('.modal');
-  modalEl.innerHTML=`<div class="modal-title" id="modal-title"></div><div class="modal-sub" id="modal-sub"></div><div class="form-grp"><label class="form-lbl">Tijd</label><input type="text" id="edit-time" placeholder="18:00"></div><div class="form-grp"><label class="form-lbl">Veld</label><input type="number" id="edit-court" min="1" max="8" placeholder="1-8"></div><div class="form-grp"><label class="form-lbl">Teamnamen</label><input type="text" id="edit-t1name" placeholder="Team 1" style="margin-bottom:6px"><input type="text" id="edit-t2name" placeholder="Team 2"></div><div class="form-grp"><label class="form-lbl">Score (sets)</label><div class="score-row"><div class="score-team-lbl" id="edit-t1lbl">Team 1</div><div class="score-vs-lbl">vs</div><div class="score-team-lbl" id="edit-t2lbl">Team 2</div></div><div class="score-row"><input type="number" class="score-input" id="edit-s1" min="0" max="3" placeholder="0"><div class="score-vs-lbl" style="font-size:20px;font-weight:800;color:var(--border)">-</div><input type="number" class="score-input" id="edit-s2" min="0" max="3" placeholder="0"></div></div><div class="modal-row"><button class="btn-cancel" onclick="closeModal()">Annuleren</button><button class="btn-save" onclick="saveEdit()">Opslaan</button></div>`;
+  modalEl.innerHTML=`<div class="modal-title" id="modal-title"></div><div class="modal-sub" id="modal-sub"></div><div class="form-grp"><label class="form-lbl">Tijd</label><input type="text" id="edit-time" placeholder="18:00"></div><div class="form-grp"><label class="form-lbl">Veld</label><input type="number" id="edit-court" min="1" max="8" placeholder="1-8"></div><div class="form-grp"><label class="form-lbl">Teamnamen</label><input type="text" id="edit-t1name" placeholder="Team 1" style="margin-bottom:6px"><input type="text" id="edit-t2name" placeholder="Team 2"></div><div class="form-grp"><label class="form-lbl">Winnaar</label><div class="winner-row"><button type="button" class="winner-btn" id="win-1" onclick="pickWinner('1')"><span id="win-1lbl">Team 1</span></button><button type="button" class="winner-btn" id="win-2" onclick="pickWinner('2')"><span id="win-2lbl">Team 2</span></button></div><button type="button" class="winner-clear" id="win-clear" onclick="pickWinner(null)">Nog niet gespeeld</button></div><div class="modal-row"><button class="btn-cancel" onclick="closeModal()">Annuleren</button><button class="btn-save" onclick="saveEdit()">Opslaan</button></div>`;
   document.getElementById('modal-title').textContent=`${cat.short} - ${phaseLbl}`;
   document.getElementById('modal-sub').textContent=DAYS.find(d=>d.key===m.day)?.full||m.day;
   document.getElementById('edit-time').value=m.time||'';
   document.getElementById('edit-court').value=m.court||'';
   document.getElementById('edit-t1name').value=t1n;
   document.getElementById('edit-t2name').value=t2n;
-  document.getElementById('edit-t1lbl').textContent=t1n||'Team 1';
-  document.getElementById('edit-t2lbl').textContent=t2n||'Team 2';
-  document.getElementById('edit-s1').value=m.s1!==null?m.s1:'';
-  document.getElementById('edit-s2').value=m.s2!==null?m.s2:'';
+  document.getElementById('win-1lbl').textContent=t1n||'Team 1';
+  document.getElementById('win-2lbl').textContent=t2n||'Team 2';
+  editWinner=(m.locked&&m.s1!==null&&m.s2!==null)?(+m.s1>+m.s2?'1':'2'):null;
+  pickWinner(editWinner);
   document.getElementById('modal-bg').style.display='flex';
 }
 function closeModal(){document.getElementById('modal-bg').style.display='none';editMatchId=null;}
@@ -889,11 +921,12 @@ function saveEdit(){
   const newCourt=parseInt(document.getElementById('edit-court').value);
   const newT1n=document.getElementById('edit-t1name').value.trim();
   const newT2n=document.getElementById('edit-t2name').value.trim();
-  const s1v=document.getElementById('edit-s1').value;
-  const s2v=document.getElementById('edit-s2').value;
   if(newTime)m.time=newTime;
   if(!isNaN(newCourt)&&newCourt>0)m.court=newCourt;
-  if(s1v!==''&&s2v!==''){m.s1=parseInt(s1v);m.s2=parseInt(s2v);}
+  // Winnaar i.p.v. score: winnaar krijgt 1, verliezer 0 (zo blijven standen/rangschikking werken).
+  if(editWinner==='1'){m.s1=1;m.s2=0;m.locked=true;}
+  else if(editWinner==='2'){m.s1=0;m.s2=1;m.locked=true;}
+  else{m.s1=null;m.s2=null;m.locked=false;}
   if(m.phase==='poule'){if(!S.teams[m.cat])S.teams[m.cat]={};if(!S.teams[m.cat][m.poule])S.teams[m.cat][m.poule]={};if(newT1n&&m.t1)S.teams[m.cat][m.poule][m.t1]=newT1n;if(newT2n&&m.t2)S.teams[m.cat][m.poule][m.t2]=newT2n;}else{if(newT1n)m.t1_desc=newT1n;if(newT2n)m.t2_desc=newT2n;}
   save();closeModal();renderAdminList();renderHome();toast('Opgeslagen');
 }
@@ -920,7 +953,6 @@ function toast(msg){const el=document.getElementById('toast');el.textContent=msg
     document.getElementById('desktop-block').style.display=shouldBlock()?'flex':'none';
   });
 })();
-document.getElementById('pin-dots').innerHTML=Array.from({length:ADMIN_PIN.length},(_,i)=>`<div class="pin-dot" id="pd${i}"></div>`).join('');
 document.getElementById('day-tabs').innerHTML=DAYS.map(d=>`<button class="day-tab ${d.key==='ma'?'active':''}" onclick="setDay('${d.key}')">${d.label}</button>`).join('');
 renderCountdown();
 initFirebase();
