@@ -118,6 +118,9 @@
     .adv-badge{display:inline-block;font-size:9px;font-weight:800;color:#000;background:var(--gold);padding:2px 6px;border-radius:4px;margin-left:6px;vertical-align:middle;letter-spacing:.5px;}
     .adv-toggle{margin-left:8px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;border:1px solid var(--border);background:none;color:var(--gray);cursor:pointer;font-family:'Rubik',sans-serif;}
     .adv-toggle.on{border-color:var(--gold);color:var(--gold);}
+    .door-row{display:grid;grid-template-columns:20px 1fr auto;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--border);font-size:13px;}
+    .door-row:last-child{border-bottom:none;}
+    .st-wl{color:var(--gray);font-size:11px;margin-left:6px;}
     .bracket-wrap{padding:8px 12px 20px;}
     .bracket-title{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;padding-left:2px;}
     .bracket-round{margin-bottom:16px;}
@@ -357,6 +360,7 @@
     <div class="admin-tabs">
       <button class="atab active" id="atab-wedstrijden" onclick="setAdminTab('wedstrijden')">Wedstrijden</button>
       <button class="atab" id="atab-deelnemers" onclick="setAdminTab('deelnemers')">Deelnemers</button>
+      <button class="atab" id="atab-doorgang" onclick="setAdminTab('doorgang')">Doorgang</button>
     </div>
     <div id="admin-tab-wedstrijden">
       <div class="admin-filter" id="admin-filter"></div>
@@ -365,6 +369,10 @@
     <div id="admin-tab-deelnemers" style="display:none">
       <div class="cat-selector" id="deeln-cat-sel"></div>
       <div id="deeln-content"></div>
+    </div>
+    <div id="admin-tab-doorgang" style="display:none">
+      <div class="cat-selector" id="door-cat-sel"></div>
+      <div id="door-content"></div>
     </div>
   </div>
 </div>
@@ -571,6 +579,7 @@ function makeSeed(){
 let S={teams:{},deelnemers:{},matches:[],advance:{}};
 let fbRef=null;
 let fbAuth=null;
+let doorCat='h_p100';
 let adminActive=false,currentDay='ma',currentCat='h_p100',adminFilterCat='all',adminTab='wedstrijden',deelnCat='h_p100',editMatchId=null,detailMatchId=null,editWinner=null;
 
 // ============================================================
@@ -745,7 +754,7 @@ function renderStanden(){
   cat.poules.forEach(poule=>{
     const rows=calcStandings(currentCat,poule);
     html+=`<div class="poule-block"><div class="poule-head">Poule ${poule}</div><div class="standings-table"><div class="st-row header"><div></div><div>Team</div><div style="text-align:center">W</div><div style="text-align:center">V</div></div>`;
-    rows.forEach((r,i)=>{const name=teamName(currentCat,poule,r.key)||r.key;const adv=isAdvance(currentCat,poule,r.key);html+=`<div class="st-row"><div class="st-pos ${adv?'top':''}">${i+1}</div><div class="st-team ${adv?'leader':''}">${escHtml(name)}${adv?' <span class="adv-badge">DOOR</span>':''}${adminActive?`<button class="adv-toggle ${adv?'on':''}" onclick="toggleAdvance(event,'${currentCat}','${poule}','${r.key}')">${adv?'✓ door':'+ door'}</button>`:''}</div><div class="st-num">${r.w}</div><div class="st-num">${r.l}</div></div>`;});
+    rows.forEach((r,i)=>{const name=teamName(currentCat,poule,r.key)||r.key;const adv=isAdvance(currentCat,poule,r.key);html+=`<div class="st-row"><div class="st-pos ${adv?'top':''}">${i+1}</div><div class="st-team ${adv?'leader':''}">${escHtml(name)}${adv?' <span class="adv-badge">DOOR</span>':''}</div><div class="st-num">${r.w}</div><div class="st-num">${r.l}</div></div>`;});
     html+=`</div></div>`;
     const pm=S.matches.filter(m=>m.cat===currentCat&&m.poule===poule&&m.phase==='poule');
     if(pm.length){html+=`<div style="margin:4px 12px 12px">`;pm.sort((a,b)=>a.time>b.time?1:-1).forEach(m=>{html+=renderMatchCard(m);});html+=`</div>`;}
@@ -769,8 +778,37 @@ function renderStanden(){
   content.innerHTML=html;
 }
 function setCat(cat){currentCat=cat;renderStanden();}
-function isAdvance(cat,poule,key){return !!(S.advance&&S.advance[`${cat}_${poule}_${key}`]);}
-function toggleAdvance(e,cat,poule,key){e.stopPropagation();if(!S.advance)S.advance={};const k=`${cat}_${poule}_${key}`;if(S.advance[k])delete S.advance[k];else S.advance[k]=true;save();renderStanden();toast(S.advance[k]?'Gemarkeerd als doorgegaan':'Markering verwijderd');}
+// Aantal dat per poule doorgaat: QF-bracket = top 2, 3-poule SF (h_p700) = top 1, 2-poule SF (d_p500) = top 2.
+function qualPerPoule(cat){const c=CATS[cat]||{};if(c.bracket==='QF')return 2;if((c.poules||[]).length>=3)return 1;return 2;}
+// Auto-doorgang: enkel als de poule volledig gespeeld is en de grens niet op een gelijke stand valt.
+function autoAdvance(cat,poule){
+  const ms=S.matches.filter(m=>m.cat===cat&&m.poule===poule&&m.phase==='poule');
+  if(!ms.length||!ms.every(m=>m.locked&&m.s1!==null&&m.s2!==null))return [];
+  const rows=calcStandings(cat,poule),N=qualPerPoule(cat);
+  if(rows.length<=N)return rows.map(r=>r.key);
+  const cutoffW=rows[N-1].w;
+  // Geen gelijkspel aan de grens: de top N is duidelijk.
+  if(rows[N].w<cutoffW)return rows.slice(0,N).map(r=>r.key);
+  // Wel gelijkspel aan de grens: enkel teams strikt boven de grenswaarde zijn duidelijk door, de rest beslist de admin.
+  return rows.filter(r=>r.w>cutoffW).map(r=>r.key);
+}
+// Expliciete admin-keuze heeft voorrang; anders auto.
+function isAdvance(cat,poule,key){const k=`${cat}_${poule}_${key}`;if(S.advance&&k in S.advance)return !!S.advance[k];return autoAdvance(cat,poule).includes(key);}
+function toggleAdvance(e,cat,poule,key){e.stopPropagation();if(!S.advance)S.advance={};const k=`${cat}_${poule}_${key}`;const next=!isAdvance(cat,poule,key);S.advance[k]=next;save();if(adminTab==='doorgang')renderDoorgang();renderStanden();toast(next?'Gemarkeerd als doorgegaan':'Markering verwijderd');}
+function renderDoorgang(){
+  document.getElementById('door-cat-sel').innerHTML=Object.entries(CATS).map(([key,cat])=>`<button class="cat-pill ${key===doorCat?'active':''}" onclick="setDoorCat('${key}')">${cat.short}</button>`).join('');
+  const cat=CATS[doorCat],content=document.getElementById('door-content');if(!cat){content.innerHTML='';return;}
+  let html=`<div class="sec-title">${cat.label} — duid aan wie doorgaat</div>`;
+  cat.poules.forEach(poule=>{
+    const rows=calcStandings(doorCat,poule);
+    html+=`<div class="poule-block"><div class="poule-head">Poule ${poule}</div><div class="standings-table">`;
+    rows.forEach((r,i)=>{const name=teamName(doorCat,poule,r.key)||r.key;const adv=isAdvance(doorCat,poule,r.key);
+      html+=`<div class="door-row"><div class="st-pos ${adv?'top':''}">${i+1}</div><div class="st-team ${adv?'leader':''}">${escHtml(name)} <span class="st-wl">${r.w}W ${r.l}V</span></div><button class="adv-toggle ${adv?'on':''}" onclick="toggleAdvance(event,'${doorCat}','${poule}','${r.key}')">${adv?'✓ door':'+ door'}</button></div>`;});
+    html+=`</div></div>`;
+  });
+  content.innerHTML=html;
+}
+function setDoorCat(cat){doorCat=cat;renderDoorgang();}
 function calcStandings(cat,poule){
   const ms=S.matches.filter(m=>m.cat===cat&&m.poule===poule&&m.phase==='poule');
   const tkeys=(S.teams[cat]&&S.teams[cat][poule]?Object.keys(S.teams[cat][poule]):['1','2','3','4']).filter(k=>S.teams[cat]&&S.teams[cat][poule]&&S.teams[cat][poule][k]);
@@ -800,10 +838,13 @@ function setAdminTab(tab){
   adminTab=tab;
   document.getElementById('atab-wedstrijden').classList.toggle('active',tab==='wedstrijden');
   document.getElementById('atab-deelnemers').classList.toggle('active',tab==='deelnemers');
+  document.getElementById('atab-doorgang').classList.toggle('active',tab==='doorgang');
   document.getElementById('admin-tab-wedstrijden').style.display=tab==='wedstrijden'?'':'none';
   document.getElementById('admin-tab-deelnemers').style.display=tab==='deelnemers'?'':'none';
+  document.getElementById('admin-tab-doorgang').style.display=tab==='doorgang'?'':'none';
   if(tab==='wedstrijden')renderAdminWedstrijden();
   if(tab==='deelnemers')renderDeelnemers();
+  if(tab==='doorgang')renderDoorgang();
 }
 function renderAdminWedstrijden(){
   const fEl=document.getElementById('admin-filter');
