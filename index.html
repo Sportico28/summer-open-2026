@@ -106,7 +106,7 @@
     .poule-block{margin:8px 12px;}
     .poule-head{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;padding-left:2px;}
     .standings-table{background:var(--card);border-radius:12px;overflow:hidden;}
-    .st-row{display:grid;grid-template-columns:20px 1fr 36px 36px 40px;align-items:center;padding:10px 12px;gap:6px;font-size:12px;border-bottom:1px solid var(--border);}
+    .st-row{display:grid;grid-template-columns:20px 1fr 36px 36px;align-items:center;padding:10px 12px;gap:6px;font-size:12px;border-bottom:1px solid var(--border);}
     .st-row:last-child{border-bottom:none;}
     .st-row.header{color:var(--gray);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;background:var(--card2);}
     .st-pos{color:var(--gray);font-weight:700;}
@@ -115,6 +115,9 @@
     .st-team.leader{color:var(--gold);font-weight:700;}
     .st-num{text-align:center;color:var(--white);}
     .st-pts{text-align:center;font-weight:700;color:var(--gold);}
+    .adv-badge{display:inline-block;font-size:9px;font-weight:800;color:#000;background:var(--gold);padding:2px 6px;border-radius:4px;margin-left:6px;vertical-align:middle;letter-spacing:.5px;}
+    .adv-toggle{margin-left:8px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;border:1px solid var(--border);background:none;color:var(--gray);cursor:pointer;font-family:'Rubik',sans-serif;}
+    .adv-toggle.on{border-color:var(--gold);color:var(--gold);}
     .bracket-wrap{padding:8px 12px 20px;}
     .bracket-title{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;padding-left:2px;}
     .bracket-round{margin-bottom:16px;}
@@ -565,7 +568,7 @@ function makeSeed(){
 // ============================================================
 // STATE
 // ============================================================
-let S={teams:{},deelnemers:{},matches:[]};
+let S={teams:{},deelnemers:{},matches:[],advance:{}};
 let fbRef=null;
 let fbAuth=null;
 let adminActive=false,currentDay='ma',currentCat='h_p100',adminFilterCat='all',adminTab='wedstrijden',deelnCat='h_p100',editMatchId=null,detailMatchId=null,editWinner=null;
@@ -580,7 +583,7 @@ function initFirebase(){
     try{fbAuth=firebase.auth();fbAuth.onAuthStateChanged(u=>{adminActive=!!u;if(u&&document.getElementById('page-admin').classList.contains('active'))renderAdmin();});}catch(e){console.error('auth init',e);}
     fbRef.child('data').on('value',snap=>{
       const d=snap.val();
-      if(d&&d.matches&&d.matches.length){S.matches=d.matches.map(m=>({...m,s1:m.s1??null,s2:m.s2??null,locked:!!m.locked,t1:m.t1??null,t2:m.t2??null}));S.teams=d.teams||{};S.deelnemers=d.deelnemers||{};}
+      if(d&&d.matches&&d.matches.length){S.matches=d.matches.map(m=>({...m,s1:m.s1??null,s2:m.s2??null,locked:!!m.locked,t1:m.t1??null,t2:m.t2??null}));S.teams=d.teams||{};S.deelnemers=d.deelnemers||{};S.advance=d.advance||{};}
       else{S=makeSeed();fbRef.child('data').set(S);}
       document.getElementById('fb-loading').style.display='none';
       renderAll();
@@ -741,8 +744,8 @@ function renderStanden(){
   let html=`<div class="sec-title">${cat.label}</div>`;
   cat.poules.forEach(poule=>{
     const rows=calcStandings(currentCat,poule);
-    html+=`<div class="poule-block"><div class="poule-head">Poule ${poule}</div><div class="standings-table"><div class="st-row header"><div></div><div>Team</div><div style="text-align:center">W</div><div style="text-align:center">V</div><div style="text-align:center">PTS</div></div>`;
-    rows.forEach((r,i)=>{const name=teamName(currentCat,poule,r.key)||r.key;const isTop=i<2;html+=`<div class="st-row"><div class="st-pos ${isTop?'top':''}">${i+1}</div><div class="st-team ${isTop?'leader':''}">${escHtml(name)}</div><div class="st-num">${r.w}</div><div class="st-num">${r.l}</div><div class="st-pts">${r.pts}</div></div>`;});
+    html+=`<div class="poule-block"><div class="poule-head">Poule ${poule}</div><div class="standings-table"><div class="st-row header"><div></div><div>Team</div><div style="text-align:center">W</div><div style="text-align:center">V</div></div>`;
+    rows.forEach((r,i)=>{const name=teamName(currentCat,poule,r.key)||r.key;const adv=isAdvance(currentCat,poule,r.key);html+=`<div class="st-row"><div class="st-pos ${adv?'top':''}">${i+1}</div><div class="st-team ${adv?'leader':''}">${escHtml(name)}${adv?' <span class="adv-badge">DOOR</span>':''}${adminActive?`<button class="adv-toggle ${adv?'on':''}" onclick="toggleAdvance(event,'${currentCat}','${poule}','${r.key}')">${adv?'✓ door':'+ door'}</button>`:''}</div><div class="st-num">${r.w}</div><div class="st-num">${r.l}</div></div>`;});
     html+=`</div></div>`;
     const pm=S.matches.filter(m=>m.cat===currentCat&&m.poule===poule&&m.phase==='poule');
     if(pm.length){html+=`<div style="margin:4px 12px 12px">`;pm.sort((a,b)=>a.time>b.time?1:-1).forEach(m=>{html+=renderMatchCard(m);});html+=`</div>`;}
@@ -766,12 +769,14 @@ function renderStanden(){
   content.innerHTML=html;
 }
 function setCat(cat){currentCat=cat;renderStanden();}
+function isAdvance(cat,poule,key){return !!(S.advance&&S.advance[`${cat}_${poule}_${key}`]);}
+function toggleAdvance(e,cat,poule,key){e.stopPropagation();if(!S.advance)S.advance={};const k=`${cat}_${poule}_${key}`;if(S.advance[k])delete S.advance[k];else S.advance[k]=true;save();renderStanden();toast(S.advance[k]?'Gemarkeerd als doorgegaan':'Markering verwijderd');}
 function calcStandings(cat,poule){
   const ms=S.matches.filter(m=>m.cat===cat&&m.poule===poule&&m.phase==='poule');
   const tkeys=(S.teams[cat]&&S.teams[cat][poule]?Object.keys(S.teams[cat][poule]):['1','2','3','4']).filter(k=>S.teams[cat]&&S.teams[cat][poule]&&S.teams[cat][poule][k]);
   const rows={};tkeys.forEach(t=>rows[t]={key:t,gs:0,gc:0,pts:0,w:0,l:0});
   ms.forEach(m=>{if(!m.locked||m.s1===null||m.s2===null)return;const s1=+m.s1,s2=+m.s2;if(!rows[m.t1]||!rows[m.t2])return;rows[m.t1].gs+=s1;rows[m.t1].gc+=s2;rows[m.t2].gs+=s2;rows[m.t2].gc+=s1;if(s1>s2){rows[m.t1].pts+=2;rows[m.t1].w++;rows[m.t2].pts+=1;rows[m.t2].l++;}else if(s2>s1){rows[m.t2].pts+=2;rows[m.t2].w++;rows[m.t1].pts+=1;rows[m.t1].l++;}else{rows[m.t1].pts+=1;rows[m.t2].pts+=1;}});
-  return Object.values(rows).sort((a,b)=>b.pts!==a.pts?b.pts-a.pts:(b.gs-b.gc)-(a.gs-a.gc));
+  return Object.values(rows).sort((a,b)=>b.w!==a.w?b.w-a.w:a.l-b.l);
 }
 function renderMatchCard(m){
   const cat=CATS[m.cat]||{};const isEdr=m.phase!=='poule';
